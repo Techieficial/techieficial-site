@@ -1,28 +1,28 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   title: "Techieficial | AI video, paid ads, CRM and AI agents, run by one team",
   description:
-    "Techieficial plans and runs AI video content, paid ads, CRM automation and AI agents as one coordinated program. Book a strategy call.",
+    "Techieficial plans and runs AI video content, paid ads, CRM automation and AI agents as one coordinated program. Start your project.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
     >
       <body className="min-h-dvh">{children}</body>
     </html>

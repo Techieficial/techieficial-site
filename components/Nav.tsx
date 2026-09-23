@@ -25,26 +25,28 @@ export function Nav() {
     <header className="sticky top-3 z-40 px-4 md:top-4 md:px-6">
       <nav
         aria-label="Main"
-        className="mx-auto flex h-16 max-w-[1240px] items-center justify-between rounded-full border border-rule bg-surface/85 pl-5 pr-2 backdrop-blur-xl md:pl-6"
+        className="mx-auto flex h-16 max-w-[1240px] items-center gap-4 rounded-full border border-rule bg-surface/85 pl-4 pr-2 backdrop-blur-xl md:pl-5"
       >
         <Logo />
-        <ul className="hidden items-center gap-8 text-[15px] text-muted lg:flex">
+        <ul className="hidden flex-1 items-center justify-center gap-8 text-[15px] text-muted lg:flex">
           {LINKS.map((l) => (
             <li key={l.href}>
-              <a href={l.href} className="transition-colors hover:text-ink">
+              <a href={l.href} className="py-2 transition-colors hover:text-ink">
                 {l.label}
               </a>
             </li>
           ))}
         </ul>
-        <CtaButton className="hidden sm:inline-flex" />
+        <div className="ml-auto hidden sm:block lg:ml-0">
+          <CtaButton />
+        </div>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "Close menu" : "Open menu"}
-          className="relative grid size-12 place-items-center rounded-full lg:hidden sm:ml-2"
+          className="relative ml-auto grid size-12 shrink-0 place-items-center rounded-full sm:ml-0 lg:hidden"
         >
           <span
             className={`absolute h-[1.5px] w-5 bg-ink transition-transform duration-500 ease-out-expo ${open ? "rotate-45" : "-translate-y-[4px]"}`}
@@ -58,7 +60,7 @@ export function Nav() {
       <div
         id="mobile-menu"
         hidden={!open}
-        className="fixed inset-x-4 top-[5.25rem] rounded-3xl border border-rule bg-surface p-6 shadow-[0_24px_60px_-20px_rgba(14,26,43,0.25)] lg:hidden"
+        className="fixed inset-x-4 top-[5.25rem] rounded-3xl bg-surface p-6 shadow-[0_24px_60px_-20px_rgba(14,26,43,0.35)] lg:hidden"
       >
         <ul className="flex flex-col">
           {LINKS.map((l) => (

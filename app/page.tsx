@@ -7,6 +7,8 @@ import {
   FinalCta,
   Footer,
   Hero,
+  HeroBackdrop,
+  PlanSection,
   Process,
   ProofBand,
   Testimonials,
@@ -14,12 +16,14 @@ import {
 
 export default function Home() {
   return (
-    <>
+    <div className="relative isolate">
+      <HeroBackdrop />
       <Nav />
       <main>
         <Hero />
         <ProofBand />
         <Services />
+        <PlanSection />
         <Compare />
         <Process />
         <Academy />
@@ -28,6 +32,6 @@ export default function Home() {
         <FinalCta />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

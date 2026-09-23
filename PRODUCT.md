@@ -16,7 +16,7 @@ Business owners and marketing leads evaluating high-ticket, done-for-you marketi
 
 ## Product Purpose
 
-Techieficial is a premium agency. The marketing site exists to get qualified visitors to book a strategy call. Success = strategy calls booked.
+Techieficial is a premium agency. The marketing site exists to get qualified visitors to start a project through the project form. Success = project enquiries submitted.
 
 ## Positioning
 
@@ -36,6 +36,7 @@ One team that covers content, paid media, CRM/automation and AI agents end to en
 - Name: Techieficial.
 - No em-dashes anywhere in copy.
 - Premium, high-ticket register.
+- Visual direction chosen by the user: dark + electric (near-black, violet/cyan/pink/lime), Space Grotesk + Inter, animated service wheel hero modelled on the user's reference screenshot.
 - Reference sites (for layout, spacing, type and feel only, never copied): vahubpro.com, webrunnermedia.com, standoutfromthepack.com.au.
 
 ## Evidence on Hand
@@ -46,7 +47,7 @@ One team that covers content, paid media, CRM/automation and AI agents end to en
 
 ## Product Principles
 
-1. Every page drives to one action: book a strategy call.
+1. Every page drives to one action: Start your project (project form). The user does not want "Book a strategy call" wording.
 2. Prove, don't claim. Only the one real proof point above is stated as fact.
 3. Plain, specific language a business owner understands. No hype verbs.
 4. Premium through restraint and craft, not decoration.

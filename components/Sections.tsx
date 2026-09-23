@@ -1,26 +1,71 @@
-import { PlusIcon } from "@phosphor-icons/react/dist/ssr";
+import { CheckIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
 import { CtaButton } from "./CtaButton";
 import { FlightPlan } from "./FlightPlan";
 import { Logo } from "./Logo";
-import { COMPARISON, COUNTRIES, FAQS, PROOF_LINE, STEPS } from "@/lib/content";
+import { ServiceWheel } from "./ServiceWheel";
+import { ContactForm } from "./ContactForm";
+import { COMPARISON, COUNTRIES, FAQS, STEPS } from "@/lib/content";
 
 const wrap = "mx-auto max-w-[1240px]";
 const h2 = "text-[clamp(2rem,4.4vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.035em]";
 
+/** Glow and flow line behind the nav and hero, so there is no seam under the sticky nav. */
+export function HeroBackdrop() {
+  return (
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[1100px] overflow-hidden">
+        <div className="absolute -top-40 right-[-10%] size-[720px] rounded-full bg-[radial-gradient(closest-side,rgba(124,92,255,0.28),transparent)]" />
+        <div className="absolute bottom-[-20%] left-[-15%] size-[620px] rounded-full bg-[radial-gradient(closest-side,rgba(34,211,238,0.16),transparent)]" />
+        <svg viewBox="0 0 1440 800" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+          <defs>
+            <linearGradient id="flow" x1="0" x2="1">
+              <stop offset="0" stopColor="#22d3ee" stopOpacity="0" />
+              <stop offset="0.4" stopColor="#7c5cff" stopOpacity="0.55" />
+              <stop offset="1" stopColor="#22d3ee" stopOpacity="0.35" />
+            </linearGradient>
+          </defs>
+          <path
+            className="flow-line"
+            d="M-40 620 C 260 700, 460 520, 720 440 S 1100 300, 1180 420 S 1120 620, 1250 520 S 1400 300, 1500 260"
+            fill="none"
+            stroke="url(#flow)"
+            strokeWidth="2.5"
+          />
+        </svg>
+      </div>
+  );
+}
+
 export function Hero() {
   return (
-    <section className="px-4 pb-20 pt-14 md:px-6 md:pb-28 md:pt-20">
-      <div className={wrap}>
-        <h1 className="text-[clamp(2.5rem,6.2vw,5.25rem)] font-semibold leading-[1.02] tracking-[-0.04em]">
-          <span className="block">One team. Every channel.</span>{" "}
-          <span className="block text-muted">Planned like a campaign.</span>
-        </h1>
-        <div className="mt-7 flex flex-col gap-8 md:mt-9 md:flex-row md:items-end md:justify-between">
-          <p className="max-w-[44ch] text-lg leading-relaxed text-muted md:text-xl md:leading-relaxed">
-            AI video, paid ads, CRM automation and AI agents, run end to end by one team.
+    <section className="relative px-4 pb-16 pt-10 md:px-6 md:pb-24 md:pt-14">
+      <div className={`${wrap} grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-8`}>
+        <div>
+          <h1 className="text-[clamp(2.6rem,5.6vw,4.6rem)] font-bold leading-[1.02] tracking-[-0.035em]">
+            One team for your whole <span className="text-electric">growth engine</span>.
+          </h1>
+          <p className="mt-6 max-w-[44ch] text-lg leading-relaxed text-muted md:text-xl md:leading-relaxed">
+            AI video, paid ads, CRM automation and AI agents, run end to end. Plus an Academy to train
+            your team.
           </p>
-          <CtaButton size="lg" />
+          <div className="mt-9">
+            <CtaButton size="lg" />
+          </div>
         </div>
+        <ServiceWheel />
+      </div>
+    </section>
+  );
+}
+
+export function PlanSection() {
+  return (
+    <section className="px-4 py-24 md:px-6 md:py-32">
+      <div className={wrap}>
+        <h2 className={`${h2} max-w-[20ch]`}>Every channel on one plan.</h2>
+        <p className="mt-5 max-w-[56ch] text-lg leading-relaxed text-muted">
+          Each service goes live in the right order, so leads from your ads land in a CRM that is
+          ready for them.
+        </p>
         <div className="mt-12 md:mt-16">
           <FlightPlan />
         </div>
@@ -32,31 +77,24 @@ export function Hero() {
 export function ProofBand() {
   return (
     <section aria-label="Proof" className="border-y border-rule bg-surface px-4 py-14 md:px-6 md:py-20">
-      <div className={`${wrap} grid gap-10 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:items-center md:gap-16`}>
-        <p className="text-[clamp(1.4rem,2.6vw,2.1rem)] font-medium leading-[1.25] tracking-[-0.025em]">
-          {PROOF_LINE}.
+      <div className={`${wrap} grid gap-8 md:grid-cols-[auto_minmax(0,1fr)] md:items-center md:gap-16`}>
+        <p className="font-mono text-[clamp(4.5rem,11vw,8.5rem)] font-medium leading-none tracking-[-0.06em] text-accent-text tabular">
+          13+
         </p>
-        <ul className="grid grid-cols-5 gap-2" aria-label="Countries delivered in">
-          {COUNTRIES.map((c) => (
-            <li
-              key={c.code}
-              title={c.name}
-              className="grid aspect-square place-items-center rounded-[14px] bg-accent-soft font-mono text-base font-medium text-accent md:text-lg"
-            >
-              <span aria-hidden>{c.code}</span>
-              <span className="sr-only">{c.name}</span>
-            </li>
-          ))}
-        </ul>
+        <div>
+          <p className="max-w-[34ch] text-[clamp(1.35rem,2.4vw,1.9rem)] font-medium leading-[1.3] tracking-[-0.02em]">
+            CRM and automation systems delivered for clients in five countries.
+          </p>
+          <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-muted" aria-label="Countries delivered in">
+            {COUNTRIES.map((c) => (
+              <li key={c.code}>{c.name}</li>
+            ))}
+          </ul>
+        </div>
       </div>
-      <div className={`${wrap} mt-12 border-t border-rule pt-8`}>
-        <p className="text-sm text-muted">[PLACEHOLDER: client logos, with permission]</p>
-        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <li key={i} className="h-14 rounded-[12px] border border-dashed border-rule" aria-hidden />
-          ))}
-        </ul>
-      </div>
+      <p className={`${wrap} mt-12 rounded-[12px] border border-dashed border-rule px-5 py-4 text-sm text-muted`}>
+        [PLACEHOLDER: client logos, with permission]
+      </p>
     </section>
   );
 }
@@ -65,12 +103,12 @@ export function Compare() {
   return (
     <section className="px-4 py-24 md:px-6 md:py-36">
       <div className={wrap}>
-        <h2 className={`${h2} max-w-[20ch]`}>Stop managing four vendors to run one funnel.</h2>
+        <h2 className={`${h2} max-w-[20ch]`}>Stop managing three vendors to run one funnel.</h2>
         <div className="mt-14 overflow-hidden rounded-[20px] border border-rule bg-surface md:mt-20">
           <div className="hidden grid-cols-[minmax(0,2fr)_minmax(0,5fr)_minmax(0,5fr)] border-b border-rule text-sm text-muted md:grid">
             <div className="px-8 py-5" />
             <div className="px-8 py-5">The usual setup</div>
-            <div className="bg-accent-soft px-8 py-5 font-medium text-accent">With Techieficial</div>
+            <div className="bg-accent-soft px-8 py-5 font-medium text-accent-text">With Techieficial</div>
           </div>
           {COMPARISON.map((row) => (
             <div
@@ -83,7 +121,7 @@ export function Compare() {
                 {row.usual}
               </div>
               <div className="mx-3 mb-4 rounded-[12px] bg-accent-soft px-4 py-3 leading-relaxed md:m-0 md:rounded-none md:px-8 md:py-7">
-                <span className="mb-1 block text-xs text-accent md:hidden">With Techieficial</span>
+                <span className="mb-1 block text-xs text-accent-text md:hidden">With Techieficial</span>
                 {row.ours}
               </div>
             </div>
@@ -94,20 +132,35 @@ export function Compare() {
   );
 }
 
+const PROCESS_WEEKS = Array.from({ length: 13 }, (_, i) => i);
+
 export function Process() {
   return (
     <section id="process" className="bg-surface px-4 py-24 md:px-6 md:py-36">
       <div className={wrap}>
         <h2 className={`${h2} max-w-[18ch]`}>From first call to a running program.</h2>
-        <ol className="relative mt-14 grid gap-12 md:mt-20 md:grid-cols-3 md:gap-10">
-          <span aria-hidden className="absolute left-[15px] top-4 h-[calc(100%-2rem)] w-px bg-rule md:left-0 md:top-[15px] md:h-px md:w-full" />
+        <ol className="mt-14 flex flex-col md:mt-20">
           {STEPS.map((s, i) => (
-            <li key={s.title} className="relative pl-14 md:pl-0 md:pt-16">
-              <span className="absolute left-0 top-0 grid size-8 place-items-center rounded-full bg-accent font-mono text-sm font-medium text-on-accent">
-                {i + 1}
-              </span>
-              <h3 className="text-2xl font-medium tracking-[-0.025em]">{s.title}</h3>
-              <p className="mt-3 max-w-[36ch] leading-relaxed text-muted">{s.body}</p>
+            <li
+              key={s.title}
+              className="grid gap-4 border-t border-rule py-8 last:border-b md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:items-center md:gap-12"
+            >
+              <div>
+                <p className="font-mono text-sm text-accent-text tabular">
+                  {i + 1}. {s.label}
+                </p>
+                <h3 className="mt-2 text-2xl font-medium tracking-[-0.025em]">{s.title}</h3>
+                <p className="mt-2 max-w-[44ch] leading-relaxed text-muted">{s.body}</p>
+              </div>
+              <div aria-hidden className="grid h-7 grid-cols-13 gap-1 md:h-8 md:gap-1.5">
+                {PROCESS_WEEKS.map((w) => (
+                  <span key={w} style={{ gridColumn: w + 1, gridRow: 1 }} className="rounded-[4px] bg-track" />
+                ))}
+                <span
+                  style={{ gridColumn: `${s.weeks[0] + 1} / ${s.weeks[1] + 2}`, gridRow: 1 }}
+                  className="rounded-[6px] bg-accent"
+                />
+              </div>
             </li>
           ))}
         </ol>
@@ -212,24 +265,28 @@ export function Faq() {
 
 export function FinalCta() {
   return (
-    <section id="book" className="px-4 pb-6 md:px-6">
-      <div className="mx-auto max-w-[1288px] rounded-[28px] bg-accent px-6 py-16 text-on-accent md:px-16 md:py-24">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:items-end lg:gap-20">
+    <section id="start" className="px-4 pb-6 md:px-6">
+      <div className="relative mx-auto max-w-[1288px] overflow-hidden rounded-[28px] border border-rule bg-surface px-6 py-16 md:px-16 md:py-24">
+        <div aria-hidden className="pointer-events-none absolute -right-40 -top-40 size-[560px] rounded-full bg-[radial-gradient(closest-side,rgba(124,92,255,0.3),transparent)]" />
+        <div className="relative grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-20">
           <div>
-            <h2 className="max-w-[14ch] text-[clamp(2.3rem,5.4vw,4.5rem)] font-semibold leading-[1.02] tracking-[-0.04em]">
-              Let&rsquo;s plan your next 12 weeks.
+            <h2 className="max-w-[14ch] text-[clamp(2.3rem,5vw,4.25rem)] font-bold leading-[1.02] tracking-[-0.035em]">
+              Tell us about your <span className="text-electric">project</span>.
             </h2>
-            <p className="mt-6 max-w-[46ch] text-lg leading-relaxed opacity-85">
-              On the call we look at your goals and current channels, and tell you where we would start. If
-              we are not the right fit, we will say so.
+            <p className="mt-6 max-w-[44ch] text-lg leading-relaxed text-muted">
+              Share your goals and the channels you need. We reply with questions or a proposed next
+              step. If we are not the right fit, we will say so.
             </p>
-            <div className="mt-10">
-              <CtaButton size="lg" tone="inverse" />
-            </div>
+            <ul className="mt-8 flex flex-col gap-3">
+              {["A reply from the team, not a bot", "A written plan if we are a fit", "No obligation to continue"].map((t) => (
+                <li key={t} className="flex items-center gap-3">
+                  <CheckIcon weight="bold" aria-hidden className="size-4 shrink-0 text-accent-2" />
+                  {t}
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="grid min-h-[260px] place-items-center rounded-[20px] border border-dashed border-current/35 p-8 text-center text-sm opacity-85">
-            [PLACEHOLDER: booking calendar embed]
-          </div>
+          <ContactForm />
         </div>
       </div>
     </section>
@@ -237,6 +294,7 @@ export function FinalCta() {
 }
 
 export function Footer() {
+  const link = "inline-flex min-h-11 items-center text-muted hover:text-ink";
   return (
     <footer className="px-4 pb-10 pt-16 md:px-6">
       <div className={`${wrap} flex flex-col gap-10 md:flex-row md:items-start md:justify-between`}>
@@ -246,18 +304,18 @@ export function Footer() {
             AI video, paid ads, CRM automation, AI agents and training. One team.
           </p>
         </div>
-        <nav aria-label="Footer" className="grid grid-cols-2 gap-x-16 gap-y-3 text-sm">
-          <a href="#services" className="text-muted hover:text-ink">Services</a>
-          <a href="#academy" className="text-muted hover:text-ink">Academy</a>
-          <a href="#process" className="text-muted hover:text-ink">How it works</a>
-          <a href="#faq" className="text-muted hover:text-ink">FAQ</a>
-          <span className="text-muted">[PLACEHOLDER: email]</span>
-          <span className="text-muted">[PLACEHOLDER: social links]</span>
+        <nav aria-label="Footer" className="grid grid-cols-2 gap-x-16 text-sm">
+          <a href="#services" className={link}>Services</a>
+          <a href="#academy" className={link}>Academy</a>
+          <a href="#process" className={link}>How it works</a>
+          <a href="#faq" className={link}>FAQ</a>
+          <a href="#start" className={link}>Start your project</a>
         </nav>
       </div>
       <p className={`${wrap} mt-14 border-t border-rule pt-6 text-xs text-muted`}>
-        &copy; {new Date().getFullYear()} Techieficial. [PLACEHOLDER: legal entity and privacy policy link]
+        &copy; {new Date().getFullYear()} Techieficial. [PLACEHOLDER: email, social links, legal entity and privacy policy]
       </p>
     </footer>
   );
 }
+

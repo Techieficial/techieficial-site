@@ -1,33 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #f4f6f8;
-  --surface: #ffffff;
-  --ink: #0e1a2b;
-  --muted: #475467;
-  --rule: #d5dbe3;
-  --accent: #2448ff;
-  --accent-hover: #1a38e0;
-  --on-accent: #ffffff;
-  --accent-soft: #e6ebff;
-  --track: #e9edf2;
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0e1a2b;
-    --surface: #14233a;
-    --ink: #eef2f7;
-    --muted: #a6b3c5;
-    --rule: #26374f;
-    --accent: #7b93ff;
-    --accent-hover: #93a7ff;
-    --on-accent: #0e1a2b;
-    --accent-soft: #1c2c57;
-    --track: #1a2a42;
-    color-scheme: dark;
-  }
+  --bg: #0a0b14;
+  --surface: #12131f;
+  --surface-2: #191b2b;
+  --ink: #f4f5fa;
+  --muted: #9ca3b8;
+  --rule: #24263a;
+  --accent: #7c5cff;
+  --accent-2: #22d3ee;
+  --accent-3: #f472b6;
+  --accent-4: #a3e635;
+  --accent-hover: #9b87ff;
+  --on-accent: #0a0b14;
+  --accent-soft: #1b1936;
+  --accent-text: #a99bff;
+  --track: #1a1c2c;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -37,12 +26,18 @@
   --color-muted: var(--muted);
   --color-rule: var(--rule);
   --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+  --color-accent-4: var(--accent-4);
+  --color-surface-2: var(--surface-2);
   --color-accent-hover: var(--accent-hover);
   --color-on-accent: var(--on-accent);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-text: var(--accent-text);
   --color-track: var(--track);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-space-grotesk);
+  --font-mono: var(--font-space-grotesk);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -54,8 +49,7 @@ html {
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
-  font-feature-settings: "ss01", "cv11";
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
 ::selection {
@@ -66,7 +60,17 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 6px;
+}
+
+.bg-electric {
+  background-image: linear-gradient(100deg, #9b87ff 0%, #22d3ee 100%);
+}
+
+.text-electric {
+  background-image: linear-gradient(100deg, #b3a4ff 0%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 * {
@@ -76,6 +80,7 @@ body {
 h1,
 h2,
 h3 {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
   text-wrap: balance;
 }
 
@@ -138,5 +143,54 @@ details > summary::-webkit-details-marker {
 @media (prefers-reduced-motion: no-preference) {
   .fade-in {
     animation: fade-in 500ms var(--ease-out-expo) both;
+  }
+}
+
+/* Service wheel */
+.wheel-seg {
+  transform-origin: 320px 320px;
+}
+.wheel-pop {
+  transition: transform 450ms var(--ease-out-expo), filter 300ms ease-out;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wheel-seg {
+    animation: seg-in 900ms var(--ease-out-expo) both;
+    animation-delay: calc(var(--i, 0) * 90ms + 150ms);
+  }
+  .wheel-spin {
+    transform-origin: 320px 320px;
+    animation: spin 40s linear infinite;
+  }
+  .flow-line {
+    stroke-dasharray: 2600;
+    animation: draw 2.4s var(--ease-out-expo) both 300ms;
+  }
+}
+
+@keyframes seg-in {
+  from {
+    opacity: 0;
+    transform: scale(0.82) rotate(-8deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 2600;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }

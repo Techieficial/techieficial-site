@@ -17,8 +17,10 @@ export function FlightPlan() {
       className="rounded-[20px] border border-rule bg-surface p-4 sm:p-6 md:p-8"
       onMouseLeave={() => setActive(null)}
     >
+      <p className="mb-4 text-sm text-muted md:hidden">Example 12-week launch plan</p>
+
       {/* Week header */}
-      <div className="grid grid-cols-12 gap-x-1 md:grid-cols-[180px_repeat(12,1fr)] md:gap-x-1.5">
+      <div className="grid grid-cols-12 gap-x-1 md:grid-cols-[200px_repeat(12,1fr)] md:gap-x-1.5">
         <div className="hidden md:block" />
         {WEEKS.map((w) => (
           <div
@@ -38,19 +40,18 @@ export function FlightPlan() {
           return (
             <li key={s.id} className="border-t border-rule">
               <a
-                href="#services"
+                href={`#service-${s.id}`}
                 onMouseEnter={() => setActive(s.id)}
                 onFocus={() => setActive(s.id)}
                 onBlur={() => setActive(null)}
-                className="grid grid-cols-12 items-center gap-x-1 gap-y-2 py-3 outline-offset-0 md:grid-cols-[180px_repeat(12,1fr)] md:gap-x-1.5 md:py-3.5"
+                className="grid grid-cols-12 items-center gap-x-1 gap-y-2 py-3 md:grid-cols-[200px_repeat(12,1fr)] md:gap-x-1.5 md:py-3.5"
               >
                 <span
                   className={`col-span-12 text-sm font-medium transition-colors duration-300 md:col-span-1 md:text-[15px] ${dim ? "text-muted" : "text-ink"}`}
                 >
-                  {s.short}
+                  {s.name}
                 </span>
-                {/* Track */}
-                <span className="relative col-span-12 grid h-7 grid-cols-12 gap-x-1 md:col-span-12 md:h-8 md:gap-x-1.5">
+                <span className="col-span-12 grid h-7 grid-cols-12 gap-x-1 md:h-8 md:gap-x-1.5">
                   {WEEKS.map((w) => (
                     <span
                       key={w}
@@ -73,6 +74,10 @@ export function FlightPlan() {
                     );
                   })}
                 </span>
+                {/* Touch screens get the note inline, no hover needed */}
+                <span className="col-span-12 text-[13px] leading-snug text-muted md:hidden">
+                  {s.planNote}
+                </span>
               </a>
             </li>
           );
@@ -81,7 +86,7 @@ export function FlightPlan() {
 
       <figcaption
         aria-live="polite"
-        className="mt-2 min-h-[3rem] border-t border-rule pt-4 text-sm leading-relaxed text-muted md:min-h-0"
+        className="mt-2 hidden max-w-[72ch] border-t border-rule pt-4 text-sm leading-relaxed text-muted md:block"
       >
         {note}
       </figcaption>
