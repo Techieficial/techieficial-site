@@ -43,3 +43,8 @@ next-env.d.ts
 # impeccable local artifacts
 .impeccable/review/
 .impeccable/config.local.json
+
+# cloudflare
+.open-next/
+.wrangler/
+.dev.vars

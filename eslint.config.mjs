@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
     ".claude/**",
     ".agents/**",
     ".impeccable/**",
+    ".open-next/**",
+    ".wrangler/**",
   ]),
 ]);
 
