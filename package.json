@@ -3,14 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "velite && (velite --watch & next dev)",
+    "build": "velite --clean && next build && node scripts/scan-placeholders.mjs",
     "start": "next start",
     "lint": "eslint",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "content": "velite",
+    "typecheck": "velite && next typegen && tsc --noEmit",
+    "check": "node scripts/check.mjs",
+    "test:e2e": "playwright test",
+    "check:fast": "node scripts/check.mjs --no-lighthouse",
+    "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.6",
@@ -18,15 +24,22 @@
     "motion": "^13.4.2",
     "next": "16.3.6",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "velite": "^0.4.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
+    "linkinator": "^8.1.0",
+    "rehype-slug": "^6.0.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "wrangler": "^4.137.0"

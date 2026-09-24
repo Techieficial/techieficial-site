@@ -8,15 +8,15 @@ web
 
 ## Stack
 
-Next.js (App Router) + Tailwind CSS, mobile-first. Set by the user in the brief.
+Next.js 16 (App Router) + TypeScript + Tailwind v4, Velite content layer, deployed on Cloudflare Workers via OpenNext. Full brief: CLAUDE.md.
 
 ## Users
 
-Business owners and marketing leads evaluating high-ticket, done-for-you marketing and automation services. They arrive comparing agencies, short on time, sceptical of AI hype, and want to know within seconds whether Techieficial can run the work for them.
+In priority order: service business owners (home services, dental/med spa, legal, real estate) who lose leads to missed calls and slow follow-up; marketing agencies wanting white-label fulfillment; e-commerce brands needing ads and creatives; companies (20 to 500 staff) needing AI training; VAs and career switchers (Academy). Short on time, sceptical of AI hype.
 
 ## Product Purpose
 
-Techieficial is a premium agency. The marketing site exists to get qualified visitors to start a project through the project form. Success = project enquiries submitted.
+Techieficial is an AI growth agency. Site goals, in order: 1) booked demos (primary CTA "Book a demo", high ticket), 2) live demo tests (Demo Lab), 3) low-ticket purchases / Academy waitlist, 4) newsletter signups.
 
 ## Positioning
 

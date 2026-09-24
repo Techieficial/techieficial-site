@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -48,3 +49,12 @@ next-env.d.ts
 .open-next/
 .wrangler/
 .dev.vars
+
+# generated content
+.velite/
+public/static/
+# tests
+test-results/
+playwright-report/
+.lighthouseci/
+.env.local
