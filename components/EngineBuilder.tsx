@@ -59,6 +59,37 @@ export function EngineBuilder({ services }: { services: { slug: ServiceSlug; nam
 
   return (
     <div className="rounded-[24px] border border-rule bg-surface p-6 md:p-10">
+      {/* All three steps are always in the page, so visitors and crawlers see the whole flow up front. */}
+      <ol aria-label={t.progressLabel} className="mb-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-rule pb-6">
+        {t.stepNames.map((name, i) => {
+          const n = i + 1;
+          const done = step > n;
+          const current = step === n;
+          return (
+            <li key={name} aria-current={current ? "step" : undefined} className={`flex items-center gap-2.5 text-[15px] font-medium ${current ? "text-ink" : done ? "text-ink/85" : "text-muted"}`}>
+              <span
+                aria-hidden
+                className={`grid size-7 place-items-center rounded-full border text-sm font-bold ${current ? "border-accent-hover bg-surface-2" : done ? "border-accent-2 text-accent-2" : "border-rule"}`}
+              >
+                {done ? <CheckIcon weight="bold" className="size-3.5" /> : n}
+              </span>{" "}
+              <span>
+                <span className="sr-only">{n}. </span>
+                {name}
+                {done && <span className="sr-only"> ({t.stepDone})</span>}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+      <noscript>
+        <p className="mb-6 text-muted">
+          {t.noScript}{" "}
+          <a href="#packages" className="font-medium text-accent-text underline">
+            {t.noScriptLink}
+          </a>
+        </p>
+      </noscript>
       <div aria-live="polite">
         {step <= 3 ? (
           <>

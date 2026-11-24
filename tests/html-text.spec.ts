@@ -31,3 +31,20 @@ test("comparison table caption differs from the section heading", async ({ page 
   expect(caption).toBeTruthy();
   expect(caption).not.toBe(heading);
 });
+
+test("pricing HTML shows all three Engine Builder steps", async ({ request }) => {
+  const text = htmlText(await (await request.get("/pricing")).text());
+  for (const step of ["Services", "Business size", "Main goal"]) expect(text, step).toContain(step);
+});
+
+test("Engine Builder step bar tracks the current step", async ({ page }) => {
+  await page.goto("/pricing");
+  const steps = page.getByRole("list", { name: "Engine Builder steps" }).getByRole("listitem");
+  await expect(steps).toHaveCount(3);
+  await expect(steps.nth(0)).toHaveAttribute("aria-current", "step");
+  await page.getByRole("checkbox", { name: /AI Agents/ }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await expect(page.getByRole("heading", { name: "What size is your business?" })).toBeVisible();
+  await expect(steps.nth(1)).toHaveAttribute("aria-current", "step");
+  await expect(steps.nth(0)).toContainText("done");
+});
