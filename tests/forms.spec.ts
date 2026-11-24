@@ -117,6 +117,14 @@ test("missed-call calculator uses the v3 formula", async ({ page }) => {
   // 50 x 4.3 x 0.2 x 0.5 x 400 = 8,600 a month, 103,200 a year.
   await expect(page.getByText("$8,600").first()).toBeVisible();
   await expect(page.getByText("$103,200")).toBeVisible();
+  // "Email me this result" sends the estimate to the CRM, tagged calculator.
+  const email = `calc+${Date.now()}@techieficial.com`;
+  await page.locator("main").getByRole("textbox", { name: "Work email" }).fill(email);
+  await page.locator("main").getByRole("button", { name: "Send it" }).click();
+  await expect(page.getByText("Sent. Check your inbox.")).toBeVisible();
+  const lead = await leadFor(page, email);
+  expect(lead.tag).toBe("calculator");
+  expect(String(lead.message)).toContain("$8,600");
 });
 
 test("call-me requests go to the call-me webhook only", async ({ request }) => {

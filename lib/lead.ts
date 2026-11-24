@@ -40,7 +40,8 @@ export const leadSchema = z
   })
   .check(
     z.superRefine((data, ctx) => {
-      if (data.source !== "newsletter" && !data.name) ctx.addIssue({ code: "custom", path: ["name"], message: "required", input: data.name });
+      // Email-only forms (newsletter, calculator result) do not ask for a name.
+      if (data.source !== "newsletter" && data.source !== "calculator" && !data.name) ctx.addIssue({ code: "custom", path: ["name"], message: "required", input: data.name });
       if ((data.source === "audit" || data.source === "test-build") && !data.company) {
         ctx.addIssue({ code: "custom", path: ["company"], message: "required", input: data.company });
       }
