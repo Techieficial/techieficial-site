@@ -107,17 +107,30 @@ test("honeypot submissions are dropped silently", async ({ request }) => {
   expect(all.some((l) => l.email === email)).toBe(false);
 });
 
-test("engine builder recommends a package and passes it to booking", async ({ page }) => {
-  await page.goto("/pricing");
-  const builder = page.locator("section").filter({ has: page.getByRole("heading", { name: "Engine Builder" }) });
-  await builder.getByRole("checkbox", { name: /AI Agents/ }).click();
-  await builder.getByRole("button", { name: "Next" }).click();
-  await builder.getByRole("radio", { name: "2 to 10" }).click();
-  await builder.getByRole("button", { name: "Next" }).click();
-  await builder.getByRole("radio", { name: "Stop missing leads" }).click();
-  await builder.getByRole("button", { name: "Next" }).click();
+test("Team Builder recommends an offer by the v3 rules and passes the choices to booking", async ({ page }) => {
+  await page.goto("/offers");
+  const builder = page.locator("section").filter({ has: page.getByRole("heading", { name: "Team Builder" }) });
+  const run = async (problems: string[]) => {
+    for (const p of problems) await builder.getByRole("checkbox", { name: p }).click();
+    await builder.getByRole("button", { name: "Next" }).click();
+    await builder.getByRole("radio", { name: "2 to 10" }).click();
+    await builder.getByRole("button", { name: "Next" }).click();
+    await builder.getByRole("radio", { name: "No", exact: true }).click();
+    await builder.getByRole("button", { name: "Next" }).click();
+  };
+  // Only missed calls: AI Receptionist Starter (checkout, closed for now).
+  await run(["Missed calls"]);
+  await expect(builder.getByRole("heading", { name: /Recommended for you: AI Receptionist Starter/ })).toBeVisible();
+  await expect(builder.getByText("Checkout opens soon")).toBeVisible();
+  await builder.getByRole("button", { name: "Start again" }).click();
+  // Not enough leads: AI Growth Team.
+  await run(["Not enough leads"]);
+  await expect(builder.getByRole("heading", { name: /Recommended for you: AI Growth Team/ })).toBeVisible();
+  await builder.getByRole("button", { name: "Start again" }).click();
+  // Two problems: AI Front Office, booked through a strategy call.
+  await run(["Missed calls", "No follow-up"]);
   await expect(builder.getByRole("heading", { name: /Recommended for you: AI Front Office/ })).toBeVisible();
   await builder.getByRole("link", { name: "Book a strategy call" }).click();
   await expect(page).toHaveURL(/\/contact\?package=AI(\+|%20)Front(\+|%20)Office/);
-  await expect(page.getByText("Your Engine Builder choices")).toBeVisible();
+  await expect(page.getByText("Your choices")).toBeVisible();
 });

@@ -17,7 +17,7 @@ test("theme switch flips the theme and remembers it across pages", async ({ page
   const toggle = page.getByRole("navigation", { name: "Main" }).getByRole("button", { name: /light and dark/i });
   await toggle.click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await page.goto("/pricing");
+  await page.goto("/offers");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.getByRole("navigation", { name: "Main" }).getByRole("button", { name: /light and dark/i }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");

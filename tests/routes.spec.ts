@@ -61,3 +61,21 @@ test("AI Team page lists 4 AI employees that each have a profile", async ({ page
     expect(res.status(), slug).toBe(200);
   }
 });
+
+test("Pricing permanently redirects to Offers, and every product page exists", async ({ request }) => {
+  const res = await request.get("/pricing", { maxRedirects: 0 });
+  expect(res.status()).toBe(301);
+  expect(res.headers()["location"]).toMatch(/\/offers$/);
+  for (const slug of ["ai-front-office", "ai-growth-team", "ai-receptionist-starter", "crm-workspace", "missed-call-text-back", "ai-receptionist-playbook"]) {
+    expect((await request.get(`/offers/${slug}`)).status(), slug).toBe(200);
+  }
+});
+
+test("checkout products show Checkout opens soon while checkout is off; $3,000+ products only offer a call", async ({ page }) => {
+  await page.goto("/offers/ai-receptionist-starter");
+  await expect(page.getByText("Checkout opens soon").first()).toBeVisible();
+  await expect(page.locator('a[href*="fastpaydirect"]')).toHaveCount(0);
+  await page.goto("/offers/ai-front-office");
+  await expect(page.getByRole("link", { name: /Interview the AI team/ }).first()).toBeVisible();
+  await expect(page.getByText("Checkout opens soon")).toHaveCount(0);
+});

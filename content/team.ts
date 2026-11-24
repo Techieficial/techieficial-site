@@ -201,6 +201,6 @@ export const teamPage = {
     neverTitle: "What it never does",
     hireTitle: "How to hire",
     faqTitle: "Questions",
-    ctaTitle: "Ready to hire your AI team?",
+    ctaTitle: "Your next lead is calling. Who's answering?",
   },
 };

@@ -20,7 +20,7 @@ export function GET() {
     "",
     "## Key pages",
     link("Demo Lab", "/demo", "Test the AI receptionist and book a test build"),
-    link("Pricing", "/pricing", "Packages and the Engine Builder"),
+    link("Offers and pricing", "/offers", "Every offer with setup and monthly prices, add-ons and the Team Builder"),
     link("Agencies", "/agencies", "White-label fulfillment for agencies"),
     link("Academy", "/academy", "Training and courses waitlist"),
     link("FAQ", "/faq"),

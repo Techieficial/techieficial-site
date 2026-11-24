@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { contactPage } from "@/content/pages";
 import { LeadForm } from "./LeadForm";
 
-const keys = ["package", "service", "services", "size", "goal"] as const;
+const keys = ["package", "service", "services", "size", "goal", "crm"] as const;
 
 /** Contact form that carries Engine Builder choices (from the URL) as hidden fields. */
 export function ContactForm() {

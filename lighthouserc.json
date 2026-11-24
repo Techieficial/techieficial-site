@@ -5,7 +5,7 @@
         "http://127.0.0.1:3200/",
         "http://127.0.0.1:3200/services/marketing-automation",
         "http://127.0.0.1:3200/demo",
-        "http://127.0.0.1:3200/pricing"
+        "http://127.0.0.1:3200/offers"
       ],
       "numberOfRuns": 3,
       "settings": {

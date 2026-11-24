@@ -1,7 +1,6 @@
 import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { siteConfig } from "@/site.config";
 import { teamPage } from "@/content/team";
-import { liveHref } from "@/lib/nav";
 import { pageMetadata } from "@/lib/seo";
 import { CTABand, PageHero } from "@/components/blocks";
 import { TeamCards } from "@/components/team";
@@ -11,7 +10,7 @@ export const metadata = pageMetadata({ ...teamPage.seo, path: "/ai-team" });
 
 /** Meet the AI Team (docs/SITE_CONTENT_V3.md 2.2). */
 export default function AiTeamPage() {
-  const wholeTeam = liveHref({ href: "/offers/ai-front-office", fallback: "/pricing" });
+  const wholeTeam = "/offers/ai-front-office";
   return (
     <>
       <PageHero title={teamPage.title} intro={teamPage.intro} crumbs={[{ name: teamPage.profile.breadcrumb, path: "/ai-team" }]}>

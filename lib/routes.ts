@@ -1,5 +1,6 @@
 import { getCaseStudies, getIndustries, getLegalDocs, getPosts, getServicePages, hasWork } from "./content";
 import { team, teamUrl } from "@/content/team";
+import { productPages } from "@/content/offers";
 
 export type RouteEntry = { path: string; lastModified?: string };
 
@@ -9,7 +10,7 @@ export function publicRoutes(): RouteEntry[] {
     "/",
     "/services",
     "/demo",
-    "/pricing",
+    "/offers",
     "/agencies",
     "/academy",
     "/about",
@@ -24,6 +25,7 @@ export function publicRoutes(): RouteEntry[] {
     ...staticPaths.map((path) => ({ path })),
     ...getServicePages().map((s) => ({ path: s.url })),
     ...team.map((m) => ({ path: teamUrl(m.slug) })),
+    ...productPages.map((p) => ({ path: `/offers/${p.slug}` })),
     ...getIndustries().map((i) => ({ path: i.url })),
     ...getCaseStudies().map((c) => ({ path: c.url })),
     ...getPosts().map((p) => ({ path: p.url, lastModified: p.updated ?? p.date })),

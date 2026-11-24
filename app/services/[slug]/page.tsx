@@ -157,7 +157,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                   .replace("{monthly}", formatUsd(pkg.monthly ?? 0))}
               </p>
             </div>
-            <Button href="/pricing" variant="secondary" arrow={false}>
+            <Button href="/offers" variant="secondary" arrow={false}>
               {ui.pricingLink}
             </Button>
           </div>

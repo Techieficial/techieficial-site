@@ -42,6 +42,10 @@ export type Offer = {
   /** Optional: a higher crossed-out price, and a limited-time line (no timers). */
   compareAtPrice?: number;
   limitedOffer?: string;
+  /** Monthly fee when the client already has their own CRM account (AI Front Office). */
+  ownCrmMonthly?: number;
+  /** Optional quick-start setup fee (CRM Workspace). */
+  quickStart?: number;
   popular?: boolean;
   draft: boolean;
   /** Short list for cards. */
@@ -76,6 +80,7 @@ export const offers: Offer[] = [
     setup: 3500,
     monthly: 1297,
     minimumTerm: "3-month minimum",
+    ownCrmMonthly: 997,
     path: "call",
     popular: true,
     draft: true,
@@ -104,6 +109,7 @@ export const offers: Offer[] = [
     tagline: "Your own CRM, hosted and supported.",
     bestFor: "A hosted, supported CRM without AI",
     monthly: 197,
+    quickStart: 297,
     path: "checkout",
     paymentLink: "https://link.fastpaydirect.com/payment-link/6b05aee6906a8b62055d9462",
     checkoutLabel: "Get started",
@@ -187,45 +193,17 @@ export const pricingFaqs = [
   },
 ];
 
-/* ---------- Engine Builder ---------- */
-
-export const builderSizes = [
-  { key: "solo", label: "Solo" },
-  { key: "small", label: "2 to 10" },
-  { key: "medium", label: "11 to 50" },
-  { key: "large", label: "50+" },
-] as const;
-
-export const builderGoals = [
-  { key: "answer", label: "Stop missing leads" },
-  { key: "grow", label: "Get more leads" },
-  { key: "content", label: "Make more content" },
-  { key: "team", label: "Train my team" },
-] as const;
-
-export type BuilderSize = (typeof builderSizes)[number]["key"];
-export type BuilderGoal = (typeof builderGoals)[number]["key"];
+/* ---------- Team Builder ---------- */
 
 /**
- * Recommends an offer: AI Receptionist Starter by default, stepping up to the AI Front Office or
- * AI Growth Team when the services, goal or business size need more.
- * Temporary rules until Phase 4 replaces this with the Team Builder (docs/SITE_CONTENT_V3.md 2.4).
+ * Team Builder rules (docs/SITE_CONTENT_V3.md 2.4): "Not enough leads" points to the AI Growth Team;
+ * only missed calls points to the AI Receptionist Starter; anything else (2 or more problems, or one
+ * problem only the full team solves) points to the AI Front Office.
  */
-export function recommendPackage(services: ServiceSlug[], size: BuilderSize, goal: BuilderGoal): Offer {
-  const ladder: OfferSlug[] = ["ai-receptionist-starter", "ai-front-office", "ai-growth-team"];
-  let best = 0;
-  const bump = (i: number) => {
-    best = Math.max(best, i);
-  };
-  for (const s of services) {
-    if (s === "ai-agents" || s === "ai-video") bump(1);
-    if (s === "paid-ads" || s === "training") bump(2);
-  }
-  if (goal === "grow" || goal === "team") bump(2);
-  if (goal === "content") bump(1);
-  if (size === "large") bump(2);
-  if (size === "medium") bump(1);
-  return offerBySlug(ladder[best]);
+export function recommendOffer(problems: string[]): Offer {
+  if (problems.includes("leads")) return offerBySlug("ai-growth-team");
+  if (problems.length === 1 && problems[0] === "missed-calls") return offerBySlug("ai-receptionist-starter");
+  return offerBySlug("ai-front-office");
 }
 
 export const formatUsd = (n: number) => `$${n.toLocaleString("en-US")}`;
@@ -237,4 +215,11 @@ export function priceParts(o: { setup?: number; monthly?: number; oneTime?: numb
     monthly: o.monthly !== undefined ? `${formatUsd(o.monthly)}/mo` : undefined,
     oneTime: o.oneTime !== undefined ? formatUsd(o.oneTime) : undefined,
   };
+}
+
+/** Fills price tokens in copy ({ownCrmMonthly}, {quickStart}) from the offer, so prices live only here. */
+export function fillPrices(text: string, o: Offer) {
+  return text
+    .replace("{ownCrmMonthly}", o.ownCrmMonthly !== undefined ? formatUsd(o.ownCrmMonthly) : "")
+    .replace("{quickStart}", o.quickStart !== undefined ? formatUsd(o.quickStart) : "");
 }

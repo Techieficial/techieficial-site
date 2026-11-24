@@ -67,7 +67,8 @@ const nextConfig: NextConfig = {
       { source: "/services/ads", destination: "/services/paid-ads", permanent: true },
       { source: "/services/video", destination: "/services/ai-video", permanent: true },
       { source: "/services/agents", destination: "/ai-team", statusCode: 301 },
-      // v3: the AI Team page replaces the AI Agents service page.
+      // v3: Offers replaces Pricing, and the AI Team page replaces the AI Agents service page.
+      { source: "/pricing", destination: "/offers", statusCode: 301 },
       { source: "/services/ai-agents", destination: "/ai-team", statusCode: 301 },
       { source: "/book", destination: "/contact", permanent: false },
     ];

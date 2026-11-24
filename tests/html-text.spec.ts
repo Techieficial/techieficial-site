@@ -17,7 +17,7 @@ test("homepage HTML has one wheel details card", async ({ request }) => {
 
 test("text does not run together where elements meet", async ({ request }) => {
   const joined = ["actionTest", "$2,500plus", "SeenCapture", "LeadsGrow", "demoTest", "demoSee"];
-  for (const path of ["/", "/pricing", "/ai-team/receptionist"]) {
+  for (const path of ["/", "/offers", "/ai-team/receptionist"]) {
     const text = htmlText(await (await request.get(path)).text());
     for (const j of joined) expect(text.includes(j), `${path}: ${j}`).toBe(false);
   }
@@ -31,17 +31,17 @@ test("comparison table caption differs from the section heading", async ({ page 
   expect(caption).not.toBe(heading);
 });
 
-test("pricing HTML shows all three Engine Builder steps", async ({ request }) => {
-  const text = htmlText(await (await request.get("/pricing")).text());
-  for (const step of ["Services", "Business size", "Main goal"]) expect(text, step).toContain(step);
+test("offers HTML shows all three Team Builder steps", async ({ request }) => {
+  const text = htmlText(await (await request.get("/offers")).text());
+  for (const step of ["Problems", "Business size", "Your CRM"]) expect(text, step).toContain(step);
 });
 
-test("Engine Builder step bar tracks the current step", async ({ page }) => {
-  await page.goto("/pricing");
-  const steps = page.getByRole("list", { name: "Engine Builder steps" }).getByRole("listitem");
+test("Team Builder step bar tracks the current step", async ({ page }) => {
+  await page.goto("/offers");
+  const steps = page.getByRole("list", { name: "Team Builder steps" }).getByRole("listitem");
   await expect(steps).toHaveCount(3);
   await expect(steps.nth(0)).toHaveAttribute("aria-current", "step");
-  await page.getByRole("checkbox", { name: /AI Agents/ }).click();
+  await page.getByRole("checkbox", { name: "Missed calls" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await expect(page.getByRole("heading", { name: "What size is your business?" })).toBeVisible();
   await expect(steps.nth(1)).toHaveAttribute("aria-current", "step");

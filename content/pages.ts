@@ -17,7 +17,7 @@ export const nav = {
       { name: "AI Follow-up Agent", line: "Chases unbooked leads, open quotes and no-shows.", icon: "ArrowsClockwise", href: "/ai-team/follow-up-agent" },
       { name: "AI Reviews Agent", line: "Asks for reviews after every job.", icon: "Star", href: "/ai-team/reviews-agent" },
     ],
-    wholeTeam: { title: "Hire the whole team", body: "AI Front Office: all 4 AI employees, built and managed for you.", href: "/offers/ai-front-office", fallback: "/pricing" },
+    wholeTeam: { title: "Hire the whole team", body: "AI Front Office: all 4 AI employees, built and managed for you.", href: "/offers/ai-front-office" },
     allLabel: "Meet the AI team",
   },
   byIndustry: "By industry",
@@ -36,7 +36,7 @@ export const nav = {
   ] as NavLinkDef[],
   links: [
     { label: "Demo Lab", href: "/demo" },
-    { label: "Offers", href: "/offers", fallback: "/pricing" },
+    { label: "Offers", href: "/offers" },
     { label: "Inside", href: "/inside" },
     { label: "Academy", href: "/academy" },
   ] as NavLinkDef[],
@@ -71,7 +71,7 @@ export const footer = {
         { label: "CRM Workspace", href: "/offers/crm-workspace" },
         { label: "Missed-Call Text-Back", href: "/offers/missed-call-text-back" },
         { label: "Playbook", href: "/offers/ai-receptionist-playbook" },
-        { label: "All offers and pricing", href: "/offers", fallback: "/pricing" },
+        { label: "All offers and pricing", href: "/offers" },
       ],
     },
     {
@@ -163,41 +163,13 @@ export const demoPage = {
   galleryAll: "All",
 };
 
+/** Labels used on offer cards and price boxes. Page copy for /offers lives in content/offers.ts. */
 export const pricingPage = {
-  seo: {
-    title: "Offers and Pricing | Techieficial",
-    description: "From a $97 playbook to a fully managed AI team. Clear setup and monthly prices. Usage billed at cost.",
-  },
-  title: "Build your AI team.",
-  intro: "Start with one hire or bring on the whole team. Every plan is built for you, trained on your business and managed every month.",
-  builder: {
-    title: "Engine Builder",
-    step1: "Which services do you need?",
-    step2: "What size is your business?",
-    step3: "What is your main goal?",
-    resultTitle: "Recommended for you",
-    setup: "Setup from",
-    monthly: "Monthly from",
-    next: "Next",
-    back: "Back",
-    restart: "Start again",
-    stepOf: "Step {n} of 3",
-    progressLabel: "Engine Builder steps",
-    stepNames: ["Services", "Business size", "Main goal"],
-    stepDone: "done",
-    noScript: "The Engine Builder needs JavaScript to run. You can compare every package and price in the Packages section below.",
-    noScriptLink: "Go to offers",
-    pickHint: "Pick one or more.",
-    includes: "What is included",
-    selectionNote: "Your choices are added to the booking form.",
-  },
-  packagesTitle: "Offers",
-  coversTitle: "What your monthly fee covers",
-  faqTitle: "Pricing questions",
   popular: "Most popular",
   draftNote: "Draft pricing",
   checkoutSoon: "Checkout opens soon",
   oneTimeLabel: "One-time",
+  includes: "What is included",
   minimumLabel: "Minimum term",
   setup: "Setup from",
   monthly: "Monthly from",
@@ -297,7 +269,7 @@ export const contactPage = {
   formTitle: "Tell us about your business",
   calendarTitle: "Pick a time",
   otherWays: "Other ways to reach us",
-  selectionTitle: "Your Engine Builder choices",
+  selectionTitle: "Your choices",
   submit: "Book my strategy call",
 };
 
@@ -353,7 +325,7 @@ export const notFoundPage = {
   links: [
     { label: "Services", href: "/services" },
     { label: "Demo Lab", href: "/demo" },
-    { label: "Pricing", href: "/pricing" },
+    { label: "Offers", href: "/offers" },
     { label: "Book a strategy call", href: "/contact" },
   ],
 };
