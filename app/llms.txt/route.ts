@@ -1,5 +1,7 @@
 import { siteConfig } from "@/site.config";
-import { getIndustries, getPosts, getServices } from "@/lib/content";
+import { getIndustries, getPosts, getServicePages } from "@/lib/content";
+import { team, teamUrl } from "@/content/team";
+import { offers } from "@/content/pricing";
 import { absoluteUrl } from "@/lib/seo";
 
 export const dynamic = "force-static";
@@ -10,16 +12,26 @@ export function GET() {
   const lines = [
     `# ${siteConfig.name}`,
     "",
-    `> ${siteConfig.name} is an ${siteConfig.tagline.toLowerCase()}. ${siteConfig.mission} Clients in ${siteConfig.countries.join(", ")}.`,
+    `> ${siteConfig.name} builds, trains and manages AI teams for service businesses: an AI Receptionist, AI Lead Responder, AI Follow-up Agent and AI Reviews Agent working 24/7 inside the client's CRM. Clients in ${siteConfig.countries.join(", ")}.`,
     "",
-    "## Services",
-    ...getServices().map((s) => link(s.name, s.url, s.outcome)),
+    "## The AI team",
+    link("Meet the AI team", "/ai-team"),
+    ...team.map((m) => link(m.profileName ?? m.name, teamUrl(m.slug), m.line)),
+    "",
+    "## Offers",
+    ...offers.map((o) => link(o.name, `/offers/${o.slug}`, o.tagline)),
+    "",
+    "## More services",
+    ...getServicePages().map((s) => link(s.name, s.url, s.outcome)),
     "",
     "## Industries",
     ...getIndustries().map((i) => link(i.name, i.url, i.description)),
     "",
     "## Key pages",
-    link("Demo Lab", "/demo", "Test the AI receptionist and book a test build"),
+    link("Demo Lab", "/demo", "Interview the AI team and book a test build"),
+    link("Inside Techieficial", "/inside", "What runs Techieficial today"),
+    link("Missed-call calculator", "/tools/missed-call-calculator", "Estimate what missed calls cost you"),
+    link("Free lead-leak audit", "/audit"),
     link("Offers and pricing", "/offers", "Every offer with setup and monthly prices, add-ons and the Team Builder"),
     link("Agencies", "/agencies", "White-label fulfillment for agencies"),
     link("Academy", "/academy", "Training and courses waitlist"),

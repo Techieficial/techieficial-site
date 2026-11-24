@@ -113,10 +113,13 @@ export const servicesHub = {
   feeds: "feeds",
   seo: {
     title: "Services | Techieficial",
-    description: "Marketing automation, paid ads, AI video, AI agents and training, planned and run as one growth engine.",
+    description: "Paid ads, AI video, CRM automation and team training. Add them to your AI team, or hire them on their own.",
   },
-  title: "Five services, one growth engine.",
-  intro: "Each service works on its own. Together, they turn attention into booked work without leads falling through the cracks.",
+  title: "More ways we grow your business.",
+  intro: "Add these to your AI team, or hire them on their own.",
+  pairsTitle: "Pairs with your AI team",
+  pairsBody: "Every lead these services bring in is answered, followed up and booked by your AI team, and logged in your CRM.",
+  pairsLink: "Meet the AI team",
   connectTitle: "How the services connect",
   connect: [
     { from: "ai-video", to: "paid-ads", label: "Video feeds your ads with fresh creative." },
@@ -197,12 +200,12 @@ export const agenciesPage = {
     title: "White-Label Fulfillment for Agencies | Techieficial",
     description: "CRM builds, AI agents and AI video delivered under your agency's brand. Sell more services without hiring a build team.",
   },
-  title: "Your brand. Our build team.",
-  intro: "We build CRM systems, AI agents and AI video for your clients, under your agency's name. You own the relationship, we do the fulfillment.",
+  title: "Sell AI teams under your brand. We build them.",
+  intro: "We deliver AI Receptionists, AI Front Offices, CRM builds and AI video under your brand, with full white-label and NDA. You own the relationship, we do the fulfillment.",
   offerTitle: "What we build for you",
   offer: [
     { title: "CRM builds", body: "Pipelines, automations, booking and reporting for your clients." },
-    { title: "AI agents", body: "Voice receptionists, chat agents and lead qualifiers, set up for each client." },
+    { title: "AI Receptionists and AI Front Offices", body: "AI teams that answer, follow up and book for each of your clients." },
     { title: "AI video", body: "Ad creatives, UGC-style ads and explainers in your clients' brand." },
   ],
   howTitle: "How it works",
@@ -224,12 +227,12 @@ export const agenciesPage = {
 
 export const academyPage = {
   seo: {
-    title: "Academy | Techieficial",
-    description: "Learn to build CRM automations, AI agents and AI video from the team that builds them for clients. Join the Academy waitlist.",
+    title: "Academy: Train Your Humans | Techieficial",
+    description: "Courses, mentorship and corporate training on running a business with AI employees, from the people who build them. Join the waitlist.",
   },
-  title: "Learn the systems we build for clients.",
-  intro: "The Techieficial Academy is coming soon. Join the waitlist to hear first when courses, mentorship and the community open.",
-  comingTitle: "What is coming",
+  title: "Your AI team is ready. Is your human team?",
+  intro: "Courses, mentorship and corporate training on running a business with AI employees, from the people who build them.",
+  comingTitle: "Coming soon",
   coming: [
     { title: "Self-paced course", body: "Step-by-step lessons on CRM automation, AI agents and AI video." },
     { title: "Community", body: "A place to ask questions and share builds with other learners." },
@@ -245,34 +248,32 @@ export const academyPage = {
 export const aboutPage = {
   seo: {
     title: "About | Techieficial",
-    description: "Techieficial is an AI growth agency that plans and runs marketing automation, ads, AI video, AI agents and training as one system.",
+    description: "Techieficial builds, trains and manages AI teams for service businesses in the US, UK, Canada, Australia and New Zealand.",
   },
-  title: "We build growth engines, not one-off projects.",
-  intro: "Techieficial is an AI growth agency. We plan and run marketing automation, paid ads, AI video, AI agents and training as one connected system.",
-  valuesTitle: "What we believe",
-  values: [
-    { title: "Systems over tactics", body: "A single campaign fades. A connected system keeps working." },
-    { title: "Speed wins", body: "The first business to reply often wins the customer. We build for speed." },
-    { title: "Plain language", body: "No jargon, no hype. You always know what we are building and why." },
-    { title: "Prove it", body: "We show you the system working before we ask you to trust it." },
+  title: "Built by a builder.",
+  intro: "Techieficial builds, trains and manages AI teams for service businesses.",
+  /** Founder story (docs/SITE_CONTENT_V3.md 2.13). DRAFT: hidden until the owner approves it and supplies a photo. */
+  founderApproved: false,
+  founderTitle: "The founder",
+  founder: [
+    "Techieficial was founded by Abdulmujeeb Iyanda. He started in IT, troubleshooting systems and hardware, then moved into web and funnel design, and for the last 4+ years has specialized in CRM builds and automation.",
+    "He has built CRM and automation systems for more than 13 clients across the US, UK, Canada, Australia and New Zealand, each one designed and delivered personally. The same problem came up again and again: good businesses losing leads to missed calls, slow replies and follow-up nobody had time for.",
+    "Techieficial packages the fix as an AI team you can hire, built and managed by someone who has done the work by hand.",
   ],
   howTitle: "How we work",
-  how: [
-    "One team plans every service together, so nothing is built in isolation.",
-    "We test every path end to end before anything goes live.",
-    "We keep improving the system after launch and report on it every month.",
-  ],
+  how: ["We build it ourselves.", "We test before anything goes live.", "We tell you what the AI can't do.", "We report every month."],
   countriesTitle: "Where we work",
   countriesBody: "We have delivered CRM and automation systems for 13+ clients across these countries:",
 };
 
 export const contactPage = {
   seo: {
-    title: "Book a Demo | Techieficial",
+    title: "Book a Strategy Call | Techieficial",
     description: "Book a strategy call with Techieficial. We look at how leads reach you today and show you what we would build first.",
   },
-  title: "Book a strategy call.",
-  intro: "Tell us about your business. We will look at how leads reach you today and show you what we would build first.",
+  title: "Let's map your AI team.",
+  intro: "Book a 30-minute strategy call. You'll leave with a clear plan for where your leads are slipping, whether or not we work together.",
+  supportLabel: "Existing clients",
   formTitle: "Tell us about your business",
   calendarTitle: "Pick a time",
   otherWays: "Other ways to reach us",
@@ -301,26 +302,32 @@ export const blogPage = {
   minRead: "min read",
 };
 
+/** After a payment link purchase (docs/SITE_CONTENT_V3.md 2.16). Point the CRM payment links' success URL here. */
+export const purchaseThanks = {
+  seo: { title: "Payment Received | Techieficial", description: "Payment received. Welcome to Techieficial. Here is what happens next." },
+  title: "Payment received. Welcome to Techieficial.",
+  intro: "Here is what happens next.",
+  steps: [
+    { title: "Onboarding email", body: "Within 1 business day from support@techieficial.com." },
+    { title: "Playbook buyers", body: "Check your email for the download link." },
+  ],
+};
+
 export const thankYouPage = {
   seo: {
     title: "Thank You | Techieficial",
     description: "Thanks for getting in touch with Techieficial. Here is what happens next.",
   },
-  title: "Thanks, we have your details.",
+  title: "You're booked.",
   intro: "Here is what happens next.",
   steps: [
-    { title: "We review your details", body: "We look at your business and how leads reach you today." },
-    { title: "You get a confirmation", body: "If you booked a time, a confirmation and reminder are on their way." },
-    { title: "We meet", body: "On the call we show you what we would build first and answer your questions." },
+    { title: "Check your email", body: "Your meeting link is on its way." },
+    { title: "Have your numbers in mind", body: "Your website and a recent busy week, so we can see where leads slip." },
   ],
-  prepTitle: "To get the most from the call",
-  prep: [
-    "Know roughly how many calls, forms and messages you get each month",
-    "List the tools you use today, such as your CRM, calendar and ad accounts",
-    "Think about the one problem you most want fixed",
-  ],
-  explore: "While you wait",
-  demoLink: "Try the Demo Lab",
+  /** Shown only once the demo number exists. */
+  callStep: { title: "Call the AI before we meet", body: "Hear what your customers would hear." },
+  explore: "Before we meet",
+  demoLink: "Interview the AI team in the Demo Lab",
   workLink: "See our work",
   blogLink: "Read the blog",
 };
@@ -401,6 +408,7 @@ export const ui = {
   pricingTitle: "Pricing",
   pricingFrom: "Included in the {package}, from {setup} setup and {monthly} a month. Phone, SMS and email usage billed at cost.",
   pricingLink: "See all offers",
+  startSmaller: "Want to start smaller? Begin with the AI Receptionist Starter and add the rest of the team later.",
   faqTitle: "Questions about",
   relatedServices: "Related services",
   relatedIndustries: "Industries we build this for",

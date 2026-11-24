@@ -28,7 +28,7 @@ Reply **STOP** to any message to unsubscribe. You will receive one final message
 
 ## Help
 
-Reply **HELP** to any message for help, or reach us through our [contact page](/contact).
+Reply **HELP** to any message for help, or email [hello@techieficial.com](mailto:hello@techieficial.com).
 
 ## Carriers
 

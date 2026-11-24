@@ -3,7 +3,6 @@ import { aboutPage, ui } from "@/content/pages";
 import { siteConfig } from "@/site.config";
 import { pageMetadata } from "@/lib/seo";
 import { CTABand, PageHero } from "@/components/blocks";
-import { CardGrid } from "@/components/StepList";
 import { Section, SectionHeader } from "@/components/ui";
 
 export const metadata = pageMetadata({ ...aboutPage.seo, path: "/about" });
@@ -13,10 +12,17 @@ export default function AboutPage() {
     <>
       <PageHero title={aboutPage.title} intro={aboutPage.intro} crumbs={[{ name: "About", path: "/about" }]} />
 
-      <Section className="!pt-4" labelledBy="values-title">
-        <SectionHeader id="values-title" title={aboutPage.valuesTitle} />
-        <CardGrid items={aboutPage.values} cols={4} />
-      </Section>
+      {/* Founder story: hidden until the owner approves the draft and supplies a photo (content/_missing.md). */}
+      {aboutPage.founderApproved && (
+        <Section className="!pt-4" labelledBy="founder-title">
+          <SectionHeader id="founder-title" title={aboutPage.founderTitle} />
+          <div className="max-w-[65ch] space-y-4 text-[length:var(--text-lead)] leading-relaxed text-muted">
+            {aboutPage.founder.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+          </div>
+        </Section>
+      )}
 
       <Section tone="raised" labelledBy="how-title">
         <div className="grid gap-10 lg:grid-cols-2">

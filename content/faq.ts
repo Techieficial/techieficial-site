@@ -8,8 +8,12 @@ export const faqGroups: FaqGroup[] = [
     title: "Services",
     items: [
       {
+        q: "Do I have to hire the whole team?",
+        a: "No. Start with the AI Receptionist Starter and add the rest later.",
+      },
+      {
         q: "What does Techieficial do?",
-        a: "We plan and run five services as one system: marketing automation with a CRM, paid ads, AI video content, AI agents and training. You can hire us for one service or all five.",
+        a: "We build, train and manage AI teams for service businesses: an AI Receptionist, Lead Responder, Follow-up Agent and Reviews Agent working inside your CRM. We also run paid ads, AI video, CRM automation and team training.",
         home: true,
       },
       {
@@ -50,6 +54,10 @@ export const faqGroups: FaqGroup[] = [
     title: "Process",
     items: [
       {
+        q: "What happens on the strategy call?",
+        a: "We look at how leads reach you, where they slip, and which AI employees would make the biggest difference. No pressure to buy.",
+      },
+      {
         q: "How does a project start?",
         a: "With a demo call. We look at how leads reach you today, show you what we would build and send a written proposal.",
         home: true,
@@ -72,6 +80,10 @@ export const faqGroups: FaqGroup[] = [
     title: "AI and data",
     items: [
       {
+        q: "Can the AI make mistakes?",
+        a: "Yes, occasionally, like any new employee. That's why we review conversations every week and tune it, and why it transfers anything it isn't sure about.",
+      },
+      {
         q: "Will customers know they are speaking to an AI?",
         a: "We recommend AI agents introduce themselves as virtual assistants. They hand over to a person whenever needed.",
         home: true,
@@ -89,6 +101,10 @@ export const faqGroups: FaqGroup[] = [
   {
     title: "Contracts",
     items: [
+      {
+        q: "Can I cancel?",
+        a: "Month-to-month plans cancel anytime. The AI Front Office and AI Growth Team have a 3-month minimum.",
+      },
       {
         q: "Is there a minimum term?",
         a: "Contract terms are set out in your proposal. Ask us on the call about the options for your project.",

@@ -5,7 +5,7 @@ name: Paid Ads
 navName: Paid Ads
 icon: Megaphone
 outcome: Ad spend tied to booked jobs, not just clicks.
-headline: Ads that feed a system, not a spreadsheet.
+headline: Ads that feed your AI team, not a spreadsheet.
 who: For businesses ready to spend on ads and tired of reports full of clicks that never turn into customers.
 seoTitle: Paid Ads on Meta, Google, TikTok, LinkedIn | Techieficial
 description: Campaigns on Meta, Google, TikTok and LinkedIn with AI ad creatives, connected to your CRM so you can see which spend turns into booked work.

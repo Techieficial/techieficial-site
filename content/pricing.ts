@@ -223,3 +223,22 @@ export function fillPrices(text: string, o: Offer) {
     .replace("{ownCrmMonthly}", o.ownCrmMonthly !== undefined ? formatUsd(o.ownCrmMonthly) : "")
     .replace("{quickStart}", o.quickStart !== undefined ? formatUsd(o.quickStart) : "");
 }
+
+/** Price line for each add-on service page (docs/SITE_CONTENT_V3.md 2.9). Prices come from addOns above. */
+export function servicePriceLine(slug: ServiceSlug): string | undefined {
+  const addOn = (name: string) => addOns.find((a) => a.name.startsWith(name));
+  const pack = addOn("AI video pack");
+  const workshop = addOn("Team AI workshop");
+  switch (slug) {
+    case "paid-ads":
+      return "Included in the AI Growth Team.";
+    case "ai-video":
+      return pack?.oneTime !== undefined ? `Add-on: 5-video pack, ${formatUsd(pack.oneTime)}.` : undefined;
+    case "marketing-automation":
+      return "Custom CRM builds are priced by quote.";
+    case "training":
+      return workshop?.oneTime !== undefined ? `90-minute workshop, ${formatUsd(workshop.oneTime)}. Corporate programs by quote.` : undefined;
+    default:
+      return undefined;
+  }
+}

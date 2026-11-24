@@ -53,4 +53,4 @@ We may update this policy. The date at the top shows when it last changed.
 
 ## Contact
 
-Questions about this policy can be sent through our [contact page](/contact).
+Questions about this policy can be sent to [hello@techieficial.com](mailto:hello@techieficial.com) or through our [contact page](/contact).

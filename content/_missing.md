@@ -36,7 +36,7 @@ Supplied on Nov 24, 2026 (docs/CRM_SETUP.md): business emails (hello@, support@)
 
 ## About and Academy
 
-- [ ] Founder story and photo (About page section hidden).
+- [ ] Founder photo, and approval of the drafted founder story in `content/pages.ts` (`aboutPage.founder`). Set `founderApproved: true` to show it. Decide whether to mention being Nigerian and based in the Philippines.
 - [ ] Instructor bio and photo for the Academy page (hidden).
 - [ ] Founding-member offer for the Academy waitlist: what it is, the price, and the deadline (hidden).
 
@@ -54,6 +54,20 @@ Supplied on Nov 24, 2026 (docs/CRM_SETUP.md): business emails (hello@, support@)
 - [ ] LinkedIn company URL and X account (the other socials are live).
 - [ ] GA4 measurement ID, Meta Pixel ID, Microsoft Clarity ID. The cookie banner only appears once at least one is set.
 - [ ] Chat agent widget script URL (`NEXT_PUBLIC_CHAT_WIDGET_SRC`) for the Demo Lab (button hidden).
+
+## v3 items to confirm (hidden until confirmed)
+
+- [ ] **Guarantee** wording and terms ("Live in 14 days or your setup fee back"). Not shown.
+- [ ] **Upgrade credit** terms (setup fee counts toward a bigger plan within 60 days). Not shown.
+- [ ] **Free audit turnaround** (draft: "within 3 business days"). The audit thank-you page leaves it out.
+- [ ] **Homepage stat** from Nextiva (vendor blog): approve or replace. Not used; the problem section uses the 411 Locals and Harvard Business Review stats instead.
+- [ ] **Experience line** on the home services page ("We've built CRM and lead systems for builders and HVAC businesses"). Not shown.
+- [ ] **Customer data FAQ** ("Is my customer data safe?"): confirm against the privacy policy. Not shown.
+- [ ] **Paid ads standalone price** (or "quote"). The page says "Included in the AI Growth Team".
+- [ ] **Kickoff call calendar link** for the purchase thank-you page.
+- [ ] **CRM payment links: success URL.** Point each one at https://techieficial.com/thank-you/purchase.
+- [ ] **Playbook download files** for each niche.
+- [ ] **Legal business name and address** for the legal pages and footer (for example EYANDA IT SOLUTIONS trading as Techieficial).
 
 ## Later pages
 

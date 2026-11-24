@@ -16,10 +16,17 @@ Each file is marked `status: needs-review` at the top. Change it to `status: app
 - `content/industries/dental-medspa.md`
 - `content/industries/legal.md`
 
+## v3 copy (from docs/SITE_CONTENT_V3.md, adapted where the site rules required)
+- `content/team.ts`: the AI team cards, /ai-team and the 4 profiles.
+- `content/offers.ts`: /offers, the Team Builder and the 6 product pages.
+- `content/tools.ts`: /inside, the missed-call calculator and the free audit.
+- `content/emails/newsletter-welcome.md`: 3 welcome emails to paste into the CRM.
+
 ## Blog (3 launch posts, please approve the topics too)
 - `content/blog/what-missed-calls-cost.md`
 - `content/blog/ai-receptionist-vs-answering-service.md`
 - `content/blog/what-a-crm-automation-build-includes.md`
+- Drafts, hidden until approved (set `draft: false`): `content/blog/ai-receptionist-emergency-call.md`, `content/blog/speed-to-lead.md`, `content/blog/more-google-reviews.md`
 
 ## Legal (drafts only, need a legal check)
 - `content/legal/privacy.md`

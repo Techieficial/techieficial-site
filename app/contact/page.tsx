@@ -37,6 +37,12 @@ export default function ContactPage() {
                       </a>
                     </li>
                   )}
+                  <li className="text-muted">
+                    {contactPage.supportLabel}:{" "}
+                    <a href={`mailto:${siteConfig.contact.supportEmail}`} className="text-ink hover:text-accent-text">
+                      {siteConfig.contact.supportEmail}
+                    </a>
+                  </li>
                   {demoPhone && (
                     <li>
                       <a href={telHref(demoPhone)} data-event="demo_call_started" className="inline-flex items-center gap-3 hover:text-accent-text">

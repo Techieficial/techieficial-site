@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowRightIcon, CheckIcon, FlaskIcon } from "@phosphor-icons/react/dist/ssr";
 import { accentText, siteConfig } from "@/site.config";
-import { ui } from "@/content/pages";
-import { formatUsd, offerForPackage } from "@/content/pricing";
+import { servicesHub, ui } from "@/content/pages";
+import { formatUsd, offerForPackage, servicePriceLine } from "@/content/pricing";
 import { getCaseStudies, getIndustry, getService, getServicePages, serviceBySlug } from "@/lib/content";
 import { pageMetadata, serviceLd } from "@/lib/seo";
 import { CaseStudyCard, CTABand, DemoCallBlock, FAQAccordion, PageHero, ServiceCard } from "@/components/blocks";
@@ -142,27 +142,38 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         </Section>
       )}
 
-      {/* Pricing */}
-      {pkg && (
-        <Section labelledBy="pricing-title">
-          <div className="flex flex-col gap-6 rounded-[28px] border border-rule bg-surface p-8 md:flex-row md:items-center md:justify-between md:p-12">
-            <div>
-              <h2 id="pricing-title" className="text-[length:var(--text-h3)] font-bold md:text-3xl">
-                {ui.pricingTitle}
-              </h2>
-              <p className="mt-3 max-w-[56ch] text-muted">
-                {ui.pricingFrom
-                  .replace("{package}", pkg.name)
-                  .replace("{setup}", formatUsd(pkg.setup ?? 0))
-                  .replace("{monthly}", formatUsd(pkg.monthly ?? 0))}
-              </p>
-            </div>
-            <Button href="/offers" variant="secondary" arrow={false}>
-              {ui.pricingLink}
-            </Button>
+      {/* Pricing (docs/SITE_CONTENT_V3.md 2.9) */}
+      <Section labelledBy="pricing-title">
+        <div className="flex flex-col gap-6 rounded-[28px] border border-rule bg-surface p-8 md:flex-row md:items-center md:justify-between md:p-12">
+          <div>
+            <h2 id="pricing-title" className="text-[length:var(--text-h3)] font-bold md:text-3xl">
+              {ui.pricingTitle}
+            </h2>
+            <p className="mt-3 max-w-[56ch] text-muted">
+              {servicePriceLine(s.slug) ??
+                (pkg ? ui.pricingFrom.replace("{package}", pkg.name).replace("{setup}", formatUsd(pkg.setup ?? 0)).replace("{monthly}", formatUsd(pkg.monthly ?? 0)) : "")}
+            </p>
           </div>
-        </Section>
-      )}
+          <Button href="/offers" variant="secondary" arrow={false}>
+            {ui.pricingLink}
+          </Button>
+        </div>
+      </Section>
+
+      {/* Pairs with your AI team */}
+      <Section tone="raised" labelledBy="pairs-title">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 id="pairs-title" className="text-[length:var(--text-h3)] font-bold md:text-3xl">
+              {servicesHub.pairsTitle}
+            </h2>
+            <p className="mt-3 max-w-[56ch] text-muted">{servicesHub.pairsBody}</p>
+          </div>
+          <Button href="/ai-team" arrow={false}>
+            {servicesHub.pairsLink}
+          </Button>
+        </div>
+      </Section>
 
       {/* FAQ */}
       <Section tone="raised" labelledBy="faq-title">

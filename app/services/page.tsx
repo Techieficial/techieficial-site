@@ -2,17 +2,17 @@ import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { accentText, type ServiceSlug } from "@/site.config";
 import { servicesHub } from "@/content/pages";
 import { featuredOffers } from "@/content/pricing";
-import { getServices, serviceBySlug } from "@/lib/content";
+import { getServicePages, serviceBySlug } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { CTABand, PageHero, PricingCard, ServiceCard } from "@/components/blocks";
 import { Reveal } from "@/components/Reveal";
-import { Section, SectionHeader } from "@/components/ui";
+import { Button, Section, SectionHeader } from "@/components/ui";
 import { home } from "@/content/home";
 
 export const metadata = pageMetadata({ ...servicesHub.seo, path: "/services" });
 
 export default function ServicesHubPage() {
-  const services = getServices();
+  const services = getServicePages();
   return (
     <>
       <PageHero title={servicesHub.title} intro={servicesHub.intro} crumbs={[{ name: "Services", path: "/services" }]} />
@@ -51,7 +51,21 @@ export default function ServicesHubPage() {
         </ol>
       </Section>
 
-      <Section labelledBy="packages-title">
+      <Section labelledBy="pairs-title">
+        <div className="flex flex-col gap-6 rounded-[28px] border border-rule bg-surface p-8 md:flex-row md:items-center md:justify-between md:p-12">
+          <div>
+            <h2 id="pairs-title" className="text-[length:var(--text-h3)] font-bold md:text-3xl">
+              {servicesHub.pairsTitle}
+            </h2>
+            <p className="mt-3 max-w-[56ch] text-muted">{servicesHub.pairsBody}</p>
+          </div>
+          <Button href="/ai-team" arrow={false}>
+            {servicesHub.pairsLink}
+          </Button>
+        </div>
+      </Section>
+
+      <Section tone="raised" labelledBy="packages-title">
         <SectionHeader id="packages-title" title={servicesHub.packagesTitle} intro={home.packages.intro} />
         <div className="grid gap-5 pt-3 md:grid-cols-3">
           {featuredOffers.map((o) => (

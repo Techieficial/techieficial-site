@@ -25,7 +25,7 @@ export default function AcademyPage() {
       <Section tone="raised" id="waitlist" labelledBy="waitlist-title">
         <div className="mx-auto max-w-xl">
           <SectionHeader id="waitlist-title" title={academyPage.waitlistTitle} intro={academyPage.waitlistBody} />
-          <LeadForm source="academy" fields={["name", "email"]} submitLabel={siteConfig.cta.waitlist.label} event="form_submit" successMessage={academyPage.waitlistSuccess} />
+          <LeadForm source="academy" fields={["name", "email", "role"]} submitLabel={siteConfig.cta.waitlist.label} event="form_submit" successMessage={academyPage.waitlistSuccess} />
         </div>
       </Section>
     </>

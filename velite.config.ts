@@ -51,10 +51,14 @@ const industries = defineCollection({
       intro: s.string(),
       seoTitle: s.string().max(60),
       description: s.string().max(155),
-      pains: s.array(card).length(3),
+      pains: s.array(card).min(3).max(4),
       workflow: s.array(card).min(4).max(6),
+      /** Optional "Built for ..." list of niche features. */
+      builtFor: s.object({ title: s.string(), items: s.array(s.string()).min(2) }).optional(),
       packageKey: s.string(),
       packageWhy: s.string(),
+      /** Optional smaller starting offer, shown next to the recommended one. */
+      startSmallKey: s.string().optional(),
       services: s.array(serviceSlug).min(2),
       faqs: s.array(faq).min(3),
       status,

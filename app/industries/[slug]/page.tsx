@@ -1,3 +1,4 @@
+import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ui } from "@/content/pages";
@@ -24,6 +25,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
   const ind = getIndustry((await params).slug);
   if (!ind) notFound();
   const pkg = offerForPackage(ind.packageKey);
+  const small = ind.startSmallKey ? offerForPackage(ind.startSmallKey) : undefined;
   const services = ind.services.map((s) => serviceBySlug(s));
   const study = getCaseStudies().find((c) => c.industry.toLowerCase().includes(ind.name.toLowerCase().split(" ")[0]));
 
@@ -39,7 +41,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
         <h2 id="pains-title" className="sr-only">
           {ui.painsTitle}
         </h2>
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className={`grid gap-5 ${ind.pains.length === 4 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3"}`}>
           {ind.pains.map((p) => (
             <article key={p.title} className="rounded-[20px] border border-rule bg-surface p-7">
               <h3 className="text-xl font-semibold">{p.title}</h3>
@@ -64,8 +66,22 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
         </ol>
       </Section>
 
+      {ind.builtFor && (
+        <Section labelledBy="built-for-title">
+          <SectionHeader id="built-for-title" title={ind.builtFor.title} />
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {ind.builtFor.items.map((b) => (
+              <li key={b} className="flex gap-3 rounded-2xl border border-rule bg-surface p-5">
+                <CheckIcon weight="bold" aria-hidden className="mt-1 size-5 shrink-0 text-accent-text" />
+                {b}
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
       {pkg && (
-        <Section labelledBy="pkg-title">
+        <Section tone={ind.builtFor ? "raised" : undefined} labelledBy="pkg-title">
           <div className="grid items-center gap-10 lg:grid-cols-2">
             <div>
               <h2 id="pkg-title" className="text-[length:var(--text-h2)] font-bold leading-[1.05] tracking-[-0.03em]">
@@ -75,6 +91,12 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
             </div>
             <PricingCard offer={pkg} />
           </div>
+          {small && (
+            <div className="mt-10 grid items-center gap-10 lg:grid-cols-2">
+              <p className="text-[length:var(--text-lead)] text-muted">{ui.startSmaller}</p>
+              <PricingCard offer={small} compact />
+            </div>
+          )}
         </Section>
       )}
 
