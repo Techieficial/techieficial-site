@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { ArrowRightIcon, CaretDownIcon, PhoneCallIcon } from "@phosphor-icons/react";
 import { siteConfig, telHref } from "@/site.config";
 import { nav } from "@/content/pages";
@@ -79,10 +79,44 @@ export function Navbar({
     hoverTimer.current = setTimeout(() => setMegaOpen(false), 200);
   };
 
+  const menuRef = useRef<HTMLDivElement>(null);
+  const servicesItemRef = useRef<HTMLLIElement>(null);
+
+  const openAndFocusFirst = () => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    setMegaOpen(true);
+    requestAnimationFrame(() => menuRef.current?.querySelector<HTMLAnchorElement>("a")?.focus());
+  };
+
+  // Close the mega-menu when keyboard focus moves outside the Services item and the menu.
+  const onFocusOut = (e: FocusEvent) => {
+    const next = e.relatedTarget as Node | null;
+    if (!megaOpen || !next) return;
+    if (servicesItemRef.current?.contains(next) || menuRef.current?.contains(next)) return;
+    setMegaOpen(false);
+  };
+
+  // The menu sits after the nav in the page, so Tab order is joined up by hand:
+  // Tab past the last menu link goes on to the next nav link, Shift+Tab from the first goes back to the toggle.
+  const onMenuKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== "Tab") return;
+    const items = Array.from(menuRef.current?.querySelectorAll<HTMLAnchorElement>("a") ?? []);
+    if (!items.length) return;
+    if (e.shiftKey && document.activeElement === items[0]) {
+      e.preventDefault();
+      triggerRef.current?.focus();
+    } else if (!e.shiftKey && document.activeElement === items[items.length - 1]) {
+      e.preventDefault();
+      const after = servicesItemRef.current?.nextElementSibling?.querySelector<HTMLAnchorElement>("a");
+      setMegaOpen(false);
+      after?.focus();
+    }
+  };
+
   const solid = scrolled || megaOpen || sheetOpen;
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40">
+    <header className="fixed inset-x-0 top-0 z-40" onBlur={onFocusOut}>
       <AnnouncementBar />
       <div
         className={`transition-[background-color,border-color,backdrop-filter] duration-300 ${solid ? "border-b border-rule bg-bg/80 backdrop-blur-xl" : "border-b border-transparent"}`}
@@ -91,16 +125,35 @@ export function Navbar({
           <Logo />
 
           <ul className="ml-4 hidden items-center gap-1 lg:flex">
-            <li onMouseEnter={openWithDelay} onMouseLeave={closeWithDelay} className="relative">
+            <li ref={servicesItemRef} onMouseEnter={openWithDelay} onMouseLeave={closeWithDelay} className="relative flex items-center">
+              <Link
+                href={nav.servicesHref}
+                aria-current={pathname === nav.servicesHref ? "page" : undefined}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    openAndFocusFirst();
+                  }
+                }}
+                className="inline-flex h-11 items-center rounded-l-full pl-4 pr-1 text-[15px] text-ink/85 hover:text-ink aria-[current=page]:text-ink"
+              >
+                {nav.servicesLabel}
+              </Link>
               <button
                 ref={triggerRef}
                 type="button"
                 aria-expanded={megaOpen}
                 aria-controls={megaId}
+                aria-label={nav.servicesMenuToggle}
                 onClick={() => setMegaOpen((v) => !v)}
-                className="inline-flex h-11 items-center gap-1.5 rounded-full px-4 text-[15px] text-ink/85 hover:text-ink"
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowDown" || (e.key === "Tab" && !e.shiftKey && megaOpen)) {
+                    e.preventDefault();
+                    openAndFocusFirst();
+                  }
+                }}
+                className="inline-grid size-11 place-items-center rounded-r-full pr-2 text-ink/85 hover:text-ink"
               >
-                {nav.servicesLabel}
                 <CaretDownIcon aria-hidden className={`size-3.5 transition-transform ${megaOpen ? "rotate-180" : ""}`} />
               </button>
             </li>
@@ -148,7 +201,9 @@ export function Navbar({
         {/* Desktop mega-menu */}
         <div
           id={megaId}
+          ref={menuRef}
           hidden={!megaOpen}
+          onKeyDown={onMenuKeyDown}
           onClick={(e) => (e.target as HTMLElement).closest("a") && closeAll()}
           onMouseEnter={openWithDelay}
           onMouseLeave={closeWithDelay}
@@ -214,6 +269,11 @@ export function Navbar({
             </button>
             {servicesExpanded && (
               <ul className="space-y-1 pb-4">
+                <li>
+                  <Link href={nav.servicesHref} className="block rounded-xl px-2.5 py-2.5 font-medium hover:bg-surface">
+                    {nav.allServices}
+                  </Link>
+                </li>
                 {services.map((s) => (
                   <li key={s.slug}>
                     <Link href={s.url} className="flex items-center gap-3 rounded-xl p-2.5 hover:bg-surface">

@@ -2,6 +2,9 @@
 
 export const nav = {
   servicesLabel: "Services",
+  servicesHref: "/services",
+  servicesMenuToggle: "Show the services menu",
+  allServices: "All services",
   links: [
     { label: "Demo Lab", href: "/demo" },
     { label: "Work", href: "/work" },
