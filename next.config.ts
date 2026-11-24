@@ -47,7 +47,14 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // One canonical host: www goes to the bare domain.
+      // One canonical host: www goes to the bare domain. The home page needs its own
+      // rule because the Cloudflare runtime leaves an empty ":path*" in the address.
+      {
+        source: "/",
+        has: [{ type: "host", value: "www.techieficial.com" }],
+        destination: "https://techieficial.com/",
+        permanent: true,
+      },
       {
         source: "/:path*",
         has: [{ type: "host", value: "www.techieficial.com" }],
