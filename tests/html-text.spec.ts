@@ -1,18 +1,17 @@
 import { test, expect } from "@playwright/test";
 import { countOf, htmlText } from "./helpers";
-import { siteConfig } from "../site.config";
 
 test("homepage hero names each client country once", async ({ request }) => {
   const html = await (await request.get("/")).text();
   const hero = htmlText(html.slice(html.indexOf('id="top"'), html.indexOf("</section>", html.indexOf('id="top"'))));
-  for (const country of siteConfig.countries) expect(countOf(hero, country), country).toBe(1);
+  for (const country of ["UK", "Canada", "Australia", "New Zealand"]) expect(countOf(hero, country), country).toBe(1);
 });
 
 test("homepage HTML has one wheel details card", async ({ request }) => {
   const html = await (await request.get("/")).text();
-  // The card's "Explore" link appears once in the hero, not once per screen size.
-  const hero = html.slice(html.indexOf('id="top"'), html.indexOf('id="services"'));
-  expect(countOf(htmlText(hero), "Explore ")).toBe(1);
+  // The card's link appears once in the hero, not once per screen size.
+  const hero = html.slice(html.indexOf('id="top"'), html.indexOf('id="story"'));
+  expect(countOf(htmlText(hero), "View profile")).toBe(1);
   expect(countOf(hero, 'role="tablist"')).toBe(0);
 });
 
@@ -25,7 +24,7 @@ test("text does not run together where elements meet", async ({ request }) => {
 });
 
 test("comparison table caption differs from the section heading", async ({ page }) => {
-  await page.goto("/pricing");
+  await page.goto("/");
   const heading = (await page.locator("#compare-title").innerText()).trim();
   const caption = (await page.locator("table caption").textContent())?.trim();
   expect(caption).toBeTruthy();

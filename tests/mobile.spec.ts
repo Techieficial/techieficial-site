@@ -14,7 +14,7 @@ test("mobile menu opens as a sheet with a AI Team accordion", async ({ page }) =
 
 test("mobile wheel swaps to swipeable service chips", async ({ page }) => {
   await page.goto("/");
-  const tabs = page.getByRole("tablist", { name: "Techieficial services" }).getByRole("tab");
+  const tabs = page.getByRole("tablist", { name: "Your AI team" }).getByRole("tab");
   await expect(tabs).toHaveCount(5);
   await tabs.nth(2).click();
   await expect(tabs.nth(2)).toHaveAttribute("aria-selected", "true");

@@ -230,12 +230,11 @@ export function recommendPackage(services: ServiceSlug[], size: BuilderSize, goa
 
 export const formatUsd = (n: number) => `$${n.toLocaleString("en-US")}`;
 
-/** Price lines for an offer, e.g. ["$3,500 setup", "$1,297/mo"]. "From" is added when prices can go up. */
-export function priceParts(o: { setup?: number; monthly?: number; oneTime?: number; from?: boolean }) {
-  const pre = o.from ? "From " : "";
+/** Price values for an offer card. The card labels already say "Setup from" and "Monthly from". */
+export function priceParts(o: { setup?: number; monthly?: number; oneTime?: number }) {
   return {
-    setup: o.setup !== undefined ? `${pre}${formatUsd(o.setup)}` : undefined,
-    monthly: o.monthly !== undefined ? `${o.setup !== undefined ? "" : pre}${formatUsd(o.monthly)}/mo` : undefined,
-    oneTime: o.oneTime !== undefined ? `${pre}${formatUsd(o.oneTime)}` : undefined,
+    setup: o.setup !== undefined ? formatUsd(o.setup) : undefined,
+    monthly: o.monthly !== undefined ? `${formatUsd(o.monthly)}/mo` : undefined,
+    oneTime: o.oneTime !== undefined ? formatUsd(o.oneTime) : undefined,
   };
 }

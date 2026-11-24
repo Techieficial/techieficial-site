@@ -8,6 +8,7 @@ import { ContentIcon } from "./icons";
 import { LogoMark } from "./layout/Logo";
 import { accentText, onServiceColor } from "@/site.config";
 
+/** One wheel segment. `navName` is the short label on the slice, `outcome` the one-line description. */
 export type WheelService = {
   slug: string;
   name: string;
@@ -17,6 +18,8 @@ export type WheelService = {
   url: string;
   icon: string;
   color: string;
+  /** Text of the card link, e.g. "View profile". */
+  linkLabel: string;
 };
 
 const C = 320;
@@ -64,7 +67,7 @@ function useIsMobile() {
   return useSyncExternalStore(subscribeMobile, () => window.matchMedia(MOBILE_QUERY).matches, () => false);
 }
 
-export function GrowthWheel({ services }: { services: WheelService[] }) {
+export function GrowthWheel({ services, label, hubLabel }: { services: WheelService[]; label: string; hubLabel?: string }) {
   const reduce = useReducedMotion();
   const [active, setActive] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -182,7 +185,7 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
             </g>
 
             {/* Rotating service segments */}
-            <g ref={spinRef} role="group" aria-label="Techieficial services" onMouseLeave={() => setHovering(false)}>
+            <g ref={spinRef} role="group" aria-label={label} onMouseLeave={() => setHovering(false)}>
               {services.map((s, i) => {
                 const a0 = i * step - step / 2;
                 const a1 = a0 + step;
@@ -226,7 +229,7 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
                         <foreignObject x={-70} y={-40} width={140} height={80} className="pointer-events-none">
                           <div className="flex h-full flex-col items-center justify-center gap-1 text-center" style={{ color: onServiceColor(s.color) }}>
                             <ContentIcon name={s.icon} weight="duotone" className="size-7" aria-hidden />
-                            <span className="font-display text-[17px] font-bold leading-tight">{s.navName}</span>
+                            <span className="block w-full font-display text-[16px] font-bold leading-tight [overflow-wrap:anywhere]">{s.navName}</span>
                           </div>
                         </foreignObject>
                       </g>
@@ -241,6 +244,7 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
             <foreignObject x={C - 120} y={C - 110} width={240} height={220} aria-hidden>
               <div className="flex h-full flex-col items-center justify-center px-4 text-center">
                 <LogoMark className="h-[22px] w-[27px]" />
+                {hubLabel && <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">{hubLabel}</p>}
                 <p className="mt-3 font-display text-lg font-bold leading-tight" style={{ color: accentText }}>
                   {current.name}
                 </p>
@@ -254,7 +258,7 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
       {/* Mobile only: swipeable chips. Rendered on phones only, so the page HTML holds one set of service controls. */}
       <div className="min-h-[52px] md:hidden">
         {isMobile && (
-          <div role="tablist" aria-label="Techieficial services" className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-2">
+          <div role="tablist" aria-label={label} className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-2">
             {services.map((s, i) => {
               const on = (selected ?? active) === i;
               return (
@@ -328,7 +332,8 @@ function ServiceSummary({ service }: { service: WheelService }) {
         ))}
       </ul>
       <Link href={service.url} className="mt-4 inline-flex min-h-11 items-center gap-1.5 font-medium" style={{ color: accentText }}>
-        Explore {service.navName}
+        {service.linkLabel}
+        <span className="sr-only">: {service.name}</span>
         <ArrowRightIcon aria-hidden className="size-4" />
       </Link>
     </div>

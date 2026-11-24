@@ -439,6 +439,7 @@ export const ui = {
   platforms: "Platforms",
   comingSoon: "coming soon",
   newTab: "(opens in a new tab)",
+  sourceLabel: "Source",
   results: "Results",
   whatWeBuilt: "What we built",
   problem: "The problem",

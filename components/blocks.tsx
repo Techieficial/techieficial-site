@@ -176,7 +176,8 @@ export function FAQAccordion({ items, schema = true }: { items: { q: string; a: 
 
 /* ---------- CTA band ---------- */
 
-export function CTABand({ title, body, id }: { title: string; body?: string; id?: string }) {
+/** Closing call to action. `secondary` adds a second button (e.g. "Interview the AI team"). */
+export function CTABand({ title, body, id, secondary = true }: { title: string; body?: string; id?: string; secondary?: boolean }) {
   const phone = siteConfig.contact.demoPhone;
   return (
     <section id={id} aria-labelledby={id ? `${id}-title` : undefined} className="py-16 md:py-24">
@@ -190,7 +191,12 @@ export function CTABand({ title, body, id }: { title: string; body?: string; id?
           <div className="relative mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button href={siteConfig.cta.primary.href} size="lg">
               {siteConfig.cta.primary.label}
-            </Button>
+            </Button>{" "}
+            {secondary && (
+              <Button href={siteConfig.cta.demo.href} size="lg" variant="secondary" arrow={false}>
+                {siteConfig.cta.demo.label}
+              </Button>
+            )}
             {phone && (
               <a href={telHref(phone)} className="inline-flex items-center gap-2 font-medium text-ink hover:text-accent-text" data-event="demo_call_started">
                 <PhoneCallIcon aria-hidden className="size-5" />
@@ -233,13 +239,13 @@ export function Breadcrumbs({ items }: { items: { name: string; path: string }[]
 
 /* ---------- Demo call block ---------- */
 
-export function DemoCallBlock({ title, body, children }: { title: string; body: string; children?: ReactNode }) {
+export function DemoCallBlock({ title, body, children, titleId }: { title: string; body: string; children?: ReactNode; titleId?: string }) {
   const phone = siteConfig.contact.demoPhone;
   if (!phone) return null;
   return (
     <div className="relative overflow-hidden rounded-[28px] border border-rule bg-surface p-8 md:p-12">
       <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
-      <h2 className="relative text-[length:var(--text-h2)] font-bold leading-[1.05] tracking-[-0.03em]">{title}</h2>
+      <h2 id={titleId} className="relative text-[length:var(--text-h2)] font-bold leading-[1.05] tracking-[-0.03em]">{title}</h2>
       <p className="relative mt-4 max-w-[52ch] text-[length:var(--text-lead)] text-muted">{body}</p>
       <a
         href={telHref(phone)}

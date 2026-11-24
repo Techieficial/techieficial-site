@@ -8,20 +8,26 @@ import { Section, SectionHeader } from "@/components/ui";
 export function ProblemSection() {
   return (
     <Section id="problem" labelledBy="problem-title">
-      <SectionHeader id="problem-title" title={home.problem.title} intro={home.problem.intro} />
+      <SectionHeader id="problem-title" title={home.problem.title} intro={home.problem.intro || undefined} />
       <div className="grid gap-5 md:grid-cols-3">
         {home.problem.cards.map((c, i) => (
           <Reveal key={c.title} delay={i * 0.08}>
             <article className="flex h-full flex-col rounded-[20px] border border-rule bg-surface p-7">
-              <p className="font-display text-5xl font-bold tracking-[-0.03em] text-electric">{c.stat}</p>
-              <p className="mt-2 text-sm text-muted">{c.statLabel}</p>
-              <h3 className="mt-6 text-xl font-semibold">{c.title}</h3>
+              {c.stat && (
+                <>
+                  <p className="font-display text-5xl font-bold tracking-[-0.03em] text-electric">{c.stat}</p>
+                  <p className="mb-6 mt-2 text-sm text-muted">{c.statLabel}</p>
+                </>
+              )}
+              <h3 className="text-xl font-semibold">{c.title}</h3>
               <p className="mt-2 leading-relaxed text-muted">{c.body}</p>
-              <a href={c.href} className="mt-auto inline-flex items-center gap-1 pt-6 text-sm text-accent-text hover:text-ink" rel="noopener" target="_blank">
-                Source: {c.source}
-                <ArrowUpRightIcon aria-hidden className="size-3.5" />{" "}
-                <span className="sr-only">{ui.newTab}</span>
-              </a>
+              {c.href && (
+                <a href={c.href} className="mt-auto inline-flex items-center gap-1 pt-6 text-sm text-accent-text hover:text-ink" rel="noopener" target="_blank">
+                  {ui.sourceLabel}: {c.source}
+                  <ArrowUpRightIcon aria-hidden className="size-3.5" />{" "}
+                  <span className="sr-only">{ui.newTab}</span>
+                </a>
+              )}
             </article>
           </Reveal>
         ))}
@@ -31,9 +37,9 @@ export function ProblemSection() {
 }
 
 /** Techieficial vs. separate vendors vs. in-house. Shown on the pricing page. */
-export function ComparisonSection() {
+export function ComparisonSection({ tone }: { tone?: "raised" } = {}) {
   return (
-    <Section labelledBy="compare-title">
+    <Section labelledBy="compare-title" tone={tone}>
       <SectionHeader id="compare-title" title={home.comparison.title} />
       <div className="overflow-x-auto rounded-[20px] border border-rule">
         <table className="w-full min-w-[720px] border-collapse text-left">
