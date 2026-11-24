@@ -23,7 +23,7 @@ workflow:
   - title: Follow-up
     body: People who do not book get polite follow-ups until they decide.
 packageKey: convert
-packageWhy: Convert adds AI intake and nurture to the Capture basics, so every enquiry gets a fast, consistent response.
+packageWhy: The AI Front Office adds AI intake and follow-up, so every enquiry gets a fast, consistent response.
 services: [ai-agents, marketing-automation, training]
 faqs:
   - q: Will the AI give legal advice?

@@ -74,9 +74,9 @@ export const home = {
     intro: "Real projects, real numbers.",
   },
   packages: {
-    title: "Packages that grow with you.",
-    intro: "Start with the basics and add more as the system proves itself. Prices are starting points; you get a fixed quote before any work starts.",
-    link: "See full pricing",
+    title: "Start where you are.",
+    intro: "Start with one hire or bring on the whole team. Every plan is built for you, trained on your business and managed every month.",
+    link: "See all offers",
   },
   academy: {
     title: "Want to run it yourself? Learn from the people who build it.",
@@ -99,6 +99,6 @@ export const home = {
   },
   finalCta: {
     title: "See what we would build for you first.",
-    body: "Book a demo. We look at how leads reach you today and map out your first build.",
+    body: "Book a strategy call. We look at how leads reach you today and map out your first build.",
   },
 };

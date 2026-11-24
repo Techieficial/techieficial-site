@@ -8,12 +8,13 @@ Send items in any order. Each one is a small edit once we have it.
 
 | # | Item | Where it goes | What is hidden until then |
 |---|---|---|---|
-| 1 | **Demo phone number** (the live AI receptionist line) | Cloudflare build variable `NEXT_PUBLIC_DEMO_PHONE` | "Call the AI" in the menu, the announcement bar, the mobile call button, the home page demo block, the demo block on each service page, and the "Try it live" tab of the Demo Lab |
-| 2 | **CRM inbound webhook URL** | Cloudflare secret `CRM_WEBHOOK_URL` | Forms show "not sent" until this is set. Nothing reaches your CRM |
-| 3 | **"Call me" webhook URL** (optional, if the outbound AI call uses a different workflow) | Cloudflare secret `CRM_CALLME_WEBHOOK_URL` | Falls back to the main webhook |
-| 4 | **CRM calendar embed URL** | Cloudflare build variable `NEXT_PUBLIC_CALENDAR_URL` | Calendar on the Contact page and Demo Lab (the forms still work) |
-| 5 | **Business email** | Cloudflare build variable `NEXT_PUBLIC_CONTACT_EMAIL` | Email in the footer, Contact page and Organization schema |
-| 6 | **Cloudflare Turnstile keys** (free, in the Cloudflare dashboard) | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (build) + `TURNSTILE_SECRET_KEY` (secret) | Spam check on forms is off. The honeypot and rate limit still run |
+| 1 | **Demo phone number** (US number with the AI Receptionist live) | Cloudflare build variable `NEXT_PUBLIC_DEMO_PHONE` | "Call the AI" in the nav, the announcement bar, the mobile call button, every demo-call block and the Demo Lab "Call the AI" tab |
+| 2 | **PayPal Business connected in the CRM, plus one test payment** | Then set `checkoutLive: true` in `site.config.ts` | Every "Buy now" and "Get started" button shows "Checkout opens soon" |
+| 3 | **Price approval** (all prices are DRAFT) | `content/pricing.ts` | Prices show with a "Draft pricing" note on previews; Offer schema stays off |
+| 4 | **Cloudflare Turnstile keys** (free, in the Cloudflare dashboard) | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (build) + `TURNSTILE_SECRET_KEY` (secret) | Spam check on forms is off. The honeypot and rate limit still run |
+| 5 | **Google Calendar or Zoom connected** to the Strategy Call calendar, booking hours widened | In the CRM | Bookings have no meeting link |
+
+Supplied on Nov 24, 2026 (docs/CRM_SETUP.md): business emails (hello@, support@), both CRM booking calendars, both CRM webhooks (stored as Cloudflare secrets), payment links, and the YouTube, Facebook, TikTok and Instagram links.
 
 ## Brand
 
@@ -41,8 +42,8 @@ Send items in any order. Each one is a small edit once we have it.
 
 ## Pricing
 
-- [ ] **Confirm or change the package prices** in `content/pricing.ts` (Capture $1,500 + $297/mo, Convert $3,500 + $997/mo, Dominate $7,500 + $2,500/mo plus ad spend). Price schema for Google stays off until you confirm (`pricesFinal`).
-- [x] Individual service price list: supplied by the owner on Nov 24, 2026 (taken from ghlhub.pro) and shown on /pricing under "Individual services". Add-ons still to supply.
+- [ ] **Confirm or change the offer prices** in `content/pricing.ts` (AI Front Office $3,500 + $1,297/mo, AI Growth Team from $7,500 + $2,500/mo, AI Receptionist Starter $1,497 + $497/mo, CRM Workspace $197/mo, Missed-Call Text-Back $297, Playbook $97). Price schema stays off until you confirm (`pricesFinal`).
+- [x] Add-on prices: supplied in docs/SITE_CONTENT_V3.md (DRAFT). They appear on /offers in Phase 4.
 
 ## Legal
 
@@ -50,7 +51,7 @@ Send items in any order. Each one is a small edit once we have it.
 
 ## Accounts and tracking
 
-- [ ] Social profile links (only accounts that exist). Social icons are hidden.
+- [ ] LinkedIn company URL and X account (the other socials are live).
 - [ ] GA4 measurement ID, Meta Pixel ID, Microsoft Clarity ID. The cookie banner only appears once at least one is set.
 - [ ] Chat agent widget script URL (`NEXT_PUBLIC_CHAT_WIDGET_SRC`) for the Demo Lab (button hidden).
 

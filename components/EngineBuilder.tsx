@@ -36,7 +36,7 @@ export function EngineBuilder({ services }: { services: { slug: ServiceSlug; nam
     setStep(n);
     if (n === 4 && size && goal) {
       const pkg = recommendPackage(picked, size, goal);
-      track("engine_builder_complete", { package: pkg.key });
+      track("engine_builder_complete", { package: pkg.slug });
     }
     requestAnimationFrame(() => headingRef.current?.focus());
   };
@@ -47,7 +47,7 @@ export function EngineBuilder({ services }: { services: { slug: ServiceSlug; nam
 
   const bookHref = () => {
     const q = new URLSearchParams({
-      package: pkg?.key ?? "",
+      package: pkg?.name ?? "",
       services: picked.join(","),
       size: builderSizes.find((s) => s.key === size)?.label ?? "",
       goal: builderGoals.find((g) => g.key === goal)?.label ?? "",
@@ -151,12 +151,12 @@ export function EngineBuilder({ services }: { services: { slug: ServiceSlug; nam
             <dl className="mt-6 grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-sm text-muted">{t.setup}</dt>
-                <dd className="font-display text-3xl font-bold">{formatUsd(pkg.setupFrom)}</dd>
+                <dd className="font-display text-3xl font-bold">{formatUsd(pkg.setup ?? 0)}</dd>
               </div>
               <div>
                 <dt className="text-sm text-muted">{t.monthly}</dt>
                 <dd className="font-display text-3xl font-bold">
-                  {formatUsd(pkg.monthlyFrom)}
+                  {formatUsd(pkg.monthly ?? 0)}
                   {pkg.monthlyNote && " "}
                   {pkg.monthlyNote && <span className="block text-sm font-normal text-muted">{pkg.monthlyNote}</span>}
                 </dd>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { siteConfig } from "@/site.config";
 import { home } from "@/content/home";
-import { packages } from "@/content/pricing";
+import { featuredOffers } from "@/content/pricing";
 import { recordedCallAudio } from "@/content/gallery";
 import { getCaseStudies, getServices } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
@@ -153,8 +153,8 @@ export default function HomePage() {
           }
         />
         <div className="grid gap-5 pt-3 md:grid-cols-3">
-          {packages.map((p) => (
-            <PricingCard key={p.key} pkg={p} compact />
+          {featuredOffers.map((o) => (
+            <PricingCard key={o.slug} offer={o} compact />
           ))}
         </div>
       </Section>

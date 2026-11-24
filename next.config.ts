@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { siteConfig } from "./site.config";
 
 /** Origin of an optional URL env var, so the CSP only allows what is configured. */
 const origin = (url?: string) => {
@@ -9,7 +10,7 @@ const origin = (url?: string) => {
   }
 };
 
-const calendar = origin(process.env.NEXT_PUBLIC_CALENDAR_URL);
+const calendar = [...new Set([origin(siteConfig.contact.calendarUrl), origin(siteConfig.contact.testBuildCalendarUrl)])].join(" ");
 const chat = origin(process.env.NEXT_PUBLIC_CHAT_WIDGET_SRC);
 
 const csp = [

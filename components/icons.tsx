@@ -1,5 +1,9 @@
 import {
+  ArrowsClockwiseIcon,
+  ChatCircleIcon,
   FlowArrowIcon,
+  PhoneIcon,
+  StarIcon,
   GraduationCapIcon,
   MegaphoneIcon,
   RobotIcon,
@@ -16,6 +20,10 @@ const registry: Record<string, ComponentType<IconProps>> = {
   VideoCamera: VideoCameraIcon,
   Robot: RobotIcon,
   GraduationCap: GraduationCapIcon,
+  Phone: PhoneIcon,
+  ChatCircle: ChatCircleIcon,
+  ArrowsClockwise: ArrowsClockwiseIcon,
+  Star: StarIcon,
 };
 
 export function ContentIcon({ name, ...props }: { name: string } & IconProps) {

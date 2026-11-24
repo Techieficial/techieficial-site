@@ -71,7 +71,7 @@ faqs:
   - q: What happens after launch?
     a: We monitor the automations, fix anything that breaks and send you a monthly report on how leads are moving.
   - q: Is this a fit for a small business?
-    a: Yes. The Capture package is built for small service businesses that want every lead answered without hiring more staff.
+    a: Yes. The AI Receptionist Starter is built for small service businesses that want every call answered without hiring more staff.
 related: [ai-agents, paid-ads]
 industries: [home-services, dental-medspa]
 status: needs-review

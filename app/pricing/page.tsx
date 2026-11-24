@@ -1,11 +1,11 @@
 import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { pricingPage, ui } from "@/content/pages";
-import { monthlyCovers, packages, pricingFaqs } from "@/content/pricing";
+import { monthlyCovers, offers, pricingFaqs } from "@/content/pricing";
 import { getServices } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { CTABand, FAQAccordion, PageHero, PricingCard } from "@/components/blocks";
 import { EngineBuilder } from "@/components/EngineBuilder";
-import { ComparisonSection, ServicePriceList } from "@/components/sections";
+import { ComparisonSection } from "@/components/sections";
 import { Section, SectionHeader } from "@/components/ui";
 
 export const metadata = pageMetadata({ ...pricingPage.seo, path: "/pricing" });
@@ -24,13 +24,11 @@ export default function PricingPage() {
       <Section tone="raised" id="packages" labelledBy="packages-title">
         <SectionHeader id="packages-title" title={pricingPage.packagesTitle} />
         <div className="grid gap-6 lg:grid-cols-3">
-          {packages.map((p) => (
-            <PricingCard key={p.key} pkg={p} />
+          {offers.map((o) => (
+            <PricingCard key={o.slug} offer={o} />
           ))}
         </div>
       </Section>
-
-      <ServicePriceList />
 
       <Section labelledBy="covers-title">
         <div className="grid gap-10 lg:grid-cols-2">

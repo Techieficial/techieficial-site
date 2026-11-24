@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { accentText, type ServiceSlug } from "@/site.config";
 import { servicesHub } from "@/content/pages";
-import { packages } from "@/content/pricing";
+import { featuredOffers } from "@/content/pricing";
 import { getServices, serviceBySlug } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { CTABand, PageHero, PricingCard, ServiceCard } from "@/components/blocks";
@@ -57,8 +57,8 @@ export default function ServicesHubPage() {
       <Section labelledBy="packages-title">
         <SectionHeader id="packages-title" title={servicesHub.packagesTitle} intro={home.packages.intro} />
         <div className="grid gap-5 pt-3 md:grid-cols-3">
-          {packages.map((p) => (
-            <PricingCard key={p.key} pkg={p} />
+          {featuredOffers.map((o) => (
+            <PricingCard key={o.slug} offer={o} />
           ))}
         </div>
       </Section>

@@ -25,7 +25,7 @@ workflow:
   - title: Review and repeat work
     body: After the job, the customer gets a review request and later a maintenance reminder.
 packageKey: convert
-packageWhy: Convert adds the AI voice receptionist to the Capture basics, which matters most when you are out on jobs all day.
+packageWhy: The AI Front Office answers your calls while you are out on jobs, replies to web leads in under a minute and follows up every open quote.
 services: [marketing-automation, ai-agents, paid-ads]
 faqs:
   - q: Can the AI receptionist handle emergency calls?

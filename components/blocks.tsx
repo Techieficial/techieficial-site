@@ -1,14 +1,14 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRightIcon, CaretRightIcon, CheckIcon, PhoneCallIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
-import { accentText, formatPhone, siteConfig, telHref, type ServiceSlug } from "@/site.config";
-import { formatUsd, type Package } from "@/content/pricing";
+import { accentText, formatPhone, isPreviewBuild, siteConfig, telHref, type ServiceSlug } from "@/site.config";
+import { priceParts, pricesFinal, usageNote, type Offer } from "@/content/pricing";
 import { pricingPage, ui } from "@/content/pages";
 import type { CaseStudy, Service } from "@/lib/content";
 import { breadcrumbLd, faqLd } from "@/lib/seo";
 import { ContentIcon } from "./icons";
 import { JsonLd } from "./JsonLd";
-import { Button, Container } from "./ui";
+import { Button, buttonClass, Container } from "./ui";
 
 export const serviceColor = (slug: ServiceSlug) => siteConfig.serviceColors[slug];
 
@@ -52,46 +52,79 @@ export function ServiceCard({ service, size = "md" }: { service: Service; size?:
 
 /* ---------- Pricing card ---------- */
 
-export function PricingCard({ pkg, compact = false }: { pkg: Package; compact?: boolean }) {
+/** One offer: name, prices, usage note, short include list, and the right button for its buying path. */
+export function PricingCard({ offer, compact = false }: { offer: Offer; compact?: boolean }) {
+  const price = priceParts(offer);
+  const checkoutOpen = offer.path === "checkout" && siteConfig.checkoutLive && offer.paymentLink;
   return (
     <div
-      className={`relative flex h-full flex-col rounded-[20px] border p-7 ${pkg.popular ? "border-accent bg-surface-2 shadow-[0_30px_80px_-40px_var(--glow)]" : "border-rule bg-surface"}`}
+      className={`relative flex h-full flex-col rounded-[20px] border p-7 ${offer.popular ? "border-accent bg-surface-2 shadow-[0_30px_80px_-40px_var(--glow)]" : "border-rule bg-surface"}`}
     >
-      {pkg.popular && (
+      {offer.popular && (
         <span className="absolute -top-3 left-7 rounded-full bg-electric px-3 py-1 text-xs font-semibold text-on-accent">
           {pricingPage.popular}
         </span>
       )}
-      <h3 className="text-2xl font-bold tracking-[-0.02em]">{pkg.name}</h3>
-      <p className="mt-2 text-muted">{pkg.tagline}</p>
+      <h3 className="text-2xl font-bold tracking-[-0.02em]">{offer.name}</h3>
+      <p className="mt-2 text-muted">{offer.tagline}</p>
       <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-rule py-5">
-        <div>
-          <dt className="text-sm text-muted">{pricingPage.setup}</dt>
-          <dd className="mt-1 font-display text-2xl font-semibold">{formatUsd(pkg.setupFrom)}</dd>
-        </div>
-        <div>
-          <dt className="text-sm text-muted">{pricingPage.monthly}</dt>
-          <dd className="mt-1 font-display text-2xl font-semibold">
-            {formatUsd(pkg.monthlyFrom)}
-            {pkg.monthlyNote && " "}
-            {pkg.monthlyNote && <span className="block text-sm font-normal text-muted">{pkg.monthlyNote}</span>}
-          </dd>
-        </div>
+        {price.setup && (
+          <div>
+            <dt className="text-sm text-muted">{pricingPage.setup}</dt>
+            <dd className="mt-1 font-display text-2xl font-semibold">{price.setup}</dd>
+          </div>
+        )}
+        {price.monthly && (
+          <div>
+            <dt className="text-sm text-muted">{pricingPage.monthly}</dt>
+            <dd className="mt-1 font-display text-2xl font-semibold">
+              {price.monthly}
+              {offer.monthlyNote && " "}
+              {offer.monthlyNote && <span className="block text-sm font-normal text-muted">{offer.monthlyNote}</span>}
+            </dd>
+          </div>
+        )}
+        {price.oneTime && (
+          <div>
+            <dt className="text-sm text-muted">{pricingPage.oneTimeLabel}</dt>
+            <dd className="mt-1 font-display text-2xl font-semibold">{price.oneTime}</dd>
+          </div>
+        )}
+        {offer.minimumTerm && (
+          <div>
+            <dt className="text-sm text-muted">{pricingPage.minimumLabel}</dt>
+            <dd className="mt-1 text-[15px] font-medium">{offer.minimumTerm}</dd>
+          </div>
+        )}
       </dl>
+      {offer.monthly !== undefined && <p className="mt-3 text-xs text-muted">{usageNote}</p>}
+      {offer.draft && !pricesFinal && isPreviewBuild && (
+        <p className="mt-2 inline-flex w-fit rounded-full border border-dashed border-rule px-2.5 py-0.5 text-xs text-muted">{pricingPage.draftNote}</p>
+      )}
       {!compact && (
         <ul className="mt-6 space-y-2.5 text-[15px]">
-          {pkg.includes.map((item) => (
+          {offer.includes.map((item) => (
             <li key={item} className="flex gap-2.5">
-              <CheckIcon weight="bold" aria-hidden className="mt-1 size-4 shrink-0 text-accent-2" />
+              <CheckIcon weight="bold" aria-hidden className="mt-1 size-4 shrink-0 text-accent-text" />
               {item}
             </li>
           ))}
         </ul>
       )}
       <div className="mt-auto pt-7">
-        <Button href={`${siteConfig.cta.primary.href}?package=${pkg.key}`} variant={pkg.popular ? "primary" : "secondary"} className="w-full">
-          {siteConfig.cta.primary.label}
-        </Button>
+        {offer.path === "call" ? (
+          <Button href={`${siteConfig.cta.primary.href}?package=${encodeURIComponent(offer.name)}`} variant={offer.popular ? "primary" : "secondary"} className="w-full">
+            {siteConfig.cta.primary.label}
+          </Button>
+        ) : checkoutOpen ? (
+          <Button href={offer.paymentLink!} variant={offer.popular ? "primary" : "secondary"} className="w-full">
+            {offer.checkoutLabel}
+          </Button>
+        ) : (
+          <span aria-disabled="true" className={buttonClass("secondary", "md", "w-full cursor-not-allowed opacity-70")}>
+            {pricingPage.checkoutSoon}
+          </span>
+        )}
       </div>
     </div>
   );

@@ -19,31 +19,49 @@ const env = (name: string) => {
 export const siteConfig = {
   name: "Techieficial",
   url: "https://techieficial.com",
-  tagline: "AI growth agency",
-  mission: "AI video, paid ads, CRM automation and AI agents, planned and run as one system.",
+  tagline: "AI teams for service businesses",
+  mission: "AI teams for service businesses.",
   locale: "en",
 
   /** Primary and secondary calls to action, used everywhere on the site. */
   cta: {
-    primary: { label: "Book a demo", href: "/contact" },
-    primaryShort: { label: "Book a demo", href: "/contact" },
-    demo: { label: "Test the AI live", href: "/demo" },
+    primary: { label: "Book a strategy call", href: "/contact" },
+    primaryShort: { label: "Book a call", href: "/contact" },
+    demo: { label: "Interview the AI team", href: "/demo" },
     callAi: { label: "Call the AI" },
     partner: { label: "Book a partner call", href: "/agencies#partner" },
     waitlist: { label: "Join the waitlist", href: "/academy#waitlist" },
   },
 
   contact: {
-    /** Business email shown in the footer and contact page. */
-    email: env("NEXT_PUBLIC_CONTACT_EMAIL") as string | undefined,
+    /** General business email (footer, contact page, Organization schema). */
+    email: env("NEXT_PUBLIC_CONTACT_EMAIL") ?? "hello@techieficial.com",
+    /** Existing-client support email. */
+    supportEmail: "support@techieficial.com",
     /** Phone number of the live AI receptionist demo, in international format, e.g. +14155550100. */
     demoPhone: env("NEXT_PUBLIC_DEMO_PHONE") as string | undefined,
-    /** CRM calendar embed URL for booking demos. */
-    calendarUrl: env("NEXT_PUBLIC_CALENDAR_URL") as string | undefined,
+    /** CRM booking calendars (public widget links, docs/CRM_SETUP.md). An env var overrides each. */
+    calendarUrl: env("NEXT_PUBLIC_CALENDAR_URL") ?? "https://api.leadconnectorhq.com/widget/booking/vanlKYhT08mnXvYIySry",
+    testBuildCalendarUrl: env("NEXT_PUBLIC_TESTBUILD_CALENDAR_URL") ?? "https://api.leadconnectorhq.com/widget/booking/lLQv2kiaIh5gGxwypAky",
   },
 
   /** Only accounts that exist. Leave out anything that does not. */
-  socials: [] as { label: string; href: string }[],
+  socials: [
+    { label: "YouTube", href: "https://www.youtube.com/@techieficial" },
+    { label: "Facebook", href: "https://www.facebook.com/techieficial/" },
+    { label: "TikTok", href: "https://www.tiktok.com/@techieficial" },
+    { label: "Instagram", href: "https://www.instagram.com/techieficial" },
+    // LinkedIn and X: add here once the accounts' final URLs exist.
+  ] as { label: string; href: string }[],
+
+  /**
+   * Direct checkout through CRM payment links (products under $3,000). Stays false until the
+   * owner connects the payment provider and confirms a test payment; buttons show "Checkout opens soon".
+   */
+  checkoutLive: false,
+
+  /** Branch Cloudflare deploys to techieficial.com. Every other branch build is a preview. */
+  productionBranch: "claude/techieficial-marketing-site-exbrsa",
 
   /** Countries served, from real delivery history. */
   countries: ["United States", "United Kingdom", "Canada", "Australia", "New Zealand"],
@@ -75,6 +93,14 @@ export const siteConfig = {
   turnstileSiteKey: env("NEXT_PUBLIC_TURNSTILE_SITE_KEY"),
   chatWidgetSrc: env("NEXT_PUBLIC_CHAT_WIDGET_SRC"),
 } as const;
+
+/**
+ * True on preview builds (Cloudflare branch builds other than production) and in local development.
+ * Used for preview-only notes such as "Draft pricing". Cloudflare sets WORKERS_CI_BRANCH during builds.
+ */
+export const isPreviewBuild =
+  process.env.NODE_ENV === "development" ||
+  Boolean(process.env.WORKERS_CI_BRANCH && process.env.WORKERS_CI_BRANCH !== siteConfig.productionBranch);
 
 export const hasAnalytics = Boolean(
   siteConfig.analytics.ga4 || siteConfig.analytics.metaPixel || siteConfig.analytics.clarity,

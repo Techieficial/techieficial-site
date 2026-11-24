@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 
-type Lead = Record<string, unknown> & { email: string; tags: string[] };
+type Lead = Record<string, unknown> & { email: string; tag: string; _path: string };
 
 /** The lead the mock CRM webhook received for this email (tests run in parallel). */
 async function leadFor(page: Page, email: string) {
@@ -18,7 +18,7 @@ async function leadFor(page: Page, email: string) {
 test("contact form validates, submits to the CRM webhook and redirects", async ({ page }) => {
   await page.goto("/contact?package=convert&services=ai-agents&size=2%20to%2010&goal=Stop%20missing%20leads");
   const form = page.locator("form").filter({ has: page.getByLabel("Your name") }).first();
-  await form.getByRole("button", { name: "Book my demo" }).click();
+  await form.getByRole("button", { name: "Book my strategy call" }).click();
   await expect(form.getByLabel("Your name")).toHaveAttribute("aria-invalid", "true");
   await expect(form.getByLabel("Work email")).toHaveAttribute("aria-invalid", "true");
 
@@ -26,13 +26,26 @@ test("contact form validates, submits to the CRM webhook and redirects", async (
   await form.getByLabel("Your name").fill("Test Lead");
   await form.getByLabel("Work email").fill(email);
   await form.getByLabel("Mobile number").fill("+1 555 010 0199");
-  await form.getByRole("button", { name: "Book my demo" }).click();
+  await form.getByRole("button", { name: "Book my strategy call" }).click();
   await expect(page).toHaveURL(/\/thank-you$/);
 
   const lead = await leadFor(page, email);
-  expect(lead.tags).toContain("booked-call");
-  expect(lead.tags).toContain("engine-builder");
-  expect(JSON.stringify(lead)).not.toContain("turnstile");
+  expect(lead.tag).toBe("engine-builder");
+  expect(lead.source).toBe("contact-form");
+  expect(lead.first_name).toBe("Test");
+  expect(lead.last_name).toBe("Lead");
+  expect(lead.product_interest).toBe("convert");
+  expect(lead.business_size).toBe("2 to 10");
+  expect(lead._path).toBe("/hook");
+  // Exactly the keys the CRM workflow maps (docs/CRM_SETUP.md section 3), nothing else.
+  const keys = Object.keys(lead).filter((k) => k !== "_path").sort();
+  expect(keys).toEqual(
+    [
+      "first_name", "last_name", "email", "phone", "company_name", "source", "tag",
+      "business_type", "business_size", "main_goal", "budget_range", "message", "product_interest", "selected_services", "sms_consent",
+      "page_url", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
+    ].sort(),
+  );
 });
 
 test("footer newsletter signup is tagged newsletter", async ({ page }) => {
@@ -43,7 +56,7 @@ test("footer newsletter signup is tagged newsletter", async ({ page }) => {
   await footer.getByRole("button").filter({ hasText: /./ }).first().click();
   await expect(footer.getByRole("status")).toBeVisible();
   const lead = await leadFor(page, email);
-  expect(lead.tags).toContain("newsletter");
+  expect(lead.tag).toBe("newsletter");
 });
 
 test("academy waitlist is tagged academy-waitlist", async ({ page }) => {
@@ -55,7 +68,7 @@ test("academy waitlist is tagged academy-waitlist", async ({ page }) => {
   await form.getByRole("button", { name: "Join the waitlist" }).click();
   await expect(page.locator("#waitlist").getByRole("status")).toBeVisible();
   const lead = await leadFor(page, email);
-  expect(lead.tags).toContain("academy-waitlist");
+  expect(lead.tag).toBe("academy-waitlist");
 });
 
 test("demo lab test-build tab is reachable by hash and submits", async ({ page }) => {
@@ -70,7 +83,20 @@ test("demo lab test-build tab is reachable by hash and submits", async ({ page }
   await panel.getByRole("button", { name: "Send" }).click();
   await expect(page).toHaveURL(/\/thank-you$/);
   const lead = await leadFor(page, email);
-  expect(lead.tags).toContain("test-build");
+  expect(lead.tag).toBe("test-build");
+});
+
+test("call-me requests go to the call-me webhook only", async ({ request }) => {
+  const email = `callme+${Date.now()}@techieficial.com`;
+  const lead = { source: "demo-callme", name: "Call Me", email, phone: "+1 555 010 0100", smsConsent: true };
+  expect((await request.post("/api/lead", { data: lead })).status()).toBe(400);
+  expect((await request.post("/api/callme", { data: lead })).status()).toBe(200);
+  const all = (await (await request.get("http://127.0.0.1:3999/received")).json()) as Lead[];
+  const got = all.filter((l) => l.email === email);
+  expect(got).toHaveLength(1);
+  expect(got[0]._path).toBe("/callme");
+  expect(got[0].tag).toBe("demo-callme");
+  expect(got[0].sms_consent).toBe("true");
 });
 
 test("honeypot submissions are dropped silently", async ({ request }) => {
@@ -90,20 +116,8 @@ test("engine builder recommends a package and passes it to booking", async ({ pa
   await builder.getByRole("button", { name: "Next" }).click();
   await builder.getByRole("radio", { name: "Stop missing leads" }).click();
   await builder.getByRole("button", { name: "Next" }).click();
-  await expect(builder.getByRole("heading", { name: /Recommended for you: Convert/ })).toBeVisible();
-  await builder.getByRole("link", { name: "Book a demo" }).click();
-  await expect(page).toHaveURL(/\/contact\?package=convert/);
+  await expect(builder.getByRole("heading", { name: /Recommended for you: AI Front Office/ })).toBeVisible();
+  await builder.getByRole("link", { name: "Book a strategy call" }).click();
+  await expect(page).toHaveURL(/\/contact\?package=AI(\+|%20)Front(\+|%20)Office/);
   await expect(page.getByText("Your Engine Builder choices")).toBeVisible();
-});
-
-test("individual services show prices in tabs and pass the choice to booking", async ({ page }) => {
-  await page.goto("/pricing");
-  const section = page.locator("#services-prices");
-  await expect(section.getByRole("tab")).toHaveCount(5);
-  await expect(section.getByText("$350/month")).toBeVisible();
-  await section.getByRole("tab", { name: "Quick fix" }).click();
-  await expect(section.getByText("$97", { exact: true })).toBeVisible();
-  await section.getByRole("link", { name: /Request this.*Single fix/ }).click();
-  await expect(page).toHaveURL(/\/contact\?service=Quick/);
-  await expect(page.getByText(/Quick fix: Single fix/)).toBeVisible();
 });

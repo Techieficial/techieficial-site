@@ -8,6 +8,8 @@ export const leadSources = {
   newsletter: "newsletter",
   academy: "academy-waitlist",
   agency: "agency-partner",
+  audit: "audit",
+  calculator: "calculator",
 } as const;
 
 export type LeadSource = keyof typeof leadSources;
@@ -21,6 +23,7 @@ export const leadSchema = z
   .object({
     source: z.enum(Object.keys(leadSources) as [LeadSource, ...LeadSource[]]),
     name: text(120),
+    company: text(120),
     email: z.string().check(z.trim(), z.toLowerCase(), z.email("email"), z.maxLength(254)),
     phone: z.optional(z.union([phone, z.literal("")])),
     businessType: text(80),
@@ -45,3 +48,4 @@ export const leadSchema = z
   );
 
 export type LeadInput = z.input<typeof leadSchema>;
+export type LeadOutput = z.output<typeof leadSchema>;

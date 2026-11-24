@@ -51,4 +51,4 @@ Before launch, every path is tested end to end. Your team gets training and a re
 
 ## Next step
 
-Want to see which parts your business needs first? [Book a demo](/contact) or explore our [Marketing Automation service](/services/marketing-automation).
+Want to see which parts your business needs first? [Book a strategy call](/contact) or explore our [Marketing Automation service](/services/marketing-automation).

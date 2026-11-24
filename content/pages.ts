@@ -1,52 +1,105 @@
 /** Copy for every page other than home, services, industries, blog and legal. Status: needs-review. */
 
+/**
+ * Navigation (docs/SITE_CONTENT_V3.md 1.3). Each link names its v3 page in `href`. While that page is
+ * not built yet, `fallback` is used instead; with no fallback the link is hidden (see lib/nav.ts).
+ */
+export type NavLinkDef = { label: string; href: string; fallback?: string };
+
 export const nav = {
-  servicesLabel: "Services",
-  servicesHref: "/services",
-  servicesMenuToggle: "Show the services menu",
-  themeToggle: "Switch between light and dark mode",
-  allServices: "All services",
+  team: {
+    label: "AI Team",
+    href: "/ai-team",
+    fallback: "/services/ai-agents",
+    menuToggle: "Show the AI team menu",
+    cards: [
+      { name: "AI Receptionist", line: "Answers every call, books jobs, transfers emergencies.", icon: "Phone", href: "/ai-team/receptionist", fallback: "/services/ai-agents" },
+      { name: "AI Lead Responder", line: "Replies to web, ad and social leads in under a minute.", icon: "ChatCircle", href: "/ai-team/lead-responder", fallback: "/services/ai-agents" },
+      { name: "AI Follow-up Agent", line: "Chases unbooked leads, open quotes and no-shows.", icon: "ArrowsClockwise", href: "/ai-team/follow-up-agent", fallback: "/services/ai-agents" },
+      { name: "AI Reviews Agent", line: "Asks for reviews after every job.", icon: "Star", href: "/ai-team/reviews-agent", fallback: "/services/ai-agents" },
+    ],
+    wholeTeam: { title: "Hire the whole team", body: "AI Front Office: all 4 AI employees, built and managed for you.", href: "/offers/ai-front-office", fallback: "/pricing" },
+    allLabel: "Meet the AI team",
+  },
+  byIndustry: "By industry",
+  industries: [
+    { label: "Home services and trades", href: "/industries/home-services" },
+    { label: "Dental and med spa", href: "/industries/dental-medspa" },
+    { label: "Legal", href: "/industries/legal" },
+    { label: "Agencies (white label)", href: "/agencies" },
+  ] as NavLinkDef[],
+  moreServices: "More services",
+  services: [
+    { label: "Paid ads", href: "/services/paid-ads" },
+    { label: "AI video", href: "/services/ai-video" },
+    { label: "CRM automation", href: "/services/marketing-automation" },
+    { label: "Team training", href: "/services/training" },
+  ] as NavLinkDef[],
   links: [
     { label: "Demo Lab", href: "/demo" },
-    { label: "Work", href: "/work" },
-    { label: "Pricing", href: "/pricing" },
+    { label: "Offers", href: "/offers", fallback: "/pricing" },
+    { label: "Inside", href: "/inside" },
     { label: "Academy", href: "/academy" },
-  ],
-  byIndustry: "By industry",
-  agencies: "Agencies",
-  featured: {
-    title: "See the growth engine in action",
-    body: "Test our AI receptionist and see what happens in the CRM.",
-    href: "/demo",
-  },
+  ] as NavLinkDef[],
+  themeToggle: "Switch between light and dark mode",
   skipLink: "Skip to content",
 };
 
 export const footer = {
-  ctaTitle: "Ready to build your growth engine?",
+  ctaTitle: "Ready to hire your AI team?",
   newsletter: {
-    title: "1 automation idea every week",
+    title: "The AI Front Desk: one automation idea every week. Free.",
     inputLabel: "Your email",
-    button: "Subscribe",
+    button: "Send me ideas",
     success: "You are subscribed. Look out for the first email.",
   },
-  columns: {
-    services: "Services",
-    industries: "Industries",
-    resources: "Resources",
-    academy: "Academy",
-    company: "Company",
-  },
-  academyLinks: [
-    { label: "Academy", href: "/academy" },
-    { label: "Corporate training", href: "/services/training" },
-    { label: "Mentorship", href: "/services/training#deliverables" },
-  ],
-  companyLinks: [
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
-    { label: "Agencies and white label", href: "/agencies" },
-  ],
+  columns: [
+    {
+      title: "AI Team",
+      links: [
+        { label: "Receptionist", href: "/ai-team/receptionist" },
+        { label: "Lead Responder", href: "/ai-team/lead-responder" },
+        { label: "Follow-up Agent", href: "/ai-team/follow-up-agent" },
+        { label: "Reviews Agent", href: "/ai-team/reviews-agent" },
+      ],
+    },
+    {
+      title: "Offers",
+      links: [
+        { label: "AI Front Office", href: "/offers/ai-front-office" },
+        { label: "AI Growth Team", href: "/offers/ai-growth-team" },
+        { label: "AI Receptionist Starter", href: "/offers/ai-receptionist-starter" },
+        { label: "CRM Workspace", href: "/offers/crm-workspace" },
+        { label: "Missed-Call Text-Back", href: "/offers/missed-call-text-back" },
+        { label: "Playbook", href: "/offers/ai-receptionist-playbook" },
+        { label: "All offers and pricing", href: "/offers", fallback: "/pricing" },
+      ],
+    },
+    {
+      title: "Resources",
+      links: [
+        { label: "Demo Lab", href: "/demo" },
+        { label: "Missed-call calculator", href: "/tools/missed-call-calculator" },
+        { label: "Free audit", href: "/audit" },
+        { label: "Work", href: "/work" },
+        { label: "Blog", href: "/blog" },
+        { label: "FAQ", href: "/faq" },
+      ],
+    },
+    {
+      title: "Company",
+      links: [
+        { label: "About", href: "/about" },
+        { label: "Inside Techieficial", href: "/inside" },
+        { label: "Academy", href: "/academy" },
+        { label: "Agencies", href: "/agencies" },
+        { label: "Contact", href: "/contact" },
+      ],
+    },
+  ] as { title: string; links: NavLinkDef[] }[],
+  emailLabel: "General",
+  supportLabel: "Client support",
+  bottomLine: "AI teams for service businesses.",
   legalLinks: [
     { label: "Privacy", href: "/privacy" },
     { label: "Terms", href: "/terms" },
@@ -72,7 +125,7 @@ export const servicesHub = {
     { from: "ai-agents", to: "marketing-automation", label: "AI agents answer, qualify and book, then log it in the CRM." },
     { from: "training", to: "marketing-automation", label: "Training hands the system over to your team." },
   ],
-  packagesTitle: "Compare packages",
+  packagesTitle: "Start where you are.",
 };
 
 export const demoPage = {
@@ -113,11 +166,11 @@ export const demoPage = {
 
 export const pricingPage = {
   seo: {
-    title: "Pricing | Techieficial",
-    description: "Starting prices for the Capture, Convert and Dominate packages, plus the Engine Builder to find the right fit for your business.",
+    title: "Offers and Pricing | Techieficial",
+    description: "From a $97 playbook to a fully managed AI team. Clear setup and monthly prices. Usage billed at cost.",
   },
-  title: "Simple packages. A fixed quote before we start.",
-  intro: "Every package has a one-time setup fee and a monthly fee. Use the Engine Builder to find your fit.",
+  title: "Build your AI team.",
+  intro: "Start with one hire or bring on the whole team. Every plan is built for you, trained on your business and managed every month.",
   builder: {
     title: "Engine Builder",
     step1: "Which services do you need?",
@@ -134,24 +187,19 @@ export const pricingPage = {
     stepNames: ["Services", "Business size", "Main goal"],
     stepDone: "done",
     noScript: "The Engine Builder needs JavaScript to run. You can compare every package and price in the Packages section below.",
-    noScriptLink: "Go to packages",
+    noScriptLink: "Go to offers",
     pickHint: "Pick one or more.",
     includes: "What is included",
     selectionNote: "Your choices are added to the booking form.",
   },
-  packagesTitle: "Packages",
-  servicesList: {
-    title: "Individual services",
-    intro: "Need one thing done instead of a package? Pick a service and send the request.",
-    tabsLabel: "Service types",
-    request: "Request this",
-    call: "Book a call",
-    quote: "Ask for a quote",
-    note: "Prices are in US dollars. Projects of $4,500 or more start with a short call. Payment details are agreed once the scope is confirmed.",
-  },
+  packagesTitle: "Offers",
   coversTitle: "What your monthly fee covers",
   faqTitle: "Pricing questions",
   popular: "Most popular",
+  draftNote: "Draft pricing",
+  checkoutSoon: "Checkout opens soon",
+  oneTimeLabel: "One-time",
+  minimumLabel: "Minimum term",
   setup: "Setup from",
   monthly: "Monthly from",
 };
@@ -243,15 +291,15 @@ export const aboutPage = {
 export const contactPage = {
   seo: {
     title: "Book a Demo | Techieficial",
-    description: "Book a demo with Techieficial. We look at how leads reach you today and show you what we would build first.",
+    description: "Book a strategy call with Techieficial. We look at how leads reach you today and show you what we would build first.",
   },
-  title: "Book a demo.",
+  title: "Book a strategy call.",
   intro: "Tell us about your business. We will look at how leads reach you today and show you what we would build first.",
   formTitle: "Tell us about your business",
   calendarTitle: "Pick a time",
   otherWays: "Other ways to reach us",
   selectionTitle: "Your Engine Builder choices",
-  submit: "Book my demo",
+  submit: "Book my strategy call",
 };
 
 export const faqPage = {
@@ -260,7 +308,7 @@ export const faqPage = {
     description: "Answers about Techieficial's services, pricing, process, AI and data, and contracts.",
   },
   title: "Frequently asked questions",
-  intro: "Cannot find your answer? Book a demo and ask us directly.",
+  intro: "Cannot find your answer? Book a strategy call and ask us directly.",
 };
 
 export const blogPage = {
@@ -307,7 +355,7 @@ export const notFoundPage = {
     { label: "Services", href: "/services" },
     { label: "Demo Lab", href: "/demo" },
     { label: "Pricing", href: "/pricing" },
-    { label: "Book a demo", href: "/contact" },
+    { label: "Book a strategy call", href: "/contact" },
   ],
 };
 
@@ -377,8 +425,8 @@ export const ui = {
   processTitle: "From kickoff to launch",
   resultsTitle: "Results",
   pricingTitle: "Pricing",
-  pricingFrom: "Included in the {package} package, from {setup} setup and {monthly} a month.",
-  pricingLink: "See all packages",
+  pricingFrom: "Included in the {package}, from {setup} setup and {monthly} a month. Phone, SMS and email usage billed at cost.",
+  pricingLink: "See all offers",
   faqTitle: "Questions about",
   relatedServices: "Related services",
   relatedIndustries: "Industries we build this for",
@@ -399,6 +447,6 @@ export const ui = {
   demoLabBody: "Visit the Demo Lab to test the system and book a test build for your business.",
   demoLab: "Demo Lab",
   serviceCtaTitle: "Ready to see {name} working for your business?",
-  serviceCtaBody: "Book a demo and we will show you what we would build first.",
+  serviceCtaBody: "Book a strategy call and we will show you what we would build first.",
   industryCtaTitle: "Ready to build this for your business?",
 };

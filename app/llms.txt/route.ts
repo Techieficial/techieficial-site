@@ -24,7 +24,7 @@ export function GET() {
     link("Agencies", "/agencies", "White-label fulfillment for agencies"),
     link("Academy", "/academy", "Training and courses waitlist"),
     link("FAQ", "/faq"),
-    link("Book a demo", "/contact"),
+    link("Book a strategy call", "/contact"),
     "",
     "## Blog",
     ...getPosts().map((p) => link(p.title, p.url, p.description)),

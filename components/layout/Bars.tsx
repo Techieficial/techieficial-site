@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { PhoneCallIcon, XIcon } from "@phosphor-icons/react";
 import { siteConfig, telHref } from "@/site.config";
 
-/** Sticky bottom bar on mobile: Book a demo + Call the AI. */
+/** Sticky bottom bar on mobile: Book a call + Call the AI. */
 export function MobileBar() {
   const phone = siteConfig.contact.demoPhone;
   return (

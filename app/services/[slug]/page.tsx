@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { ArrowRightIcon, CheckIcon, FlaskIcon } from "@phosphor-icons/react/dist/ssr";
 import { accentText, siteConfig } from "@/site.config";
 import { ui } from "@/content/pages";
-import { formatUsd, packages } from "@/content/pricing";
+import { formatUsd, offerForPackage } from "@/content/pricing";
 import { getCaseStudies, getIndustry, getService, getServices, serviceBySlug } from "@/lib/content";
 import { pageMetadata, serviceLd } from "@/lib/seo";
 import { CaseStudyCard, CTABand, DemoCallBlock, FAQAccordion, PageHero, ServiceCard } from "@/components/blocks";
@@ -29,7 +29,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
   if (!s) notFound();
   const color = "var(--accent)";
   const text = accentText;
-  const pkg = packages.find((p) => p.key === s.pricingKey);
+  const pkg = offerForPackage(s.pricingKey);
   const study = getCaseStudies().find((c) => c.services.includes(s.slug));
   const industries = s.industries.map((slug) => getIndustry(slug)).filter((i) => i !== undefined);
   const related = s.related.map((slug) => serviceBySlug(slug));
@@ -152,8 +152,8 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
               <p className="mt-3 max-w-[56ch] text-muted">
                 {ui.pricingFrom
                   .replace("{package}", pkg.name)
-                  .replace("{setup}", formatUsd(pkg.setupFrom))
-                  .replace("{monthly}", formatUsd(pkg.monthlyFrom))}
+                  .replace("{setup}", formatUsd(pkg.setup ?? 0))
+                  .replace("{monthly}", formatUsd(pkg.monthly ?? 0))}
               </p>
             </div>
             <Button href="/pricing" variant="secondary" arrow={false}>

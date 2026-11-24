@@ -3,9 +3,9 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import { siteConfig } from "@/site.config";
 import { nav } from "@/content/pages";
 import { home } from "@/content/home";
-import { getIndustries, getServices, hasWork } from "@/lib/content";
 import { organizationLd, websiteLd } from "@/lib/seo";
-import { Navbar } from "@/components/layout/Navbar";
+import { Navbar, type NavMenu } from "@/components/layout/Navbar";
+import { liveHref, liveLinks } from "@/lib/nav";
 import { Footer } from "@/components/layout/Footer";
 import { MobileBar } from "@/components/layout/Bars";
 import { ConsentManager, UtmCapture } from "@/components/consent/Consent";
@@ -36,15 +36,20 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
-  const services = getServices().map((s) => ({
-    slug: s.slug,
-    name: s.name,
-    url: s.url,
-    outcome: s.outcome,
-    icon: s.icon,
-    color: siteConfig.serviceColors[s.slug],
-  }));
-  const industries = getIndustries().map((i) => ({ name: i.navName, url: i.url }));
+  const menu: NavMenu = {
+    teamHref: liveHref(nav.team) ?? "/services",
+    cards: nav.team.cards.flatMap((c) => {
+      const href = liveHref(c);
+      return href ? [{ name: c.name, line: c.line, icon: c.icon, href }] : [];
+    }),
+    wholeTeam: (() => {
+      const href = liveHref(nav.team.wholeTeam);
+      return href ? { title: nav.team.wholeTeam.title, body: nav.team.wholeTeam.body, href } : null;
+    })(),
+    industries: liveLinks(nav.industries),
+    services: liveLinks(nav.services),
+    links: liveLinks(nav.links),
+  };
 
   return (
     // data-theme is set by the head script before React loads, so the attribute differs from the server markup on purpose.
@@ -60,7 +65,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {nav.skipLink}
         </a>
         <div id="scroll-sentinel" aria-hidden className="pointer-events-none absolute left-0 top-0 h-20 w-px" />
-        <Navbar services={services} industries={industries} showWork={hasWork()} />
+        <Navbar menu={menu} />
         <main id="main">{children}</main>
         <Footer />
         <MobileBar />

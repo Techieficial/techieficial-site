@@ -10,10 +10,11 @@ createServer((req, res) => {
     let body = "";
     req.on("data", (c) => (body += c));
     req.on("end", () => {
+      // _path records which webhook was called (/hook for forms, /callme for Demo Lab "call me").
       try {
-        received.push(JSON.parse(body));
+        received.push({ ...JSON.parse(body), _path: req.url });
       } catch {
-        received.push({ raw: body });
+        received.push({ raw: body, _path: req.url });
       }
       res.writeHead(200, { "Content-Type": "application/json" }).end('{"ok":true}');
     });

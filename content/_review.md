@@ -33,4 +33,4 @@ Each file is marked `status: needs-review` at the top. Change it to `status: app
 - `content/pages.ts`: every other page, form labels, menu and footer.
 - `content/faq.ts`: all FAQs.
 - `content/pricing.ts`: packages, what the monthly fee covers, pricing FAQs, Engine Builder rules.
-- `site.config.ts`: buttons ("Book a demo"), countries, service colors, announcement text.
+- `site.config.ts`: buttons ("Book a strategy call"), countries, service colors, announcement text.

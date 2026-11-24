@@ -4,6 +4,18 @@
 
 ---
 
+## 0. Version 3 (owner decision, Nov 25, 2026): read this first
+
+- **`docs/SITE_CONTENT_V3.md` is the source of truth for structure and copy.** Where it conflicts with anything below, it wins. The site is rebuilt around "Hire your AI team"; the main offer is the AI Front Office.
+- **`docs/CRM_SETUP.md` is the source of truth for webhooks, calendars, payment links, emails and the form payload.** The webhook URLs are kept out of the repo (it is public); they live only in Cloudflare secrets.
+- **Offers replace the Capture / Convert / Dominate packages.** Prices live in `content/pricing.ts` (all DRAFT until the owner confirms). Offers of $3,000 and up go to the Demo Lab, then "Book a strategy call". Offers under $3,000 use CRM payment links, behind `siteConfig.checkoutLive` (false until a test payment works).
+- **Build phases 1 to 7** are listed in Part 4 of the v3 doc. After each phase: `npm run check`, commit, push for a preview, report (Done, Check, Need from you, Next) and wait for the owner's OK.
+- **Navigation and footer** follow v3 section 1.3. Links to v3 pages that are not built yet use a fallback or are hidden (`lib/nav.ts`), so the site never links to a missing page.
+- Unchanged from below: all non-negotiable rules in section 2, the one-accent colour system and light/dark themes in section 5, and the quality gates in section 12.
+- Live site branch: `claude/techieficial-marketing-site-exbrsa` (Cloudflare builds production from it). Never push or merge to it without the owner's go-ahead.
+
+---
+
 ## 1. Who you are working for
 
 - **Owner:** Abdulmujeeb, founder of Techieficial (techieficial.com). He does not write code. Explain decisions in plain language, keep steps short, and never assume he can debug code himself.

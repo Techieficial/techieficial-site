@@ -2,26 +2,28 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
-import { ArrowRightIcon, CaretDownIcon } from "@phosphor-icons/react";
-import { siteConfig } from "@/site.config";
+import { Fragment, useCallback, useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { ArrowRightIcon, CaretDownIcon, PhoneCallIcon } from "@phosphor-icons/react";
+import { siteConfig, telHref } from "@/site.config";
 import { nav } from "@/content/pages";
 import { Logo } from "./Logo";
-import { ServiceGlyph, type NavService } from "./ServiceGlyph";
+import { ServiceGlyph } from "./ServiceGlyph";
 import { AnnouncementBar } from "./Bars";
 import { ThemeToggle } from "./ThemeToggle";
 
-type NavIndustry = { name: string; url: string };
+type Link_ = { label: string; href: string };
 
-export function Navbar({
-  services,
-  industries,
-  showWork,
-}: {
-  services: NavService[];
-  industries: NavIndustry[];
-  showWork: boolean;
-}) {
+/** Menu data with every link already resolved to a page that exists (see lib/nav.ts). */
+export type NavMenu = {
+  teamHref: string;
+  cards: { name: string; line: string; icon: string; href: string }[];
+  wholeTeam: { title: string; body: string; href: string } | null;
+  industries: Link_[];
+  services: Link_[];
+  links: Link_[];
+};
+
+export function Navbar({ menu }: { menu: NavMenu }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
@@ -31,7 +33,8 @@ export function Navbar({
   const megaId = useId();
   const sheetId = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const links = nav.links.filter((l) => l.href !== "/work" || showWork);
+  const links = menu.links;
+  const phone = siteConfig.contact.demoPhone;
 
   // Glass background after 80px of scroll, observed with a sentinel instead of a scroll listener.
   useEffect(() => {
@@ -127,8 +130,8 @@ export function Navbar({
           <ul className="ml-4 hidden items-center gap-1 lg:flex">
             <li ref={servicesItemRef} onMouseEnter={openWithDelay} onMouseLeave={closeWithDelay} className="relative flex items-center">
               <Link
-                href={nav.servicesHref}
-                aria-current={pathname === nav.servicesHref ? "page" : undefined}
+                href={menu.teamHref}
+                aria-current={pathname === menu.teamHref ? "page" : undefined}
                 onKeyDown={(e) => {
                   if (e.key === "ArrowDown") {
                     e.preventDefault();
@@ -137,14 +140,14 @@ export function Navbar({
                 }}
                 className="inline-flex h-11 items-center rounded-l-full pl-4 pr-1 text-[15px] text-ink/85 hover:text-ink aria-[current=page]:text-ink"
               >
-                {nav.servicesLabel}
+                {nav.team.label}
               </Link>
               <button
                 ref={triggerRef}
                 type="button"
                 aria-expanded={megaOpen}
                 aria-controls={megaId}
-                aria-label={nav.servicesMenuToggle}
+                aria-label={nav.team.menuToggle}
                 onClick={() => setMegaOpen((v) => !v)}
                 onKeyDown={(e) => {
                   if (e.key === "ArrowDown" || (e.key === "Tab" && !e.shiftKey && megaOpen)) {
@@ -171,8 +174,13 @@ export function Navbar({
           </ul>
 
           <div className="ml-auto hidden items-center gap-4 lg:flex">
-            {/* Clean nav: one switch and one button. The demo number lives in the mobile bar, footer and Demo Lab. */}
             <ThemeToggle />
+            {phone && (
+              <a href={telHref(phone)} data-event="demo_call_started" className="inline-flex items-center gap-2 text-[15px] font-medium text-ink/90 hover:text-accent-text">
+                <PhoneCallIcon aria-hidden className="size-4" />
+                {siteConfig.cta.callAi.label}
+              </a>
+            )}
             <Link
               href={siteConfig.cta.primary.href}
               className="inline-flex h-11 items-center rounded-full bg-electric px-5 text-[15px] font-semibold text-on-accent transition-transform active:scale-[0.98]"
@@ -207,41 +215,47 @@ export function Navbar({
           className="hidden border-y border-rule bg-bg shadow-[0_24px_48px_-24px_var(--shadow)] lg:block"
         >
           <div className="mx-auto grid max-w-[1240px] grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-8 px-6 py-8">
-            <ul className="grid grid-cols-2 gap-2">
-              {services.map((s) => (
-                <li key={s.slug}>
-                  <Link href={s.url} className="flex gap-4 rounded-2xl p-4 transition-colors hover:bg-surface-2">
-                    <ServiceGlyph service={s} />
-                    <span>
-                      <span className="block font-medium">{s.name}</span>{" "}
-                      <span className="mt-1 block text-sm leading-snug text-muted">{s.outcome}</span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
             <div>
-              <p className="px-4 text-sm font-medium text-muted">{nav.byIndustry}</p>
-              <ul className="mt-3 space-y-1">
-                {industries.map((i) => (
-                  <li key={i.url}>
-                    <Link href={i.url} className="block rounded-xl px-4 py-2.5 hover:bg-surface-2">
-                      {i.name}
+              <ul className="grid grid-cols-2 gap-2">
+                {menu.cards.map((c) => (
+                  <li key={c.name}>
+                    <Link href={c.href} className="flex gap-4 rounded-2xl p-4 transition-colors hover:bg-surface-2">
+                      <ServiceGlyph service={{ icon: c.icon }} />
+                      <span>
+                        <span className="block font-medium">{c.name}</span>{" "}
+                        <span className="mt-1 block text-sm leading-snug text-muted">{c.line}</span>
+                      </span>
                     </Link>
                   </li>
                 ))}
-                <li>
-                  <Link href="/agencies" className="block rounded-xl px-4 py-2.5 hover:bg-surface-2">
-                    {nav.agencies}
-                  </Link>
-                </li>
               </ul>
+              {menu.wholeTeam && (
+                <Link href={menu.wholeTeam.href} className="group mt-2 flex items-center justify-between gap-4 rounded-2xl bg-surface p-5 transition-colors hover:bg-surface-2">
+                  <span>
+                    <span className="block font-display text-lg font-semibold">{menu.wholeTeam.title}</span>{" "}
+                    <span className="mt-1 block text-sm text-muted">{menu.wholeTeam.body}</span>
+                  </span>
+                  <ArrowRightIcon aria-hidden className="size-5 shrink-0 text-accent-text transition-transform group-hover:translate-x-1" />
+                </Link>
+              )}
             </div>
-            <Link href={nav.featured.href} className="group relative flex flex-col justify-end overflow-hidden rounded-2xl bg-surface p-6 transition-colors hover:bg-surface-2">
-              <span className="relative font-display text-lg font-semibold">{nav.featured.title}</span>{" "}
-              <span className="relative mt-2 text-sm text-muted">{nav.featured.body}</span>
-              <ArrowRightIcon aria-hidden className="relative mt-4 size-5 text-accent-text transition-transform group-hover:translate-x-1" />
-            </Link>
+            {[
+              { title: nav.byIndustry, links: menu.industries },
+              { title: nav.moreServices, links: menu.services },
+            ].map((col) => (
+              <div key={col.title}>
+                <p className="px-4 text-sm font-medium text-muted">{col.title}</p>
+                <ul className="mt-3 space-y-1">
+                  {col.links.map((l) => (
+                    <li key={l.href}>
+                      <Link href={l.href} className="block rounded-xl px-4 py-2.5 hover:bg-surface-2">
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -260,37 +274,46 @@ export function Navbar({
               onClick={() => setServicesExpanded((v) => !v)}
               className="flex w-full items-center justify-between py-4 text-left text-xl font-medium"
             >
-              {nav.servicesLabel}
+              {nav.team.label}
               <CaretDownIcon aria-hidden className={`size-5 transition-transform ${servicesExpanded ? "rotate-180" : ""}`} />
             </button>
             {servicesExpanded && (
               <ul className="space-y-1 pb-4">
                 <li>
-                  <Link href={nav.servicesHref} className="block rounded-xl px-2.5 py-2.5 font-medium hover:bg-surface">
-                    {nav.allServices}
+                  <Link href={menu.teamHref} className="block rounded-xl px-2.5 py-2.5 font-medium hover:bg-surface">
+                    {nav.team.allLabel}
                   </Link>
                 </li>
-                {services.map((s) => (
-                  <li key={s.slug}>
-                    <Link href={s.url} className="flex items-center gap-3 rounded-xl p-2.5 hover:bg-surface">
-                      <ServiceGlyph service={s} small />
-                      {s.name}
+                {menu.cards.map((c) => (
+                  <li key={c.name}>
+                    <Link href={c.href} className="flex items-center gap-3 rounded-xl p-2.5 hover:bg-surface">
+                      <ServiceGlyph service={{ icon: c.icon }} small />
+                      {c.name}
                     </Link>
                   </li>
                 ))}
-                <li className="px-2.5 pt-3 text-sm text-muted">{nav.byIndustry}</li>
-                {industries.map((i) => (
-                  <li key={i.url}>
-                    <Link href={i.url} className="block rounded-xl px-2.5 py-2.5 hover:bg-surface">
-                      {i.name}
+                {menu.wholeTeam && (
+                  <li>
+                    <Link href={menu.wholeTeam.href} className="block rounded-xl px-2.5 py-2.5 font-medium text-accent-text hover:bg-surface">
+                      {menu.wholeTeam.title}
                     </Link>
                   </li>
+                )}
+                {[
+                  { title: nav.byIndustry, links: menu.industries },
+                  { title: nav.moreServices, links: menu.services },
+                ].map((col) => (
+                  <Fragment key={col.title}>
+                    <li className="px-2.5 pt-3 text-sm text-muted">{col.title}</li>
+                    {col.links.map((l) => (
+                      <li key={l.href}>
+                        <Link href={l.href} className="block rounded-xl px-2.5 py-2.5 hover:bg-surface">
+                          {l.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </Fragment>
                 ))}
-                <li>
-                  <Link href="/agencies" className="block rounded-xl px-2.5 py-2.5 hover:bg-surface">
-                    {nav.agencies}
-                  </Link>
-                </li>
               </ul>
             )}
           </li>

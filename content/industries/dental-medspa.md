@@ -25,7 +25,7 @@ workflow:
   - title: Reviews
     body: Happy patients get a request to leave a review after their visit.
 packageKey: convert
-packageWhy: Convert combines the AI receptionist with nurture and reactivation, which covers new enquiries and recalls in one system.
+packageWhy: The AI Front Office pairs the AI Receptionist with follow-up and reactivation, which covers new enquiries and recalls in one system.
 services: [marketing-automation, ai-agents, ai-video]
 faqs:
   - q: Can the AI agent answer questions about treatments and pricing?

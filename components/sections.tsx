@@ -1,11 +1,8 @@
 import { ArrowUpRightIcon, CheckIcon, MinusIcon } from "@phosphor-icons/react/dist/ssr";
 import { home } from "@/content/home";
-import { pricingPage, ui } from "@/content/pages";
-import { serviceGroups } from "@/content/pricing";
-import { siteConfig } from "@/site.config";
-import { DemoTabs } from "@/components/DemoTabs";
+import { ui } from "@/content/pages";
 import { Reveal } from "@/components/Reveal";
-import { Button, Section, SectionHeader } from "@/components/ui";
+import { Section, SectionHeader } from "@/components/ui";
 
 /** "Stop managing three vendors" pain cards with sourced stats. Shown on the services hub. */
 export function ProblemSection() {
@@ -78,46 +75,3 @@ export function ComparisonSection() {
   );
 }
 
-/** Individual services with prices, in tabs (Care plan, System build, Quick fix, Integration, More). Shown on /pricing. */
-export function ServicePriceList() {
-  const t = pricingPage.servicesList;
-  const tabs = serviceGroups.map((g) => ({
-    id: g.id,
-    label: g.label,
-    content: (
-      <>
-        <p className="text-muted">{g.intro}</p>
-        <ul className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {g.options.map((o) => (
-            <li key={o.key} className="flex flex-col rounded-[20px] border border-rule bg-surface p-7">
-              <h3 className="text-xl font-semibold tracking-[-0.02em]">{o.name}</h3>
-              <p className="mt-3 font-display text-3xl font-bold">{o.price}</p>
-              <p className="mt-1 text-sm text-muted">{o.note}</p>
-              <ul className="mt-5 space-y-2 border-t border-rule pt-5 text-[15px]">
-                {o.includes.map((item) => (
-                  <li key={item} className="flex gap-2.5">
-                    <CheckIcon weight="bold" aria-hidden className="mt-1 size-4 shrink-0 text-accent-text" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto pt-7">
-                <Button href={`${siteConfig.cta.primary.href}?service=${encodeURIComponent(`${g.label}: ${o.name}`)}`} variant="secondary" arrow={false} className="w-full">
-                  {t[o.cta]}
-                  <span className="sr-only">: {o.name}</span>
-                </Button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </>
-    ),
-  }));
-  return (
-    <Section id="services-prices" labelledBy="services-prices-title">
-      <SectionHeader id="services-prices-title" title={t.title} intro={t.intro} />
-      <DemoTabs tabs={tabs} label={t.tabsLabel} />
-      <p className="mt-8 text-sm text-muted">{t.note}</p>
-    </Section>
-  );
-}

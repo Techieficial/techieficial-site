@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ui } from "@/content/pages";
-import { packages } from "@/content/pricing";
+import { offerForPackage } from "@/content/pricing";
 import { getCaseStudies, getIndustries, getIndustry, serviceBySlug } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { CaseStudyCard, CTABand, FAQAccordion, PageHero, PricingCard, ServiceCard } from "@/components/blocks";
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps<"/industries/[slug]
 export default async function IndustryPage({ params }: PageProps<"/industries/[slug]">) {
   const ind = getIndustry((await params).slug);
   if (!ind) notFound();
-  const pkg = packages.find((p) => p.key === ind.packageKey);
+  const pkg = offerForPackage(ind.packageKey);
   const services = ind.services.map((s) => serviceBySlug(s));
   const study = getCaseStudies().find((c) => c.industry.toLowerCase().includes(ind.name.toLowerCase().split(" ")[0]));
 
@@ -73,7 +73,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
               </h2>
               <p className="mt-5 max-w-[52ch] text-[length:var(--text-lead)] text-muted">{ind.packageWhy}</p>
             </div>
-            <PricingCard pkg={pkg} />
+            <PricingCard offer={pkg} />
           </div>
         </Section>
       )}

@@ -1,96 +1,189 @@
 /**
- * Packages, price points and the Engine Builder logic.
- * Status: needs-review. The owner must confirm every price before launch.
+ * Offers, add-ons and prices (v3). Source: docs/SITE_CONTENT_V3.md section 2.4 and docs/CRM_SETUP.md.
+ * Status: DRAFT. The owner is confirming every price. Change a price here and it changes everywhere.
  */
 import type { ServiceSlug } from "@/site.config";
 
+/** Prices are drafts until the owner confirms them. Drafts show a small note on preview builds only. */
 export const pricesFinal = false;
 
-export type PackageKey = "capture" | "convert" | "dominate";
+/** Shown next to every monthly price. */
+export const usageNote = "Phone, SMS and email usage billed at cost.";
 
-export type Package = {
-  key: PackageKey;
+export type OfferSlug =
+  | "ai-growth-team"
+  | "ai-front-office"
+  | "ai-receptionist-starter"
+  | "crm-workspace"
+  | "missed-call-text-back"
+  | "ai-receptionist-playbook";
+
+export type Offer = {
+  slug: OfferSlug;
   name: string;
+  /** One line under the name. */
   tagline: string;
-  setupFrom: number;
-  monthlyFrom: number;
+  /** "Best for" line on the offers ladder. */
+  bestFor: string;
+  /** Prices in US dollars. Leave out what does not apply. */
+  setup?: number;
+  monthly?: number;
+  oneTime?: number;
+  /** Prices start here and can go up ("From $7,500"). */
+  from?: boolean;
+  /** Extra line under the monthly price, e.g. "plus ad spend". */
   monthlyNote?: string;
+  minimumTerm?: string;
+  /** "call": Demo Lab, then strategy call ($3,000 and up). "checkout": CRM payment link. */
+  path: "call" | "checkout";
+  /** CRM payment link (checkout offers only). Used only while siteConfig.checkoutLive is true. */
+  paymentLink?: string;
+  checkoutLabel?: "Get started" | "Buy now";
+  /** Optional: a higher crossed-out price, and a limited-time line (no timers). */
+  compareAtPrice?: number;
+  limitedOffer?: string;
   popular?: boolean;
+  draft: boolean;
+  /** Short list for cards. */
   includes: string[];
+  /** Old package key this offer replaces (Capture, Convert, Dominate), used by older pages until they are rebuilt. */
+  replaces?: "capture" | "convert" | "dominate";
   services: ServiceSlug[];
 };
 
-export const packages: Package[] = [
+export const offers: Offer[] = [
   {
-    key: "capture",
-    name: "Capture",
-    tagline: "Stop losing the leads you already get.",
-    setupFrom: 1500,
-    monthlyFrom: 297,
-    includes: ["CRM setup", "Missed-call text back", "Speed-to-lead replies", "Review requests"],
+    slug: "ai-growth-team",
+    name: "AI Growth Team",
+    tagline: "The AI team plus ads and AI video to fill it with leads.",
+    bestFor: "Businesses that need more leads, not just better handling",
+    setup: 7500,
+    monthly: 2500,
+    from: true,
+    monthlyNote: "plus ad spend",
+    minimumTerm: "3-month minimum",
+    path: "call",
+    draft: true,
+    includes: ["Everything in AI Front Office", "Paid ads setup and management", "AI video and static ad creatives", "1 custom back-office AI agent", "2 team training workshops"],
+    replaces: "dominate",
+    services: ["ai-agents", "marketing-automation", "paid-ads", "ai-video", "training"],
+  },
+  {
+    slug: "ai-front-office",
+    name: "AI Front Office",
+    tagline: "The full 4-person AI team.",
+    bestFor: "Every lead answered, followed up and booked",
+    setup: 3500,
+    monthly: 1297,
+    minimumTerm: "3-month minimum",
+    path: "call",
+    popular: true,
+    draft: true,
+    includes: ["AI Receptionist", "AI Lead Responder", "AI Follow-up Agent", "AI Reviews Agent", "Your CRM, set up and managed"],
+    replaces: "convert",
+    services: ["ai-agents", "marketing-automation"],
+  },
+  {
+    slug: "ai-receptionist-starter",
+    name: "AI Receptionist Starter",
+    tagline: "Never miss a call again.",
+    bestFor: "Owners who miss calls but aren't ready for the full team",
+    setup: 1497,
+    monthly: 497,
+    path: "checkout",
+    paymentLink: "https://link.fastpaydirect.com/payment-link/6b05af0a21a48a3872d28e4b",
+    checkoutLabel: "Get started",
+    draft: true,
+    includes: ["1 AI Receptionist trained on your business", "Answers, books and transfers urgent calls", "Missed-call text-back", "Instant call summaries", "Live in 7 to 10 business days"],
+    replaces: "capture",
+    services: ["ai-agents", "marketing-automation"],
+  },
+  {
+    slug: "crm-workspace",
+    name: "CRM Workspace",
+    tagline: "Your own CRM, hosted and supported.",
+    bestFor: "A hosted, supported CRM without AI",
+    monthly: 197,
+    path: "checkout",
+    paymentLink: "https://link.fastpaydirect.com/payment-link/6b05aee6906a8b62055d9462",
+    checkoutLabel: "Get started",
+    draft: true,
+    includes: ["Contacts, pipeline and calendars", "One inbox for SMS, email and social", "Forms, website builder and review tools", "Mobile app", "Optional quick-start setup for $297"],
     services: ["marketing-automation"],
   },
   {
-    key: "convert",
-    name: "Convert",
-    tagline: "Answer, nurture and book, day and night.",
-    setupFrom: 3500,
-    monthlyFrom: 997,
-    popular: true,
-    includes: [
-      "Everything in Capture",
-      "AI voice receptionist",
-      "Nurture sequences",
-      "Lead reactivation",
-      "Monthly AI video creatives",
-    ],
-    services: ["marketing-automation", "ai-agents", "ai-video"],
+    slug: "missed-call-text-back",
+    name: "Missed-Call Text-Back Setup",
+    tagline: "Turn missed calls into conversations.",
+    bestFor: "A quick fix for missed calls",
+    oneTime: 297,
+    path: "checkout",
+    paymentLink: "https://link.fastpaydirect.com/payment-link/6b05aec4906a8b62055d9461",
+    checkoutLabel: "Buy now",
+    draft: true,
+    includes: ["Instant text to every missed call", "A short reply flow", "Owner alerts", "Tested before launch", "Live in 3 business days"],
+    services: ["marketing-automation"],
   },
   {
-    key: "dominate",
-    name: "Dominate",
-    tagline: "The full growth engine, run for you.",
-    setupFrom: 7500,
-    monthlyFrom: 2500,
-    monthlyNote: "plus ad spend",
-    includes: [
-      "Everything in Convert",
-      "Ads management",
-      "1 custom AI employee",
-      "Team training",
-    ],
-    services: ["marketing-automation", "ai-agents", "ai-video", "paid-ads", "training"],
+    slug: "ai-receptionist-playbook",
+    name: "AI Receptionist Playbook",
+    tagline: "Build your own AI receptionist the way we build ours.",
+    bestFor: "Do-it-yourselfers",
+    oneTime: 97,
+    path: "checkout",
+    paymentLink: "https://link.fastpaydirect.com/payment-link/6b05ae96906a8b62055d945e",
+    checkoutLabel: "Buy now",
+    draft: true,
+    includes: ["Call script", "Knowledge-base template", "FAQ list", "Call-flow map", "Prompt pack"],
+    services: ["ai-agents"],
   },
 ];
 
+export const offerBySlug = (slug: OfferSlug) => offers.find((o) => o.slug === slug)!;
+
+/** The 3 offers previewed on the homepage and hub pages. */
+export const featuredOffers = (["ai-receptionist-starter", "ai-front-office", "ai-growth-team"] as const).map(offerBySlug);
+
+/** Maps an old package key (still in service and industry content) to the offer that replaced it. */
+export const offerForPackage = (key: string) => offers.find((o) => o.replaces === key);
+
+export type AddOn = { name: string; setup?: number; monthly?: number; oneTime?: number; from?: boolean; usage?: boolean; draft: boolean };
+
+export const addOns: AddOn[] = [
+  { name: "Extra AI employee (for example an outbound caller)", setup: 750, monthly: 197, usage: true, draft: true },
+  { name: "Extra location or calendar", setup: 497, monthly: 197, draft: true },
+  { name: "Spanish-language line", setup: 497, draft: true },
+  { name: "Database reactivation campaign (one-time)", oneTime: 997, draft: true },
+  { name: "AI video pack (5 videos)", oneTime: 497, draft: true },
+  { name: "Team AI workshop (90 minutes)", oneTime: 497, draft: true },
+  { name: "Field-service software connection", oneTime: 750, from: true, draft: true },
+];
+
 export const monthlyCovers = [
-  "Your CRM platform",
-  "Monitoring of bots and automations",
-  "Ongoing optimization",
-  "Support when you need it",
-  "Monthly reporting",
+  "CRM platform and AI plan",
+  "Monitoring of every AI employee and automation",
+  "Ongoing tuning of scripts and knowledge base",
+  "Workflow fixes and improvements",
+  "Support",
+  "A monthly report: calls answered, leads booked and revenue recovered",
 ];
 
 export const pricingFaqs = [
   {
-    q: "Why is there a setup fee and a monthly fee?",
-    a: "The setup fee covers the build: planning, configuration, content and testing. The monthly fee covers the CRM platform, monitoring, improvements, support and reporting.",
+    q: "Why a setup fee?",
+    a: "It covers the build: your CRM, training each AI employee on your business, connecting your calendar and testing every scenario.",
   },
   {
-    q: "What does \"from\" mean?",
-    a: "Prices shown are starting points. The final price depends on the number of locations, users, automations and agents. You get a fixed quote before any work starts.",
+    q: "What does \"usage at cost\" mean?",
+    a: "Calls, texts and emails have small per-use charges from the phone and email networks. We pass them to you at cost, with no markup.",
   },
   {
-    q: "Is ad spend included?",
-    a: "No. Ad spend is paid directly to the ad platforms. The Dominate package includes ads management, not the spend itself.",
+    q: "Is there a contract?",
+    a: "The AI Front Office and AI Growth Team have a 3-month minimum. The others are month to month.",
   },
   {
-    q: "Can I start small and add services later?",
-    a: "Yes. Many clients start with Capture and add AI agents, video or ads once the basics are working.",
-  },
-  {
-    q: "Is there a long-term contract?",
-    a: "Contract terms are agreed in your proposal. Ask us on the call about the options.",
+    q: "Do you work with businesses outside the US?",
+    a: "Yes. We work with clients in the US, UK, Canada, Australia and New Zealand.",
   },
 ];
 
@@ -114,214 +207,35 @@ export type BuilderSize = (typeof builderSizes)[number]["key"];
 export type BuilderGoal = (typeof builderGoals)[number]["key"];
 
 /**
- * Recommends the smallest package that covers the chosen services,
- * stepping up when the goal or business size needs more.
+ * Recommends an offer: AI Receptionist Starter by default, stepping up to the AI Front Office or
+ * AI Growth Team when the services, goal or business size need more.
+ * Temporary rules until Phase 4 replaces this with the Team Builder (docs/SITE_CONTENT_V3.md 2.4).
  */
-export function recommendPackage(services: ServiceSlug[], size: BuilderSize, goal: BuilderGoal): Package {
-  const rank: Record<PackageKey, number> = { capture: 0, convert: 1, dominate: 2 };
-  let best: PackageKey = "capture";
-  const bump = (k: PackageKey) => {
-    if (rank[k] > rank[best]) best = k;
+export function recommendPackage(services: ServiceSlug[], size: BuilderSize, goal: BuilderGoal): Offer {
+  const ladder: OfferSlug[] = ["ai-receptionist-starter", "ai-front-office", "ai-growth-team"];
+  let best = 0;
+  const bump = (i: number) => {
+    best = Math.max(best, i);
   };
-
   for (const s of services) {
-    if (s === "ai-agents" || s === "ai-video") bump("convert");
-    if (s === "paid-ads" || s === "training") bump("dominate");
+    if (s === "ai-agents" || s === "ai-video") bump(1);
+    if (s === "paid-ads" || s === "training") bump(2);
   }
-  if (goal === "grow" || goal === "team") bump("dominate");
-  if (goal === "content") bump("convert");
-  if (size === "large") bump("dominate");
-  if (size === "medium") bump("convert");
-
-  return packages.find((p) => p.key === best)!;
+  if (goal === "grow" || goal === "team") bump(2);
+  if (goal === "content") bump(1);
+  if (size === "large") bump(2);
+  if (size === "medium") bump(1);
+  return offerBySlug(ladder[best]);
 }
 
 export const formatUsd = (n: number) => `$${n.toLocaleString("en-US")}`;
 
-/* ---------- Individual services (owner-supplied prices, Nov 24, 2026) ---------- */
-
-export type ServiceOption = {
-  key: string;
-  name: string;
-  price: string;
-  /** Time frame or scope line under the price. */
-  note: string;
-  includes: string[];
-  cta: "request" | "call" | "quote";
-};
-
-export type ServiceGroup = { id: string; label: string; intro: string; options: ServiceOption[] };
-
-export const serviceGroups: ServiceGroup[] = [
-  {
-    id: "care",
-    label: "Care plan",
-    intro: "Monthly support for a CRM you already have.",
-    options: [
-      {
-        key: "care-starter",
-        name: "Starter",
-        price: "$350/month",
-        note: "Up to 8 hours a month",
-        includes: ["Workflow and automation fixes", "Pipeline and CRM maintenance", "Email and SMS template edits", "Monthly 30-minute check-in call", "Reply within 48 hours"],
-        cta: "request",
-      },
-      {
-        key: "care-growth",
-        name: "Growth",
-        price: "$700/month",
-        note: "Up to 20 hours a month",
-        includes: ["Everything in Starter", "New simple automation builds", "Funnel and form updates", "Contact and list management", "Weekly video progress updates", "Reply within 24 hours"],
-        cta: "request",
-      },
-      {
-        key: "care-scale",
-        name: "Scale",
-        price: "$1,300/month",
-        note: "Up to 40 hours a month",
-        includes: ["Everything in Growth", "Full CRM management", "Complex automation builds", "Multi-channel campaign management", "Strategy call every two weeks", "Same-day reply"],
-        cta: "request",
-      },
-    ],
-  },
-  {
-    id: "build",
-    label: "System build",
-    intro: "A complete CRM built around how your business runs.",
-    options: [
-      {
-        key: "build-starter",
-        name: "Starter build",
-        price: "$1,200",
-        note: "5 to 7 business days",
-        includes: ["Up to 3 pipelines", "Up to 5 automation workflows", "Lead capture form and calendar", "Up to 5 email templates", "Video walkthrough at handover"],
-        cta: "request",
-      },
-      {
-        key: "build-standard",
-        name: "Standard build",
-        price: "$2,500",
-        note: "10 to 14 business days",
-        includes: ["Up to 6 pipelines", "Up to 15 automation workflows", "Email and SMS campaigns", "Up to 2 funnels", "Custom dashboard", "Training call and documentation"],
-        cta: "request",
-      },
-      {
-        key: "build-full",
-        name: "Full build",
-        price: "$4,500+",
-        note: "3 to 5 weeks, custom quote",
-        includes: ["Everything in Standard", "Complex multi-stage automations", "Third-party integrations included", "AI chatbot or voice AI optional", "Full team training session"],
-        cta: "call",
-      },
-    ],
-  },
-  {
-    id: "fix",
-    label: "Quick fix",
-    intro: "Something is broken and you need it sorted fast.",
-    options: [
-      {
-        key: "fix-single",
-        name: "Single fix",
-        price: "$97",
-        note: "24 to 48 hours",
-        includes: ["1 specific issue resolved", "Video walkthrough of the fix", "7-day follow-up window"],
-        cta: "request",
-      },
-      {
-        key: "fix-multi",
-        name: "Multi-issue fix",
-        price: "$197",
-        note: "48 to 72 hours",
-        includes: ["Up to 3 related issues", "Video walkthrough", "7-day follow-up window"],
-        cta: "request",
-      },
-      {
-        key: "fix-audit",
-        name: "Deep audit and fix",
-        price: "$397",
-        note: "3 to 5 business days",
-        includes: ["Full CRM audit", "Up to 5 issues resolved", "Written audit report", "30-minute walkthrough call"],
-        cta: "request",
-      },
-    ],
-  },
-  {
-    id: "integration",
-    label: "Integration",
-    intro: "Connect another tool to your CRM.",
-    options: [
-      {
-        key: "integration-simple",
-        name: "Simple",
-        price: "$500",
-        note: "3 to 5 business days",
-        includes: ["1 third-party tool connected", "Up to 3 automated flows", "Testing and documentation"],
-        cta: "request",
-      },
-      {
-        key: "integration-complex",
-        name: "Complex",
-        price: "$1,200",
-        note: "5 to 10 business days",
-        includes: ["Several tools connected", "Custom webhook or API setup", "Up to 10 automation flows", "Testing and video walkthrough"],
-        cta: "request",
-      },
-    ],
-  },
-  {
-    id: "more",
-    label: "More services",
-    intro: "Other work we take on.",
-    options: [
-      {
-        key: "crm-audit",
-        name: "CRM audit",
-        price: "$250 to $500",
-        note: "A full health check of your CRM",
-        includes: ["Every pipeline and automation reviewed", "A written list of what to fix first"],
-        cta: "request",
-      },
-      {
-        key: "crm-migration",
-        name: "CRM migration",
-        price: "Custom quote",
-        note: "For example, moving from another CRM",
-        includes: ["Automations, campaigns and pipelines rebuilt", "Checked end to end after the move"],
-        cta: "quote",
-      },
-      {
-        key: "deliverability",
-        name: "A2P 10DLC and email deliverability",
-        price: "Custom quote",
-        note: "So texts and emails actually arrive",
-        includes: ["A2P 10DLC registration", "Sending domain set up correctly"],
-        cta: "quote",
-      },
-      {
-        key: "voice-agent",
-        name: "Voice AI agent setup",
-        price: "Custom quote",
-        note: "An AI agent that answers, qualifies and books",
-        includes: ["Scripted and tested on real scenarios", "Call results saved to your CRM"],
-        cta: "quote",
-      },
-      {
-        key: "agency-build",
-        name: "Reusable build for agencies",
-        price: "Custom quote",
-        note: "One build for all your clients",
-        includes: ["Built once, deployed to each new account", "White-label, under your brand"],
-        cta: "quote",
-      },
-      {
-        key: "meta-ads",
-        name: "Meta Ads management",
-        price: "Custom quote",
-        note: "Facebook and Instagram lead campaigns",
-        includes: ["Campaign setup and creative testing", "Leads sent straight into your CRM"],
-        cta: "quote",
-      },
-    ],
-  },
-];
+/** Price lines for an offer, e.g. ["$3,500 setup", "$1,297/mo"]. "From" is added when prices can go up. */
+export function priceParts(o: { setup?: number; monthly?: number; oneTime?: number; from?: boolean }) {
+  const pre = o.from ? "From " : "";
+  return {
+    setup: o.setup !== undefined ? `${pre}${formatUsd(o.setup)}` : undefined,
+    monthly: o.monthly !== undefined ? `${o.setup !== undefined ? "" : pre}${formatUsd(o.monthly)}/mo` : undefined,
+    oneTime: o.oneTime !== undefined ? `${pre}${formatUsd(o.oneTime)}` : undefined,
+  };
+}

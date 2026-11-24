@@ -1,14 +1,14 @@
 import { test, expect } from "@playwright/test";
 
-test("mobile menu opens as a sheet with a services accordion", async ({ page }) => {
+test("mobile menu opens as a sheet with a AI Team accordion", async ({ page }) => {
   await page.goto("/");
   const open = page.getByRole("button", { name: "Open menu" });
   const sheet = page.locator(`#${await open.getAttribute("aria-controls")}`);
   await open.click();
-  const acc = sheet.getByRole("button", { name: /Services/ });
+  const acc = sheet.getByRole("button", { name: /AI Team/ });
   await acc.click();
   await expect(acc).toHaveAttribute("aria-expanded", "true");
-  await sheet.getByRole("link", { name: /Marketing Automation/ }).click();
+  await sheet.getByRole("link", { name: /CRM automation/ }).click();
   await expect(page).toHaveURL(/marketing-automation$/);
 });
 
