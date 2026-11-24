@@ -107,7 +107,7 @@ Redirects: `/#services` style anchors from the old site should still land sensib
 ## 7. Global layout
 
 ### Navbar
-- Logo left. Center: **Services** (mega-menu), **Demo Lab**, **Work**, **Pricing**, **Academy**. Right: text link **"Call the AI"** (tel: link to the demo number) and gradient button **"Book a strategy call"** (`/contact`).
+- Logo left. Center: **Services** (link to `/services` plus a menu toggle), **Demo Lab**, **Work**, **Pricing**, **Academy**. Right: the light/dark switch and one button **"Book a strategy call"** (`/contact`). Owner decision (Nov 24, 2026): keep the bar clean like a product site; the "Call the AI" phone link lives in the mobile bar, footer and Demo Lab, not the desktop bar.
 - Sticky. Transparent over the hero; after 80px of scroll becomes a dark glass bar (`backdrop-blur`, `bg/80`, bottom border `rule`).
 - **Mega-menu (Services):** 5 service tiles in their service colors (icon, name, one outcome line); a column "By industry" (Home services, Dental and med spa, Legal, Real estate (hide until page exists), Agencies); a featured card "See the Growth Engine in action" to `/demo`. Opens on hover (with delay) and on click; fully keyboard accessible; closes on Escape.
 - **Mobile:** full-screen sheet, Services as accordion, Book button pinned at the bottom. Sticky bottom bar on mobile pages: "Book a call" + "Call the AI".
@@ -123,19 +123,17 @@ Redirects: `/#services` style anchors from the old site should still land sensib
 ## 8. Page specs
 
 ### Home (`/`)
+Owner decision (Nov 24, 2026): a short homepage. Each topic has its own page; the homepage links to them.
 Section order (each section has an id):
-1. **Hero** (`#top`). Left: tag "AI growth agency", H1 "One team for your whole growth engine." (gradient on "growth engine"), sub line "AI video, paid ads, CRM automation and AI agents, planned and run as one system. Plus training so your team can run it too.", buttons "Book a strategy call" (primary) and "Try the live demo" (secondary, to `/demo`), then 3 StatChips from `content/home.mdx` (real numbers only; hide if missing). Right: **Growth Engine wheel** (spec below).
-2. **Trust marquee:** client logos (only with permission) or "Clients in US, UK, Canada, Australia, New Zealand".
-3. **Problem** (`#problem`): "Stop managing three vendors to run one funnel." 3 pain cards (missed calls, slow follow-up, AI tools that never went live), each with a sourced stat + source link.
-4. **Services** (`#services`): 5 ServiceCards in service colors.
-5. **Live demo teaser:** DemoCallBlock: "Call our AI receptionist now" + big tel number + "Or hear a recorded call" audio player.
-6. **How it works** (`#process`): Audit, Build, Launch, Operate (4 steps with timeline).
-7. **Results:** 2 to 3 CaseStudyCards (hide section if none).
-8. **Packages preview:** 3 PricingCards with "from" prices, link to `/pricing`.
-9. **Academy strip** (`#academy`): "Want to run it yourself? Learn from the people who build it." + waitlist CTA.
-10. **Comparison table:** "Techieficial vs. hiring separate vendors vs. hiring in-house" (cost, speed, one plan, reporting).
-11. **FAQ** (`#faq`): 6 questions + FAQPage schema.
-12. **Final CTA** (`#start`): CTABand with booking.
+1. **Hero** (`#top`), centred: tag "AI growth agency", H1 "One team for your whole growth engine." (accent blend on "growth engine"), sub line, buttons "Book a strategy call" (primary) and "Try the live demo" (secondary, to `/demo`), one quiet line "Clients in ..." (countries from `site.config.ts`), StatChips only with real numbers. Below it, the **main visual**: the Growth Engine wheel until the owner's hero video is ready (`content/_missing.md`).
+2. **Services** (`#services`): 5 ServiceCards.
+3. **Live demo teaser:** DemoCallBlock (shown when the demo number exists).
+4. **How it works** (`#process`): Audit, Build, Launch, Operate.
+5. **Results:** 2 to 3 CaseStudyCards (hidden if none).
+6. **Packages preview:** 3 PricingCards, link to `/pricing`.
+7. **Final CTA** (`#start`).
+
+Moved off the homepage: the Problem cards (now on `/services`, `#problem`), the comparison table (now on `/pricing`), the FAQ (on `/faq`) and the Academy strip (Academy is in the nav). Old anchors `/#problem`, `/#academy` and `/#faq` forward to those pages (`home.movedAnchors`).
 
 ### Growth Engine wheel (hero component)
 - Build as **SVG + Framer Motion** (not canvas, not video). 5 segments (one per service, service colors), inner hub with logo mark, outer ring labels "Get Seen", "Capture Leads", "Grow Revenue".

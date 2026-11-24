@@ -8,6 +8,7 @@ import { CTABand, PageHero, PricingCard, ServiceCard } from "@/components/blocks
 import { Reveal } from "@/components/Reveal";
 import { Section, SectionHeader } from "@/components/ui";
 import { home } from "@/content/home";
+import { ProblemSection } from "@/components/sections";
 
 export const metadata = pageMetadata({ ...servicesHub.seo, path: "/services" });
 
@@ -29,6 +30,8 @@ export default function ServicesHubPage() {
           ))}
         </div>
       </Section>
+
+      <ProblemSection />
 
       <Section tone="raised" labelledBy="connect-title">
         <SectionHeader id="connect-title" title={servicesHub.connectTitle} />

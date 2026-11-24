@@ -11,7 +11,7 @@ test("homepage hero names each client country once", async ({ request }) => {
 test("homepage HTML has one wheel details card", async ({ request }) => {
   const html = await (await request.get("/")).text();
   // The card's "Explore" link appears once in the hero, not once per screen size.
-  const hero = html.slice(html.indexOf('id="top"'), html.indexOf('id="problem"'));
+  const hero = html.slice(html.indexOf('id="top"'), html.indexOf('id="services"'));
   expect(countOf(htmlText(hero), "Explore ")).toBe(1);
   expect(countOf(hero, 'role="tablist"')).toBe(0);
 });
@@ -25,7 +25,7 @@ test("text does not run together where elements meet", async ({ request }) => {
 });
 
 test("comparison table caption differs from the section heading", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/pricing");
   const heading = (await page.locator("#compare-title").innerText()).trim();
   const caption = (await page.locator("table caption").textContent())?.trim();
   expect(caption).toBeTruthy();

@@ -14,6 +14,8 @@ export function htmlText(html: string) {
     .replace(/<script[\s\S]*?<\/script>/g, "")
     .replace(/<style[\s\S]*?<\/style>/g, "")
     .replace(/<!--[\s\S]*?-->/g, "")
+    // Block elements start a new line in the browser, so they separate text; inline tags do not.
+    .replace(/<\/?(?:div|p|li|ul|ol|h[1-6]|section|article|header|footer|nav|main|aside|table|caption|thead|tbody|tr|td|th|dl|dt|dd|details|summary|figure|figcaption|form|fieldset|legend|br)\b[^>]*>/gi, "\n")
     .replace(/<[^>]+>/g, "")
     .replace(/&amp;/g, "&")
     .replace(/&#x27;|&#39;/g, "'")

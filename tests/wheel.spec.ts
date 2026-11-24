@@ -31,7 +31,25 @@ test("wheel works with the keyboard", async ({ page }) => {
 
 test("old homepage anchors still exist", async ({ page }) => {
   await page.goto("/");
-  for (const id of ["top", "services", "process", "academy", "faq", "start"]) {
+  for (const id of ["top", "services", "process", "start"]) {
     await expect(page.locator(`#${id}`)).toHaveCount(1);
   }
+});
+
+test("anchors for sections that moved forward to their new pages", async ({ page }) => {
+  for (const [hash, url] of [
+    ["faq", /\/faq$/],
+    ["academy", /\/academy$/],
+    ["problem", /\/services#problem$/],
+  ] as const) {
+    await page.goto(`/#${hash}`);
+    await expect(page).toHaveURL(url);
+  }
+  await expect(page.locator("#problem")).toHaveCount(1);
+});
+
+test("homepage is the short version", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("table")).toHaveCount(0);
+  await expect(page.locator("details")).toHaveCount(0);
 });

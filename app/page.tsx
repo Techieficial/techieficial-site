@@ -1,15 +1,14 @@
 import Link from "next/link";
-import { ArrowRightIcon, ArrowUpRightIcon, CheckIcon, MinusIcon } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { siteConfig } from "@/site.config";
 import { home } from "@/content/home";
-import { ui } from "@/content/pages";
-import { homeFaqs } from "@/content/faq";
 import { packages } from "@/content/pricing";
 import { recordedCallAudio } from "@/content/gallery";
 import { getCaseStudies, getServices } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
-import { CaseStudyCard, CTABand, DemoCallBlock, FAQAccordion, PricingCard, TrustLine, ServiceCard } from "@/components/blocks";
+import { CaseStudyCard, CTABand, DemoCallBlock, PricingCard, ServiceCard, TrustLine } from "@/components/blocks";
 import { GrowthWheel } from "@/components/GrowthWheel";
+import { HashRedirect } from "@/components/HashRedirect";
 import { CountUp, Reveal } from "@/components/Reveal";
 import { Button, Container, Section, SectionHeader } from "@/components/ui";
 
@@ -74,28 +73,6 @@ export default function HomePage() {
           </div>
         </Container>
       </section>
-
-      {/* 3. Problem */}
-      <Section id="problem" labelledBy="problem-title">
-        <SectionHeader id="problem-title" title={home.problem.title} intro={home.problem.intro} />
-        <div className="grid gap-5 md:grid-cols-3">
-          {home.problem.cards.map((c, i) => (
-            <Reveal key={c.title} delay={i * 0.08}>
-              <article className="flex h-full flex-col rounded-[20px] border border-rule bg-surface p-7">
-                <p className="font-display text-5xl font-bold tracking-[-0.03em] text-electric">{c.stat}</p>
-                <p className="mt-2 text-sm text-muted">{c.statLabel}</p>
-                <h3 className="mt-6 text-xl font-semibold">{c.title}</h3>
-                <p className="mt-2 leading-relaxed text-muted">{c.body}</p>
-                <a href={c.href} className="mt-auto inline-flex items-center gap-1 pt-6 text-sm text-accent-text hover:text-ink" rel="noopener" target="_blank">
-                  Source: {c.source}
-                  <ArrowUpRightIcon aria-hidden className="size-3.5" />{" "}
-                  <span className="sr-only">{ui.newTab}</span>
-                </a>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
 
       {/* 4. Services */}
       <Section id="services" tone="raised" labelledBy="services-title">
@@ -182,81 +159,10 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* 9. Academy strip */}
-      <section id="academy" aria-labelledby="academy-title" className="py-10">
-        <Container>
-          <div className="relative flex flex-col gap-8 overflow-hidden rounded-[28px] border border-rule bg-surface p-8 md:flex-row md:items-center md:justify-between md:p-12">
-            <div aria-hidden className="pointer-events-none absolute -left-20 -top-24 size-72 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
-            <div className="relative max-w-2xl">
-              <h2 id="academy-title" className="text-[length:var(--text-h3)] font-bold leading-tight tracking-[-0.02em] md:text-4xl">
-                {home.academy.title}
-              </h2>
-              <p className="mt-4 text-muted">{home.academy.body}</p>
-            </div>
-            <Button href={siteConfig.cta.waitlist.href} variant="secondary" size="lg" className="relative shrink-0">
-              {siteConfig.cta.waitlist.label}
-            </Button>
-          </div>
-        </Container>
-      </section>
+      {/* Old one-page anchors (#problem, #academy, #faq) forward to their own pages. */}
+      <HashRedirect map={home.movedAnchors} />
 
-      {/* 10. Comparison */}
-      <Section labelledBy="compare-title">
-        <SectionHeader id="compare-title" title={home.comparison.title} />
-        <div className="overflow-x-auto rounded-[20px] border border-rule">
-          <table className="w-full min-w-[720px] border-collapse text-left">
-            <caption className="sr-only">{home.comparison.caption}</caption>
-            <thead>
-              <tr className="border-b border-rule">
-                <td className="p-5" />
-                {home.comparison.columns.map((c, i) => (
-                  <th key={c} scope="col" className={`p-5 font-display text-lg font-semibold ${i === 0 ? "bg-surface-2 text-accent-text" : "text-muted"}`}>
-                    {c}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {home.comparison.rows.map((r) => (
-                <tr key={r.label} className="border-b border-rule last:border-b-0">
-                  <th scope="row" className="p-5 font-medium">
-                    {r.label}
-                  </th>
-                  {r.values.map((v, i) => (
-                    <td key={v} className={`p-5 align-top leading-relaxed ${i === 0 ? "bg-surface-2" : "text-muted"}`}>
-                      <span className="flex gap-2.5">
-                        {i === 0 ? (
-                          <CheckIcon weight="bold" aria-hidden className="mt-1 size-4 shrink-0 text-accent-2" />
-                        ) : (
-                          <MinusIcon aria-hidden className="mt-1 size-4 shrink-0" />
-                        )}
-                        {v}
-                      </span>
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Section>
-
-      {/* 11. FAQ */}
-      <Section id="faq" tone="raised" labelledBy="faq-title">
-        <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
-          <div>
-            <h2 id="faq-title" className="text-[length:var(--text-h2)] font-bold leading-[1.05] tracking-[-0.03em]">
-              {home.faq.title}
-            </h2>
-            <Link href="/faq" className="mt-6 inline-flex items-center gap-1.5 font-medium text-accent-text hover:text-ink">
-              {home.faq.link} <ArrowRightIcon aria-hidden className="size-4" />
-            </Link>
-          </div>
-          <FAQAccordion items={homeFaqs} />
-        </div>
-      </Section>
-
-      {/* 12. Final CTA */}
+      {/* Final CTA */}
       <CTABand id="start" title={home.finalCta.title} body={home.finalCta.body} />
     </>
   );

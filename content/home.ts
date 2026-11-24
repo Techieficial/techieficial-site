@@ -15,6 +15,8 @@ export const home = {
     /** Real numbers only. Leave empty to hide the stat chips. */
     stats: [] as { value: number; suffix?: string; label: string }[],
   },
+  /** Sections that moved off the homepage: old anchor to its new page. */
+  movedAnchors: { problem: "/services#problem", academy: "/academy", faq: "/faq" } as Record<string, string>,
   trust: {
     lead: "Clients in",
   },

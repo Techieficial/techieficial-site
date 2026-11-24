@@ -5,6 +5,7 @@ import { getServices } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { CTABand, FAQAccordion, PageHero, PricingCard } from "@/components/blocks";
 import { EngineBuilder } from "@/components/EngineBuilder";
+import { ComparisonSection } from "@/components/sections";
 import { Section, SectionHeader } from "@/components/ui";
 
 export const metadata = pageMetadata({ ...pricingPage.seo, path: "/pricing" });
@@ -44,6 +45,8 @@ export default function PricingPage() {
           </ul>
         </div>
       </Section>
+
+      <ComparisonSection />
 
       <Section tone="raised" labelledBy="pfaq-title">
         <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
