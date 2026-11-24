@@ -42,7 +42,7 @@ Send items in any order. Each one is a small edit once we have it.
 ## Pricing
 
 - [ ] **Confirm or change the package prices** in `content/pricing.ts` (Capture $1,500 + $297/mo, Convert $3,500 + $997/mo, Dominate $7,500 + $2,500/mo plus ad spend). Price schema for Google stays off until you confirm (`pricesFinal`).
-- [ ] Individual service price list and add-ons (hidden until supplied).
+- [x] Individual service price list: supplied by the owner on Nov 24, 2026 (taken from ghlhub.pro) and shown on /pricing under "Individual services". Add-ons still to supply.
 
 ## Legal
 

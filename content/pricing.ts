@@ -137,3 +137,191 @@ export function recommendPackage(services: ServiceSlug[], size: BuilderSize, goa
 }
 
 export const formatUsd = (n: number) => `$${n.toLocaleString("en-US")}`;
+
+/* ---------- Individual services (owner-supplied prices, Nov 24, 2026) ---------- */
+
+export type ServiceOption = {
+  key: string;
+  name: string;
+  price: string;
+  /** Time frame or scope line under the price. */
+  note: string;
+  includes: string[];
+  cta: "request" | "call" | "quote";
+};
+
+export type ServiceGroup = { id: string; label: string; intro: string; options: ServiceOption[] };
+
+export const serviceGroups: ServiceGroup[] = [
+  {
+    id: "care",
+    label: "Care plan",
+    intro: "Monthly support for a CRM you already have.",
+    options: [
+      {
+        key: "care-starter",
+        name: "Starter",
+        price: "$350/month",
+        note: "Up to 8 hours a month",
+        includes: ["Workflow and automation fixes", "Pipeline and CRM maintenance", "Email and SMS template edits", "Monthly 30-minute check-in call", "Reply within 48 hours"],
+        cta: "request",
+      },
+      {
+        key: "care-growth",
+        name: "Growth",
+        price: "$700/month",
+        note: "Up to 20 hours a month",
+        includes: ["Everything in Starter", "New simple automation builds", "Funnel and form updates", "Contact and list management", "Weekly video progress updates", "Reply within 24 hours"],
+        cta: "request",
+      },
+      {
+        key: "care-scale",
+        name: "Scale",
+        price: "$1,300/month",
+        note: "Up to 40 hours a month",
+        includes: ["Everything in Growth", "Full CRM management", "Complex automation builds", "Multi-channel campaign management", "Strategy call every two weeks", "Same-day reply"],
+        cta: "request",
+      },
+    ],
+  },
+  {
+    id: "build",
+    label: "System build",
+    intro: "A complete CRM built around how your business runs.",
+    options: [
+      {
+        key: "build-starter",
+        name: "Starter build",
+        price: "$1,200",
+        note: "5 to 7 business days",
+        includes: ["Up to 3 pipelines", "Up to 5 automation workflows", "Lead capture form and calendar", "Up to 5 email templates", "Video walkthrough at handover"],
+        cta: "request",
+      },
+      {
+        key: "build-standard",
+        name: "Standard build",
+        price: "$2,500",
+        note: "10 to 14 business days",
+        includes: ["Up to 6 pipelines", "Up to 15 automation workflows", "Email and SMS campaigns", "Up to 2 funnels", "Custom dashboard", "Training call and documentation"],
+        cta: "request",
+      },
+      {
+        key: "build-full",
+        name: "Full build",
+        price: "$4,500+",
+        note: "3 to 5 weeks, custom quote",
+        includes: ["Everything in Standard", "Complex multi-stage automations", "Third-party integrations included", "AI chatbot or voice AI optional", "Full team training session"],
+        cta: "call",
+      },
+    ],
+  },
+  {
+    id: "fix",
+    label: "Quick fix",
+    intro: "Something is broken and you need it sorted fast.",
+    options: [
+      {
+        key: "fix-single",
+        name: "Single fix",
+        price: "$97",
+        note: "24 to 48 hours",
+        includes: ["1 specific issue resolved", "Video walkthrough of the fix", "7-day follow-up window"],
+        cta: "request",
+      },
+      {
+        key: "fix-multi",
+        name: "Multi-issue fix",
+        price: "$197",
+        note: "48 to 72 hours",
+        includes: ["Up to 3 related issues", "Video walkthrough", "7-day follow-up window"],
+        cta: "request",
+      },
+      {
+        key: "fix-audit",
+        name: "Deep audit and fix",
+        price: "$397",
+        note: "3 to 5 business days",
+        includes: ["Full CRM audit", "Up to 5 issues resolved", "Written audit report", "30-minute walkthrough call"],
+        cta: "request",
+      },
+    ],
+  },
+  {
+    id: "integration",
+    label: "Integration",
+    intro: "Connect another tool to your CRM.",
+    options: [
+      {
+        key: "integration-simple",
+        name: "Simple",
+        price: "$500",
+        note: "3 to 5 business days",
+        includes: ["1 third-party tool connected", "Up to 3 automated flows", "Testing and documentation"],
+        cta: "request",
+      },
+      {
+        key: "integration-complex",
+        name: "Complex",
+        price: "$1,200",
+        note: "5 to 10 business days",
+        includes: ["Several tools connected", "Custom webhook or API setup", "Up to 10 automation flows", "Testing and video walkthrough"],
+        cta: "request",
+      },
+    ],
+  },
+  {
+    id: "more",
+    label: "More services",
+    intro: "Other work we take on.",
+    options: [
+      {
+        key: "crm-audit",
+        name: "CRM audit",
+        price: "$250 to $500",
+        note: "A full health check of your CRM",
+        includes: ["Every pipeline and automation reviewed", "A written list of what to fix first"],
+        cta: "request",
+      },
+      {
+        key: "crm-migration",
+        name: "CRM migration",
+        price: "Custom quote",
+        note: "For example, moving from another CRM",
+        includes: ["Automations, campaigns and pipelines rebuilt", "Checked end to end after the move"],
+        cta: "quote",
+      },
+      {
+        key: "deliverability",
+        name: "A2P 10DLC and email deliverability",
+        price: "Custom quote",
+        note: "So texts and emails actually arrive",
+        includes: ["A2P 10DLC registration", "Sending domain set up correctly"],
+        cta: "quote",
+      },
+      {
+        key: "voice-agent",
+        name: "Voice AI agent setup",
+        price: "Custom quote",
+        note: "An AI agent that answers, qualifies and books",
+        includes: ["Scripted and tested on real scenarios", "Call results saved to your CRM"],
+        cta: "quote",
+      },
+      {
+        key: "agency-build",
+        name: "Reusable build for agencies",
+        price: "Custom quote",
+        note: "One build for all your clients",
+        includes: ["Built once, deployed to each new account", "White-label, under your brand"],
+        cta: "quote",
+      },
+      {
+        key: "meta-ads",
+        name: "Meta Ads management",
+        price: "Custom quote",
+        note: "Facebook and Instagram lead campaigns",
+        includes: ["Campaign setup and creative testing", "Leads sent straight into your CRM"],
+        cta: "quote",
+      },
+    ],
+  },
+];

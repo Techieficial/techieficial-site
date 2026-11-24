@@ -95,3 +95,15 @@ test("engine builder recommends a package and passes it to booking", async ({ pa
   await expect(page).toHaveURL(/\/contact\?package=convert/);
   await expect(page.getByText("Your Engine Builder choices")).toBeVisible();
 });
+
+test("individual services show prices in tabs and pass the choice to booking", async ({ page }) => {
+  await page.goto("/pricing");
+  const section = page.locator("#services-prices");
+  await expect(section.getByRole("tab")).toHaveCount(5);
+  await expect(section.getByText("$350/month")).toBeVisible();
+  await section.getByRole("tab", { name: "Quick fix" }).click();
+  await expect(section.getByText("$97", { exact: true })).toBeVisible();
+  await section.getByRole("link", { name: /Request this.*Single fix/ }).click();
+  await expect(page).toHaveURL(/\/contact\?service=Quick/);
+  await expect(page.getByText(/Quick fix: Single fix/)).toBeVisible();
+});

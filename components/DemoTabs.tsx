@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 
 export type DemoTab = { id: string; label: string; content: ReactNode };
 
 /** Accessible tabs with a URL hash per tab, e.g. /demo#build. */
-export function DemoTabs({ tabs }: { tabs: DemoTab[] }) {
+export function DemoTabs({ tabs, label = "Demo Lab" }: { tabs: DemoTab[]; label?: string }) {
   const [active, setActive] = useState(tabs[0]?.id);
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -36,7 +36,7 @@ export function DemoTabs({ tabs }: { tabs: DemoTab[] }) {
 
   return (
     <div>
-      <div role="tablist" aria-label="Demo Lab" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2">
+      <div role="tablist" aria-label={label} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2">
         {tabs.map((t, i) => {
           const on = t.id === active;
           return (

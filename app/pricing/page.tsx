@@ -5,7 +5,7 @@ import { getServices } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { CTABand, FAQAccordion, PageHero, PricingCard } from "@/components/blocks";
 import { EngineBuilder } from "@/components/EngineBuilder";
-import { ComparisonSection } from "@/components/sections";
+import { ComparisonSection, ServicePriceList } from "@/components/sections";
 import { Section, SectionHeader } from "@/components/ui";
 
 export const metadata = pageMetadata({ ...pricingPage.seo, path: "/pricing" });
@@ -29,6 +29,8 @@ export default function PricingPage() {
           ))}
         </div>
       </Section>
+
+      <ServicePriceList />
 
       <Section labelledBy="covers-title">
         <div className="grid gap-10 lg:grid-cols-2">
