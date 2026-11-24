@@ -17,7 +17,7 @@ export default function ThankYouPage() {
   return (
     <>
       <TrackOnMount event="book_call" />
-      <PageHero title={thankYouPage.title} intro={thankYouPage.intro} color="#A3E635" />
+      <PageHero title={thankYouPage.title} intro={thankYouPage.intro} />
       <Section className="!pt-0">
         <StepList steps={thankYouPage.steps} />
       </Section>

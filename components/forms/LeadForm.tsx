@@ -225,7 +225,7 @@ export function LeadForm({
             <div className="flex flex-wrap gap-3">
               {forms.testBuild.types.map((t, i) => (
                 <label key={t} className="flex min-h-11 cursor-pointer items-center gap-2.5 rounded-full border border-rule px-4 has-[:checked]:border-accent-hover has-[:checked]:bg-surface-2">
-                  <input type="radio" name="buildType" value={t} defaultChecked={i === 0} className="accent-[#7c5cff]" />
+                  <input type="radio" name="buildType" value={t} defaultChecked={i === 0} className="accent-[var(--accent)]" />
                   {t}
                 </label>
               ))}
@@ -240,7 +240,7 @@ export function LeadForm({
         field("message", forms.message, <textarea {...aria("message")} rows={4} className={`${inputClass} resize-y`} />, true)}
       {has("phone") && (
         <label className="flex items-start gap-3 text-sm leading-relaxed text-muted">
-          <input type="checkbox" name="smsConsent" className="mt-1 size-4 shrink-0 accent-[#7c5cff]" />
+          <input type="checkbox" name="smsConsent" className="mt-1 size-4 shrink-0 accent-[var(--accent)]" />
           <span>
             {forms.smsConsent}{" "}
             <Link href="/sms-terms" className="text-accent-text underline underline-offset-2">

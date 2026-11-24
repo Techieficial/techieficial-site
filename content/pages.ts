@@ -4,6 +4,7 @@ export const nav = {
   servicesLabel: "Services",
   servicesHref: "/services",
   servicesMenuToggle: "Show the services menu",
+  themeToggle: "Switch between light and dark mode",
   allServices: "All services",
   links: [
     { label: "Demo Lab", href: "/demo" },

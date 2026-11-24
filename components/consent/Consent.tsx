@@ -102,7 +102,7 @@ export function ConsentManager() {
           role="dialog"
           aria-modal="false"
           aria-labelledby="consent-title"
-          className="fixed inset-x-3 bottom-3 z-50 max-w-lg rounded-2xl border border-rule bg-surface-2 p-5 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] sm:left-auto sm:right-5 sm:bottom-5"
+          className="fixed inset-x-3 bottom-3 z-50 max-w-lg rounded-2xl border border-rule bg-surface-2 p-5 shadow-[0_30px_80px_-20px_var(--shadow)] sm:left-auto sm:right-5 sm:bottom-5"
         >
           <h2 id="consent-title" className="font-display text-lg font-semibold">
             {cookieBanner.title}
@@ -147,7 +147,7 @@ function Preferences({ initial, onSave }: { initial: Consent; onSave: (c: Omit<C
         checked={checked}
         disabled={!onChange}
         onChange={(e) => onChange?.(e.target.checked)}
-        className="mt-1 size-5 shrink-0 accent-[#7c5cff]"
+        className="mt-1 size-5 shrink-0 accent-[var(--accent)]"
       />
     </label>
   );

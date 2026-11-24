@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRightIcon, CaretRightIcon, CheckIcon, PhoneCallIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
-import { formatPhone, readableOnDark, siteConfig, telHref, type ServiceSlug } from "@/site.config";
+import { accentText, formatPhone, siteConfig, telHref, type ServiceSlug } from "@/site.config";
 import { formatUsd, type Package } from "@/content/pricing";
 import { pricingPage, ui } from "@/content/pages";
 import type { CaseStudy, Service } from "@/lib/content";
@@ -27,7 +27,7 @@ export function ServiceCard({ service, size = "md" }: { service: Service; size?:
         className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full opacity-25 blur-2xl transition-opacity duration-500 group-hover:opacity-45"
         style={{ background: color }}
       />
-      <span className="grid size-12 place-items-center rounded-2xl" style={{ background: `${color}22`, color }}>
+      <span className="grid size-12 place-items-center rounded-2xl" style={{ background: "color-mix(in srgb, var(--accent) 12%, transparent)", color: accentText }}>
         <ContentIcon name={service.icon} weight="duotone" className="size-6" aria-hidden />
       </span>
       <h3 className={`mt-6 font-semibold tracking-[-0.02em] ${size === "lg" ? "text-2xl" : "text-xl"}`}>{service.name}</h3>
@@ -36,13 +36,13 @@ export function ServiceCard({ service, size = "md" }: { service: Service; size?:
         <ul className="mt-5 space-y-2 text-[15px]">
           {service.highlights.map((h) => (
             <li key={h} className="flex gap-2.5">
-              <CheckIcon weight="bold" aria-hidden className="mt-1 size-4 shrink-0" style={{ color }} />
+              <CheckIcon weight="bold" aria-hidden className="mt-1 size-4 shrink-0" style={{ color: accentText }} />
               {h}
             </li>
           ))}
         </ul>
       )}
-      <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-[15px] font-medium" style={{ color: readableOnDark(color) }}>
+      <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-[15px] font-medium" style={{ color: accentText }}>
         Explore {service.navName}
         <ArrowRightIcon aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
       </span>
@@ -55,7 +55,7 @@ export function ServiceCard({ service, size = "md" }: { service: Service; size?:
 export function PricingCard({ pkg, compact = false }: { pkg: Package; compact?: boolean }) {
   return (
     <div
-      className={`relative flex h-full flex-col rounded-[20px] border p-7 ${pkg.popular ? "border-accent bg-surface-2 shadow-[0_30px_80px_-40px_rgba(124,92,255,0.6)]" : "border-rule bg-surface"}`}
+      className={`relative flex h-full flex-col rounded-[20px] border p-7 ${pkg.popular ? "border-accent bg-surface-2 shadow-[0_30px_80px_-40px_var(--glow)]" : "border-rule bg-surface"}`}
     >
       {pkg.popular && (
         <span className="absolute -top-3 left-7 rounded-full bg-electric px-3 py-1 text-xs font-semibold text-on-accent">
@@ -149,7 +149,7 @@ export function CTABand({ title, body, id }: { title: string; body?: string; id?
     <section id={id} aria-labelledby={id ? `${id}-title` : undefined} className="py-16 md:py-24">
       <Container>
         <div className="relative overflow-hidden rounded-[28px] border border-rule bg-surface px-6 py-14 text-center md:px-16 md:py-20">
-          <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 h-72 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(124,92,255,0.45),transparent)]" />
+          <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 h-72 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
           <h2 id={id ? `${id}-title` : undefined} className="relative mx-auto max-w-[18ch] text-[length:var(--text-h2)] font-bold leading-[1.05] tracking-[-0.03em]">
             {title}
           </h2>
@@ -205,7 +205,7 @@ export function DemoCallBlock({ title, body, children }: { title: string; body: 
   if (!phone) return null;
   return (
     <div className="relative overflow-hidden rounded-[28px] border border-rule bg-surface p-8 md:p-12">
-      <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full bg-[radial-gradient(closest-side,rgba(251,146,60,0.35),transparent)]" />
+      <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
       <h2 className="relative text-[length:var(--text-h2)] font-bold leading-[1.05] tracking-[-0.03em]">{title}</h2>
       <p className="relative mt-4 max-w-[52ch] text-[length:var(--text-lead)] text-muted">{body}</p>
       <a
@@ -255,13 +255,11 @@ export function PageHero({
   title,
   intro,
   crumbs,
-  color = "#7C5CFF",
   children,
 }: {
   title: ReactNode;
   intro?: ReactNode;
   crumbs?: { name: string; path: string }[];
-  color?: string;
   children?: ReactNode;
 }) {
   return (
@@ -269,7 +267,7 @@ export function PageHero({
       <div
         aria-hidden
         className="pointer-events-none absolute -top-40 right-[-10%] -z-10 size-[640px] rounded-full opacity-60 blur-2xl"
-        style={{ background: `radial-gradient(closest-side, ${color}55, transparent)` }}
+        style={{ background: "radial-gradient(closest-side, var(--glow), transparent)" }}
       />
       <Container>
         {crumbs && <Breadcrumbs items={crumbs} />}

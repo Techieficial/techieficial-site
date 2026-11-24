@@ -6,7 +6,7 @@ import { motion, useAnimationFrame, useReducedMotion } from "motion/react";
 import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react";
 import { ContentIcon } from "./icons";
 import { LogoMark } from "./layout/Logo";
-import { readableOnDark } from "@/site.config";
+import { accentText, onServiceColor } from "@/site.config";
 
 export type WheelService = {
   slug: string;
@@ -133,12 +133,12 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
           <svg viewBox="0 0 640 640" className="size-full overflow-visible" aria-hidden={false}>
             <defs>
               <linearGradient id="gw-ring" x1="0" x2="1" y1="0" y2="1">
-                <stop offset="0" stopColor="#7C5CFF" />
-                <stop offset="1" stopColor="#22D3EE" />
+                <stop offset="0" stopColor="#6D4AFF" />
+                <stop offset="1" stopColor="#B9A9FF" />
               </linearGradient>
               <radialGradient id="gw-glow">
-                <stop offset="0" stopColor="#7C5CFF" stopOpacity="0.5" />
-                <stop offset="1" stopColor="#22D3EE" stopOpacity="0" />
+                <stop offset="0" stopColor="#6D4AFF" stopOpacity="0.35" />
+                <stop offset="1" stopColor="#6D4AFF" stopOpacity="0" />
               </radialGradient>
             </defs>
 
@@ -148,9 +148,9 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
             <g aria-hidden>
               {STAGES.map((s) => (
                 <g key={s.id}>
-                  <path d={arc(296, s.a0, s.a1)} stroke="#191B2B" strokeWidth={34} strokeLinecap="round" fill="none" />
+                  <path d={arc(296, s.a0, s.a1)} className="stroke-surface-2" strokeWidth={34} strokeLinecap="round" fill="none" />
                   <path id={`gw-${s.id}`} d={arc(s.r, s.a0, s.a1)} fill="none" />
-                  <text className="fill-[#F4F5FA] font-display text-[18px] font-semibold tracking-[0.02em]">
+                  <text className="fill-ink font-display text-[18px] font-semibold tracking-[0.02em]">
                     <textPath href={`#gw-${s.id}`} startOffset="50%" textAnchor="middle">
                       {s.text}
                     </textPath>
@@ -168,7 +168,7 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
                   cy={C}
                   r={R_FLOW}
                   fill="none"
-                  stroke="#22D3EE"
+                  stroke="#9C86FF"
                   strokeWidth={4}
                   strokeLinecap="round"
                   strokeDasharray={`70 ${2 * Math.PI * R_FLOW}`}
@@ -176,7 +176,7 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
                   initial={{ strokeDashoffset: 0, opacity: 0 }}
                   animate={visible ? { strokeDashoffset: [0, -2 * Math.PI * R_FLOW], opacity: [0, 1, 1, 0] } : undefined}
                   transition={{ duration: 3.2, ease: [0.45, 0, 0.55, 1], repeat: Infinity, repeatDelay: 2.8 }}
-                  style={{ filter: "drop-shadow(0 0 6px #22D3EE)" }}
+                  style={{ filter: "drop-shadow(0 0 6px #9C86FF)" }}
                 />
               )}
             </g>
@@ -200,8 +200,8 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
                     tabIndex={0}
                     aria-label={`${s.name}: ${s.outcome}`}
                     aria-pressed={selected === i}
-                    className="cursor-pointer outline-none focus-visible:[&>path]:stroke-white"
-                    animate={{ x: isOn ? ox : 0, y: isOn ? oy : 0, opacity: isOn ? 1 : 0.62 }}
+                    className="cursor-pointer outline-none focus-visible:[&>path]:stroke-ink"
+                    animate={{ x: isOn ? ox : 0, y: isOn ? oy : 0, opacity: isOn ? 1 : 0.8 }}
                     transition={{ type: "spring", stiffness: 260, damping: 26 }}
                     onMouseEnter={() => {
                       setHovering(true);
@@ -216,7 +216,7 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
                     }}
                     onKeyDown={(e: KeyboardEvent<SVGGElement>) => onKey(e, i)}
                   >
-                    <path d={sector(R_IN, R_OUT, a0, a1)} fill={s.color} stroke="#0A0B14" strokeWidth={6} strokeLinejoin="round" />
+                    <path d={sector(R_IN, R_OUT, a0, a1)} fill={s.color} className="stroke-bg" strokeWidth={6} strokeLinejoin="round" />
                     <g transform={`translate(${lx} ${ly})`}>
                       <g
                         ref={(el) => {
@@ -224,7 +224,7 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
                         }}
                       >
                         <foreignObject x={-70} y={-40} width={140} height={80} className="pointer-events-none">
-                          <div className="flex h-full flex-col items-center justify-center gap-1 text-center text-[#0A0B14]">
+                          <div className="flex h-full flex-col items-center justify-center gap-1 text-center" style={{ color: onServiceColor(s.color) }}>
                             <ContentIcon name={s.icon} weight="duotone" className="size-7" aria-hidden />
                             <span className="font-display text-[17px] font-bold leading-tight">{s.navName}</span>
                           </div>
@@ -237,13 +237,14 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
             </g>
 
             {/* Hub */}
-            <circle cx={C} cy={C} r={R_IN - 12} fill="#12131F" stroke="url(#gw-ring)" strokeWidth={2} aria-hidden />
+            <circle cx={C} cy={C} r={R_IN - 12} className="fill-surface" stroke="url(#gw-ring)" strokeWidth={2} aria-hidden />
             <foreignObject x={C - 120} y={C - 110} width={240} height={220} aria-hidden>
               <div className="flex h-full flex-col items-center justify-center px-4 text-center">
                 <LogoMark className="h-[22px] w-[27px]" />
-                <p className="mt-3 font-display text-lg font-bold leading-tight" style={{ color: readableOnDark(current.color) }}>
+                <p className="mt-3 font-display text-lg font-bold leading-tight" style={{ color: accentText }}>
                   {current.name}
                 </p>
+                <p className="mt-1.5 text-[13px] leading-snug text-muted">{current.outcome}</p>
               </div>
             </foreignObject>
           </svg>
@@ -269,7 +270,7 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
                     setSelected(i);
                   }}
                   className="flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors"
-                  style={on ? { background: s.color, borderColor: s.color, color: "#0A0B14" } : { borderColor: "#24263A" }}
+                  style={on ? { background: s.color, borderColor: s.color, color: onServiceColor(s.color) } : { borderColor: "var(--rule)" }}
                 >
                   <ContentIcon name={s.icon} weight="duotone" className="size-4" aria-hidden />
                   {s.navName}
@@ -289,10 +290,17 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
         className="mx-auto mt-3 max-w-[520px] rounded-2xl border border-rule bg-surface/90 p-5 backdrop-blur md:mt-4"
         style={{ boxShadow: `inset 0 3px 0 ${current.color}` }}
       >
-        <p className="font-display text-lg font-bold" style={{ color: readableOnDark(current.color) }}>
-          {current.name}
-        </p>
-        <p className="mt-1 text-sm text-muted">{current.outcome}</p>
+        {/* On desktop the wheel hub shows the name and outcome; the card repeats them only on phones. */}
+        {isMobile ? (
+          <>
+            <p className="font-display text-lg font-bold" style={{ color: accentText }}>
+              {current.name}
+            </p>
+            <p className="mt-1 text-sm text-muted">{current.outcome}</p>
+          </>
+        ) : (
+          <p className="sr-only">{current.name}</p>
+        )}
         <ServiceSummary service={current} />
       </div>
 
@@ -314,12 +322,12 @@ function ServiceSummary({ service }: { service: WheelService }) {
       <ul className="grid gap-2 text-[15px]">
         {service.highlights.map((h) => (
           <li key={h} className="flex gap-2.5">
-            <CheckIcon weight="bold" aria-hidden className="mt-1 size-4 shrink-0" style={{ color: service.color }} />
+            <CheckIcon weight="bold" aria-hidden className="mt-1 size-4 shrink-0" style={{ color: accentText }} />
             {h}
           </li>
         ))}
       </ul>
-      <Link href={service.url} className="mt-4 inline-flex min-h-11 items-center gap-1.5 font-medium" style={{ color: readableOnDark(service.color) }}>
+      <Link href={service.url} className="mt-4 inline-flex min-h-11 items-center gap-1.5 font-medium" style={{ color: accentText }}>
         Explore {service.navName}
         <ArrowRightIcon aria-hidden className="size-4" />
       </Link>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowRightIcon, CheckIcon, FlaskIcon } from "@phosphor-icons/react/dist/ssr";
-import { readableOnDark, siteConfig } from "@/site.config";
+import { accentText, siteConfig } from "@/site.config";
 import { ui } from "@/content/pages";
 import { formatUsd, packages } from "@/content/pricing";
 import { getCaseStudies, getIndustry, getService, getServices, serviceBySlug } from "@/lib/content";
@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: PageProps<"/services/[slug]">
 export default async function ServicePage({ params }: PageProps<"/services/[slug]">) {
   const s = getService((await params).slug);
   if (!s) notFound();
-  const color = siteConfig.serviceColors[s.slug];
-  const text = readableOnDark(color);
+  const color = "var(--accent)";
+  const text = accentText;
   const pkg = packages.find((p) => p.key === s.pricingKey);
   const study = getCaseStudies().find((c) => c.services.includes(s.slug));
   const industries = s.industries.map((slug) => getIndustry(slug)).filter((i) => i !== undefined);
@@ -37,7 +37,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
   return (
     <>
       <JsonLd data={serviceLd({ name: s.name, description: s.description, url: s.url })} />
-      <PageHero title={s.headline} intro={s.who} color={color} crumbs={[{ name: "Services", path: "/services" }, { name: s.name, path: s.url }]}>
+      <PageHero title={s.headline} intro={s.who} crumbs={[{ name: "Services", path: "/services" }, { name: s.name, path: s.url }]}>
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button href={siteConfig.cta.primary.href} size="lg">
             {siteConfig.cta.primary.label}
@@ -71,7 +71,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {s.deliverables.map((d) => (
             <div key={d.title} className="rounded-2xl border border-rule bg-bg p-6">
-              <CheckIcon weight="bold" aria-hidden className="size-5" style={{ color }} />
+              <CheckIcon weight="bold" aria-hidden className="size-5" style={{ color: text }} />
               <h3 className="mt-4 text-lg font-semibold">{d.title}</h3>
               <p className="mt-2 leading-relaxed text-muted">{d.body}</p>
             </div>

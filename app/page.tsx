@@ -34,9 +34,8 @@ export default function HomePage() {
     <>
       {/* 1. Hero */}
       <section id="top" className="relative overflow-hidden pb-16 pt-28 md:pb-24 md:pt-36">
-        <div aria-hidden className="pointer-events-none absolute -top-48 right-[-15%] -z-10 size-[820px] rounded-full bg-[radial-gradient(closest-side,rgba(124,92,255,0.32),transparent)]" />
-        <div aria-hidden className="pointer-events-none absolute bottom-[-30%] left-[-20%] -z-10 size-[640px] rounded-full bg-[radial-gradient(closest-side,rgba(34,211,238,0.14),transparent)]" />
-        <Container className="grid grid-cols-[minmax(0,1fr)] items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-8">
+        <div aria-hidden className="pointer-events-none absolute -top-48 right-[-15%] -z-10 size-[820px] rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
+                <Container className="grid grid-cols-[minmax(0,1fr)] items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-8">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full border border-rule bg-surface/70 px-3.5 py-1.5 text-sm font-medium">
               <span aria-hidden className="size-2 rounded-full bg-accent-2" />
@@ -186,7 +185,7 @@ export default function HomePage() {
       <section id="academy" aria-labelledby="academy-title" className="py-10">
         <Container>
           <div className="relative flex flex-col gap-8 overflow-hidden rounded-[28px] border border-rule bg-surface p-8 md:flex-row md:items-center md:justify-between md:p-12">
-            <div aria-hidden className="pointer-events-none absolute -left-20 -top-24 size-72 rounded-full bg-[radial-gradient(closest-side,rgba(163,230,53,0.28),transparent)]" />
+            <div aria-hidden className="pointer-events-none absolute -left-20 -top-24 size-72 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
             <div className="relative max-w-2xl">
               <h2 id="academy-title" className="text-[length:var(--text-h3)] font-bold leading-tight tracking-[-0.02em] md:text-4xl">
                 {home.academy.title}

@@ -11,7 +11,7 @@ export const metadata = pageMetadata({ ...academyPage.seo, path: "/academy" });
 export default function AcademyPage() {
   return (
     <>
-      <PageHero title={academyPage.title} intro={academyPage.intro} crumbs={[{ name: "Academy", path: "/academy" }]} color="#A3E635">
+      <PageHero title={academyPage.title} intro={academyPage.intro} crumbs={[{ name: "Academy", path: "/academy" }]}>
         <Button href="#waitlist" size="lg">
           {siteConfig.cta.waitlist.label}
         </Button>

@@ -6,7 +6,7 @@ export function ServiceGlyph({ service, small = false }: { service: NavService; 
   return (
     <span
       className={`grid shrink-0 place-items-center rounded-xl ${small ? "size-9" : "size-11"}`}
-      style={{ background: `${service.color}22`, color: service.color }}
+      style={{ background: "color-mix(in srgb, var(--accent) 12%, transparent)", color: "var(--accent-text)" }}
     >
       <ContentIcon name={service.icon} weight="duotone" aria-hidden className={small ? "size-5" : "size-6"} />
     </span>

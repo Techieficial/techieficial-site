@@ -9,6 +9,7 @@ import { nav } from "@/content/pages";
 import { Logo } from "./Logo";
 import { ServiceGlyph, type NavService } from "./ServiceGlyph";
 import { AnnouncementBar } from "./Bars";
+import { ThemeToggle } from "./ThemeToggle";
 
 type NavIndustry = { name: string; url: string };
 
@@ -170,7 +171,8 @@ export function Navbar({
             ))}
           </ul>
 
-          <div className="ml-auto hidden items-center gap-5 lg:flex">
+          <div className="ml-auto hidden items-center gap-4 lg:flex">
+            <ThemeToggle />
             {phone && (
               <a href={telHref(phone)} data-event="demo_call_started" className="inline-flex items-center gap-2 text-[15px] font-medium text-ink/90 hover:text-accent-text">
                 <PhoneCallIcon aria-hidden className="size-4" />
@@ -185,9 +187,10 @@ export function Navbar({
             </Link>
           </div>
 
+          <ThemeToggle className="ml-auto lg:hidden" />
           <button
             type="button"
-            className="relative ml-auto grid size-11 place-items-center rounded-full lg:hidden"
+            className="relative grid size-11 place-items-center rounded-full lg:hidden"
             aria-expanded={sheetOpen}
             aria-controls={sheetId}
             aria-label={sheetOpen ? "Close menu" : "Open menu"}
@@ -241,10 +244,10 @@ export function Navbar({
               </ul>
             </div>
             <Link href={nav.featured.href} className="group relative flex flex-col justify-end overflow-hidden rounded-2xl border border-rule bg-surface p-6">
-              <div aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-[radial-gradient(closest-side,rgba(34,211,238,0.45),transparent)]" />
+              <div aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
               <span className="relative font-display text-lg font-semibold">{nav.featured.title}</span>{" "}
               <span className="relative mt-2 text-sm text-muted">{nav.featured.body}</span>
-              <ArrowRightIcon aria-hidden className="relative mt-4 size-5 text-accent-2 transition-transform group-hover:translate-x-1" />
+              <ArrowRightIcon aria-hidden className="relative mt-4 size-5 text-accent-text transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </div>

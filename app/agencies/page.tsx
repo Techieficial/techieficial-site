@@ -13,7 +13,7 @@ export default function AgenciesPage() {
   const cta = siteConfig.cta.partner;
   return (
     <>
-      <PageHero title={agenciesPage.title} intro={agenciesPage.intro} crumbs={[{ name: "Agencies", path: "/agencies" }]} color="#22D3EE">
+      <PageHero title={agenciesPage.title} intro={agenciesPage.intro} crumbs={[{ name: "Agencies", path: "/agencies" }]}>
         <Button href="#partner" size="lg">
           {cta.label}
         </Button>

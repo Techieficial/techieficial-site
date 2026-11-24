@@ -1,21 +1,84 @@
 @import "tailwindcss";
 
+/*
+ * Colour system: neutrals plus ONE accent (violet). Light and dark themes.
+ * The theme follows the visitor's device until they use the switch in the nav,
+ * which sets data-theme on <html> (see app/layout.tsx). Change the accent here only.
+ */
 :root {
+  --bg: #ffffff;
+  --surface: #f6f7fa;
+  --surface-2: #eef0f5;
+  --rule: #e2e5ec;
+  --ink: #0b0c14;
+  --muted: #596074;
+  --prose: #2b3040;
+  --accent: #6d4aff;
+  --accent-hover: #5b3be8;
+  --accent-text: #5636e0;
+  --headline-from: #5636e0;
+  --headline-to: #8b6bff;
+  --glow: rgba(109, 74, 255, 0.18);
+  --shadow: rgba(11, 12, 20, 0.12);
+  --on-accent: #ffffff;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
   --bg: #0a0b14;
   --surface: #12131f;
   --surface-2: #191b2b;
   --rule: #24263a;
   --ink: #f4f5fa;
   --muted: #9ca3b8;
-  --accent: #7c5cff;
-  --accent-hover: #9b87ff;
+  --prose: #d5d9e5;
+  --accent: #6d4aff;
+  --accent-hover: #5b3be8;
   --accent-text: #a99bff;
-  --accent-2: #22d3ee;
-  --accent-3: #f472b6;
-  --accent-4: #a3e635;
-  --accent-5: #fb923c;
-  --on-accent: #0a0b14;
+  --headline-from: #b3a4ff;
+  --headline-to: #e4deff;
+  --glow: rgba(109, 74, 255, 0.32);
+  --shadow: rgba(0, 0, 0, 0.6);
+  --on-accent: #ffffff;
   color-scheme: dark;
+}
+
+/* Without JavaScript, follow the device setting. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #0a0b14;
+    --surface: #12131f;
+    --surface-2: #191b2b;
+    --rule: #24263a;
+    --ink: #f4f5fa;
+    --muted: #9ca3b8;
+    --prose: #d5d9e5;
+    --accent-text: #a99bff;
+    --headline-from: #b3a4ff;
+    --headline-to: #e4deff;
+    --glow: rgba(109, 74, 255, 0.32);
+    --shadow: rgba(0, 0, 0, 0.6);
+    color-scheme: dark;
+  }
+}
+
+/* Older class names kept as aliases of the single accent. */
+:root {
+  --accent-2: var(--accent-text);
+  --accent-3: var(--accent-text);
+  --accent-4: var(--accent-text);
+  --accent-5: var(--accent-text);
+}
+
+/* Theme switch icon: show the moon in light mode, the sun in dark mode. */
+.theme-sun {
+  display: none;
+}
+:root[data-theme="dark"] .theme-sun {
+  display: block;
+}
+:root[data-theme="dark"] .theme-moon {
+  display: none;
 }
 
 @theme inline {
@@ -85,13 +148,18 @@ li {
   scrollbar-color: var(--rule) transparent;
 }
 
+/* Primary fill: the single accent, darker on hover. */
 .bg-electric {
-  background-image: linear-gradient(100deg, #7c5cff 0%, #22d3ee 100%);
+  background-color: var(--accent);
+}
+a.bg-electric:hover,
+button.bg-electric:hover {
+  background-color: var(--accent-hover);
 }
 
-/* Lighter gradient for small text on dark, keeps AA contrast. */
+/* One-colour gradient for a key headline word. Both ends meet AA for large text in each theme. */
 .text-electric {
-  background-image: linear-gradient(100deg, #b3a4ff 0%, #22d3ee 100%);
+  background-image: linear-gradient(100deg, var(--headline-from) 0%, var(--headline-to) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -109,7 +177,7 @@ li {
 /* Long-form content (blog, legal) */
 .prose {
   max-width: 70ch;
-  color: #d5d9e5;
+  color: var(--prose);
   font-size: 1.0625rem;
   line-height: 1.75;
 }

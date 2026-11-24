@@ -52,26 +52,24 @@
 
 ## 5. Brand and design system
 
-Keep the dark theme already live. Tokens:
+**Owner decision (Nov 24, 2026): one accent colour, light and dark themes.** The site uses neutrals plus a single violet accent. Visitors get light or dark based on their device setting, and a switch in the nav (moon/sun) overrides it and is remembered. All values live in `app/globals.css` (`:root` for light, `[data-theme="dark"]` for dark).
 
-| Token | Value | Use |
-|---|---|---|
-| `bg` | #0A0B14 | Page background |
-| `surface` | #12131F | Cards |
-| `surface-2` | #191B2B | Raised cards, menus |
-| `rule` | #24263A | Borders |
-| `ink` | #F4F5FA | Headings and body |
-| `muted` | #9CA3B8 | Secondary text (check 4.5:1 contrast on every background) |
-| `accent` (violet) | #7C5CFF | Primary buttons, links |
-| `accent-hover` | #9B87FF | Hover |
-| `accent-text` | #A99BFF | Violet text on dark |
-| `accent-2` (cyan) | #22D3EE | Gradient end, data |
-| `accent-3` (pink) | #F472B6 | Service accent |
-| `accent-4` (lime) | #A3E635 | Service accent |
-| `on-accent` | #0A0B14 | Text on bright fills |
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| `bg` | #FFFFFF | #0A0B14 | Page background |
+| `surface` | #F6F7FA | #12131F | Cards |
+| `surface-2` | #EEF0F5 | #191B2B | Raised cards, menus |
+| `rule` | #E2E5EC | #24263A | Borders |
+| `ink` | #0B0C14 | #F4F5FA | Headings and body |
+| `muted` | #596074 | #9CA3B8 | Secondary text (4.5:1 checked on every background) |
+| `accent` | #6D4AFF | #6D4AFF | Primary buttons (white text, 5.2:1) |
+| `accent-hover` | #5B3BE8 | #5B3BE8 | Hover |
+| `accent-text` | #5636E0 | #A99BFF | Violet text |
+| `on-accent` | #FFFFFF | #FFFFFF | Text on the accent |
 
-- **Signature gradient:** `linear-gradient(100deg, #7C5CFF 0%, #22D3EE 100%)` for primary buttons, key words in headlines and the wheel glow. Use it sparingly.
-- **Service colors** (used on cards, mega-menu, page glows, wheel): Marketing Automation = cyan, Paid Ads = pink, AI Video = violet, AI Agents = a 5th accent `#FB923C` (orange) so no two services share a color, Training/Academy = lime. Put these in `site.config.ts` so they can change.
+- **No multi-colour gradient.** Buttons are solid accent. The only gradient is a one-colour violet blend on a key headline word (`.text-electric`).
+- **Service colours** are 5 shades of the accent in `site.config.ts`, used for the wheel slices and chips. Light and dark shades alternate; `onServiceColor()` picks a readable label colour.
+- Never hardcode colours in components: use the tokens so both themes work. `npm run check` runs axe in light and dark mode.
 - **Type:** Space Grotesk 600/700 for headings, Inter 400/500 for body, self-hosted via `next/font`. Fluid type scale (clamp) from mobile to desktop.
 - **Logo:** the owner will provide the final SVG as `public/brand/logo.svg`, `logo-mark.svg` and `favicon.svg`. Until then use the current mark and wordmark, and list the logo in `content/_missing.md`.
 - **Components to build once:** Button (primary gradient, secondary outline, ghost), ServiceCard, StatChip, CaseStudyCard, PricingCard, FAQAccordion, CTABand, VideoTile (poster + lazy player), DemoCallBlock, LogoMarquee, SectionHeader, Breadcrumbs, MegaMenu, Footer, CookieBanner.

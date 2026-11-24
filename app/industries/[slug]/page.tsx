@@ -29,7 +29,7 @@ export default async function IndustryPage({ params }: PageProps<"/industries/[s
 
   return (
     <>
-      <PageHero title={ind.headline} intro={ind.intro} crumbs={[{ name: ind.name, path: ind.url }]} color="#22D3EE">
+      <PageHero title={ind.headline} intro={ind.intro} crumbs={[{ name: ind.name, path: ind.url }]}>
         <Button href={siteConfig.cta.primary.href} size="lg">
           {siteConfig.cta.primary.label}
         </Button>

@@ -54,13 +54,16 @@ export const siteConfig = {
     text: "New: call our AI receptionist live, no signup.",
   },
 
-  /** Service colors used on cards, menus, page glows and the wheel. */
+  /**
+   * Shades of the single brand accent (violet), one per service. Used for the wheel
+   * slices and chips. Light and dark shades alternate so neighbouring slices stand apart.
+   */
   serviceColors: {
-    "marketing-automation": "#22D3EE",
-    "paid-ads": "#F472B6",
-    "ai-video": "#7C5CFF",
-    "ai-agents": "#FB923C",
-    training: "#A3E635",
+    "marketing-automation": "#6D4AFF",
+    "paid-ads": "#B9A9FF",
+    "ai-video": "#3A20B0",
+    "ai-agents": "#9C86FF",
+    training: "#4A2BD6",
   } satisfies Record<ServiceSlug, string>,
 
   analytics: {
@@ -88,7 +91,11 @@ export function formatPhone(phone: string) {
   return us ? `+1 ${us[1]} ${us[2]} ${us[3]}` : phone;
 }
 
-/** Readable text version of a service color on dark backgrounds (violet is too dark for small text). */
-export function readableOnDark(color: string) {
-  return color.toUpperCase() === "#7C5CFF" ? "#A99BFF" : color;
+/** Accent text colour that stays readable in both light and dark themes. */
+export const accentText = "var(--accent-text)";
+
+/** Label colour on top of a service shade: dark on light shades, white on dark ones (all 5:1 or better). */
+export function onServiceColor(color: string) {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(color.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.2 ? "#0A0B14" : "#FFFFFF";
 }

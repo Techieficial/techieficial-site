@@ -10,6 +10,7 @@ import { Footer } from "@/components/layout/Footer";
 import { MobileBar } from "@/components/layout/Bars";
 import { ConsentManager, UtmCapture } from "@/components/consent/Consent";
 import { JsonLd } from "@/components/JsonLd";
+import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
 // "optional" keeps the first paint as the final paint on slow connections (better LCP); the fonts are preloaded,
@@ -27,8 +28,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0A0B14",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
+    { media: "(prefers-color-scheme: dark)", color: "#0A0B14" },
+  ],
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -43,7 +47,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   const industries = getIndustries().map((i) => ({ name: i.navName, url: i.url }));
 
   return (
-    <html lang={siteConfig.locale} className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    // data-theme is set by the head script before React loads, so the attribute differs from the server markup on purpose.
+    <html lang={siteConfig.locale} className={`${inter.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-dvh overflow-x-clip">
         <noscript>
           <style>{".reveal{opacity:1!important;transform:none!important}"}</style>

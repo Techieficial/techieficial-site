@@ -90,7 +90,7 @@ export default function DemoPage() {
 
   return (
     <>
-      <PageHero title={demoPage.title} intro={demoPage.intro} crumbs={[{ name: "Demo Lab", path: "/demo" }]} color="#FB923C">
+      <PageHero title={demoPage.title} intro={demoPage.intro} crumbs={[{ name: "Demo Lab", path: "/demo" }]}>
         {phone && (
           <a href={telHref(phone)} data-event="demo_call_started" className="inline-flex items-center gap-3 font-display text-[clamp(2rem,1.4rem+3vw,3.5rem)] font-bold text-electric">
             <PhoneCallIcon aria-hidden weight="duotone" className="size-10 text-accent-5" />
