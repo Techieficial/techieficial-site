@@ -47,7 +47,7 @@ export default function HomePage() {
   ];
   const { hero } = home;
   const phone = siteConfig.contact.demoPhone;
-  const teamHref = liveHref({ href: "/ai-team", fallback: "/services/ai-agents" });
+  const teamHref = "/ai-team";
   const wholeTeamHref = liveHref({ href: "/offers/ai-front-office", fallback: "/pricing" });
   const offersHref = liveHref({ href: "/offers", fallback: "/pricing" });
   const insideHref = liveHref({ href: "/inside" });

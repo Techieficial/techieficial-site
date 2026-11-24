@@ -66,7 +66,9 @@ const nextConfig: NextConfig = {
       { source: "/services/automation", destination: "/services/marketing-automation", permanent: true },
       { source: "/services/ads", destination: "/services/paid-ads", permanent: true },
       { source: "/services/video", destination: "/services/ai-video", permanent: true },
-      { source: "/services/agents", destination: "/services/ai-agents", permanent: true },
+      { source: "/services/agents", destination: "/ai-team", statusCode: 301 },
+      // v3: the AI Team page replaces the AI Agents service page.
+      { source: "/services/ai-agents", destination: "/ai-team", statusCode: 301 },
       { source: "/book", destination: "/contact", permanent: false },
     ];
   },

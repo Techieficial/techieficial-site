@@ -10,13 +10,12 @@ export const nav = {
   team: {
     label: "AI Team",
     href: "/ai-team",
-    fallback: "/services/ai-agents",
     menuToggle: "Show the AI team menu",
     cards: [
-      { name: "AI Receptionist", line: "Answers every call, books jobs, transfers emergencies.", icon: "Phone", href: "/ai-team/receptionist", fallback: "/services/ai-agents" },
-      { name: "AI Lead Responder", line: "Replies to web, ad and social leads in under a minute.", icon: "ChatCircle", href: "/ai-team/lead-responder", fallback: "/services/ai-agents" },
-      { name: "AI Follow-up Agent", line: "Chases unbooked leads, open quotes and no-shows.", icon: "ArrowsClockwise", href: "/ai-team/follow-up-agent", fallback: "/services/ai-agents" },
-      { name: "AI Reviews Agent", line: "Asks for reviews after every job.", icon: "Star", href: "/ai-team/reviews-agent", fallback: "/services/ai-agents" },
+      { name: "AI Receptionist", line: "Answers every call, books jobs, transfers emergencies.", icon: "Phone", href: "/ai-team/receptionist" },
+      { name: "AI Lead Responder", line: "Replies to web, ad and social leads in under a minute.", icon: "ChatCircle", href: "/ai-team/lead-responder" },
+      { name: "AI Follow-up Agent", line: "Chases unbooked leads, open quotes and no-shows.", icon: "ArrowsClockwise", href: "/ai-team/follow-up-agent" },
+      { name: "AI Reviews Agent", line: "Asks for reviews after every job.", icon: "Star", href: "/ai-team/reviews-agent" },
     ],
     wholeTeam: { title: "Hire the whole team", body: "AI Front Office: all 4 AI employees, built and managed for you.", href: "/offers/ai-front-office", fallback: "/pricing" },
     allLabel: "Meet the AI team",

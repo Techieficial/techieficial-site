@@ -5,7 +5,7 @@ import { ArrowRightIcon, CheckIcon, FlaskIcon } from "@phosphor-icons/react/dist
 import { accentText, siteConfig } from "@/site.config";
 import { ui } from "@/content/pages";
 import { formatUsd, offerForPackage } from "@/content/pricing";
-import { getCaseStudies, getIndustry, getService, getServices, serviceBySlug } from "@/lib/content";
+import { getCaseStudies, getIndustry, getService, getServicePages, serviceBySlug } from "@/lib/content";
 import { pageMetadata, serviceLd } from "@/lib/seo";
 import { CaseStudyCard, CTABand, DemoCallBlock, FAQAccordion, PageHero, ServiceCard } from "@/components/blocks";
 import { JsonLd } from "@/components/JsonLd";
@@ -15,7 +15,7 @@ import { Button, Section, SectionHeader } from "@/components/ui";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return getServices().map((s) => ({ slug: s.slug }));
+  return getServicePages().map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/services/[slug]">): Promise<Metadata> {
@@ -25,7 +25,8 @@ export async function generateMetadata({ params }: PageProps<"/services/[slug]">
 }
 
 export default async function ServicePage({ params }: PageProps<"/services/[slug]">) {
-  const s = getService((await params).slug);
+  const { slug } = await params;
+  const s = getServicePages().find((x) => x.slug === slug);
   if (!s) notFound();
   const color = "var(--accent)";
   const text = accentText;

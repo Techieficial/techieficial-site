@@ -9,7 +9,16 @@ export type CaseStudy = (typeof work)[number];
 export type Post = (typeof blog)[number];
 export type LegalDoc = (typeof legal)[number];
 
-export const getServices = () => live(services).sort((a, b) => a.order - b.order);
+/** Services whose page was replaced by a v3 page: their links point there and no service page is built. */
+const replacedServicePages: Record<string, string> = { "ai-agents": "/ai-team" };
+
+export const getServices = () =>
+  live(services)
+    .map((s) => (replacedServicePages[s.slug] ? { ...s, url: replacedServicePages[s.slug] } : s))
+    .sort((a, b) => a.order - b.order);
+
+/** Services that still have their own /services/[slug] page. */
+export const getServicePages = () => getServices().filter((s) => !replacedServicePages[s.slug]);
 export const getService = (slug: string) => getServices().find((s) => s.slug === slug);
 export const serviceBySlug = (slug: ServiceSlug) => getService(slug)!;
 

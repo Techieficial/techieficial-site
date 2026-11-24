@@ -1,4 +1,5 @@
-import { getCaseStudies, getIndustries, getLegalDocs, getPosts, getServices, hasWork } from "./content";
+import { getCaseStudies, getIndustries, getLegalDocs, getPosts, getServicePages, hasWork } from "./content";
+import { team, teamUrl } from "@/content/team";
 
 export type RouteEntry = { path: string; lastModified?: string };
 
@@ -15,12 +16,14 @@ export function publicRoutes(): RouteEntry[] {
     "/contact",
     "/faq",
     "/blog",
+    "/ai-team",
   ];
   if (hasWork()) staticPaths.push("/work");
 
   return [
     ...staticPaths.map((path) => ({ path })),
-    ...getServices().map((s) => ({ path: s.url })),
+    ...getServicePages().map((s) => ({ path: s.url })),
+    ...team.map((m) => ({ path: teamUrl(m.slug) })),
     ...getIndustries().map((i) => ({ path: i.url })),
     ...getCaseStudies().map((c) => ({ path: c.url })),
     ...getPosts().map((p) => ({ path: p.url, lastModified: p.updated ?? p.date })),

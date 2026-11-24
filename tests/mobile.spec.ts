@@ -21,7 +21,7 @@ test("mobile wheel swaps to swipeable service chips", async ({ page }) => {
 });
 
 test("no horizontal scroll on key pages", async ({ page }) => {
-  for (const path of ["/", "/pricing", "/demo", "/services/ai-agents", "/contact"]) {
+  for (const path of ["/", "/pricing", "/demo", "/ai-team/receptionist", "/contact"]) {
     await page.goto(path);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow, path).toBeLessThanOrEqual(0);

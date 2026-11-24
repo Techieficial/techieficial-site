@@ -160,3 +160,47 @@ export const teamCopy = {
   wheelLabel: "Your AI team",
   hub: "Your business",
 };
+
+/** /ai-team page (docs/SITE_CONTENT_V3.md 2.2) and profile template labels (2.3). */
+export const teamPage = {
+  seo: {
+    title: "Meet Your AI Team | Techieficial",
+    description: "AI Receptionist, Lead Responder, Follow-up Agent and Reviews Agent. Hire one or the whole team, built and managed for you.",
+  },
+  title: "Four AI employees. One front office that never closes.",
+  intro: "Hire one to fix your biggest leak, or hire the whole team and let every lead get answered, followed up and booked.",
+  cardsTitle: "The team",
+  includedIn: "Included in AI Front Office",
+  alsoAlone: "Also sold alone as the AI Receptionist Starter",
+  flowTitle: "How they work together",
+  flow: [
+    "A call or lead comes in.",
+    "The AI Receptionist or AI Lead Responder answers.",
+    "The booking lands in your calendar.",
+    "The AI Follow-up Agent chases anyone who didn't book.",
+    "The AI Reviews Agent asks for a review after the job.",
+  ],
+  flowNote: "Everything is logged in your CRM.",
+  comesWithTitle: "What every AI employee comes with",
+  comesWith: [
+    { title: "Trained on your business", body: "Services, prices policy, hours, service area and FAQs." },
+    { title: "Your rules", body: "What to book, what to escalate, what never to say." },
+    { title: "A manager", body: "We review conversations every week and keep improving them." },
+    { title: "Everything logged in your CRM", body: "So nothing is lost." },
+  ],
+  hireWholeTeam: "Hire the whole team",
+  profile: {
+    breadcrumb: "AI Team",
+    reportsTo: "Reports to",
+    reportsToValue: "you",
+    livesIn: "Lives in",
+    livesInValue: "your CRM",
+    jobTitle: "Job description",
+    skillsTitle: "Skills",
+    dayTitle: "A day in the life",
+    neverTitle: "What it never does",
+    hireTitle: "How to hire",
+    faqTitle: "Questions",
+    ctaTitle: "Ready to hire your AI team?",
+  },
+};

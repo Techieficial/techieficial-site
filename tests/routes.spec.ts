@@ -45,3 +45,19 @@ test("robots, sitemap, llms.txt and manifest are served", async ({ request }) =>
   expect((await request.get("/llms.txt")).status()).toBe(200);
   expect((await request.get("/manifest.webmanifest")).status()).toBe(200);
 });
+
+test("the old AI Agents service page permanently redirects to the AI Team", async ({ request }) => {
+  const res = await request.get("/services/ai-agents", { maxRedirects: 0 });
+  expect(res.status()).toBe(301);
+  expect(res.headers()["location"]).toMatch(/\/ai-team$/);
+});
+
+test("AI Team page lists 4 AI employees that each have a profile", async ({ page }) => {
+  await page.goto("/ai-team");
+  const links = page.getByRole("link", { name: /View profile/ });
+  await expect(links).toHaveCount(4);
+  for (const slug of ["receptionist", "lead-responder", "follow-up-agent", "reviews-agent"]) {
+    const res = await page.request.get(`/ai-team/${slug}`);
+    expect(res.status(), slug).toBe(200);
+  }
+});

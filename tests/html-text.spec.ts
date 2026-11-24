@@ -17,7 +17,7 @@ test("homepage HTML has one wheel details card", async ({ request }) => {
 
 test("text does not run together where elements meet", async ({ request }) => {
   const joined = ["actionTest", "$2,500plus", "SeenCapture", "LeadsGrow", "demoTest", "demoSee"];
-  for (const path of ["/", "/pricing", "/services/ai-agents"]) {
+  for (const path of ["/", "/pricing", "/ai-team/receptionist"]) {
     const text = htmlText(await (await request.get(path)).text());
     for (const j of joined) expect(text.includes(j), `${path}: ${j}`).toBe(false);
   }

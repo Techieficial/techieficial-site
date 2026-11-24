@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { team, teamCopy, teamUrl, type TeamMember } from "@/content/team";
-import { liveHref } from "@/lib/nav";
 import { Reveal } from "./Reveal";
 import { ServiceGlyph } from "./layout/ServiceGlyph";
 
 /** Link to a team member's profile, or the AI agents service page until profiles exist. */
-export const profileHref = (m: TeamMember) => liveHref({ href: teamUrl(m.slug), fallback: "/services/ai-agents" }) ?? "/services/ai-agents";
+export const profileHref = (m: TeamMember) => teamUrl(m.slug);
 
 /** The 4 AI employee cards: role, "Works: 24/7", 3 skills, "Replaces", link. `hire` adds an extra line per card. */
 export function TeamCards({ hire }: { hire?: (m: TeamMember) => string | undefined }) {
