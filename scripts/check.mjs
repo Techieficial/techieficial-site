@@ -24,11 +24,24 @@ function run(label, cmd) {
 
 let server;
 function stopServer() {
-  if (server && !server.killed) server.kill("SIGTERM");
+  if (!server || server.killed) return;
+  // npx starts next-server as a child, so stop the whole process group, not just npx.
+  try {
+    process.kill(-server.pid, "SIGTERM");
+  } catch {
+    server.kill("SIGTERM");
+  }
 }
 
 async function startServer() {
-  server = spawn("npx", ["next", "start", "-p", String(PORT), "-H", "127.0.0.1"], { stdio: "ignore", env });
+  // A server left on this port would serve an old build, so refuse to start over it.
+  try {
+    await fetch(base);
+    throw new Error(`port ${PORT} is already in use; stop the old server first`);
+  } catch (e) {
+    if (e instanceof Error && e.message.startsWith("port")) throw e;
+  }
+  server = spawn("npx", ["next", "start", "-p", String(PORT), "-H", "127.0.0.1"], { stdio: "ignore", env, detached: true });
   for (let i = 0; i < 60; i++) {
     try {
       if ((await fetch(base)).ok) return;
