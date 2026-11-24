@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRightIcon, ArrowUpRightIcon, CheckIcon, MinusIcon } from "@phosphor-icons/react/dist/ssr";
 import { siteConfig } from "@/site.config";
 import { home } from "@/content/home";
+import { ui } from "@/content/pages";
 import { homeFaqs } from "@/content/faq";
 import { packages } from "@/content/pricing";
 import { recordedCallAudio } from "@/content/gallery";
@@ -49,7 +50,7 @@ export default function HomePage() {
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Button href={siteConfig.cta.primary.href} size="lg">
                 {siteConfig.cta.primary.label}
-              </Button>
+              </Button>{" "}
               <Button href={siteConfig.cta.demo.href} size="lg" variant="secondary" arrow={false}>
                 {siteConfig.cta.demo.label}
               </Button>
@@ -87,8 +88,8 @@ export default function HomePage() {
                 <p className="mt-2 leading-relaxed text-muted">{c.body}</p>
                 <a href={c.href} className="mt-auto inline-flex items-center gap-1 pt-6 text-sm text-accent-text hover:text-ink" rel="noopener" target="_blank">
                   Source: {c.source}
-                  <ArrowUpRightIcon aria-hidden className="size-3.5" />
-                  <span className="sr-only">(opens in a new tab)</span>
+                  <ArrowUpRightIcon aria-hidden className="size-3.5" />{" "}
+                  <span className="sr-only">{ui.newTab}</span>
                 </a>
               </article>
             </Reveal>

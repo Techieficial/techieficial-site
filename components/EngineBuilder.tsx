@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { CheckIcon } from "@phosphor-icons/react";
 import { pricingPage } from "@/content/pages";
 import { builderGoals, builderSizes, formatUsd, recommendPackage, type BuilderGoal, type BuilderSize } from "@/content/pricing";
@@ -77,29 +77,38 @@ export function EngineBuilder({ services }: { services: { slug: ServiceSlug; nam
 
       {step === 1 && (
         <div role="group" aria-label={t.step1} className="mt-6 flex flex-wrap gap-3">
-          {services.map((s) => (
-            <Chip key={s.slug} on={picked.includes(s.slug)} onClick={() => toggle(s.slug)}>
-              <span aria-hidden className="size-2.5 rounded-full" style={{ background: siteConfig.serviceColors[s.slug] }} />
-              {s.name}
-            </Chip>
+          {services.map((s, i) => (
+            <Fragment key={s.slug}>
+              {i > 0 && " "}
+              <Chip on={picked.includes(s.slug)} onClick={() => toggle(s.slug)}>
+                <span aria-hidden className="size-2.5 rounded-full" style={{ background: siteConfig.serviceColors[s.slug] }} />
+                {s.name}
+              </Chip>
+            </Fragment>
           ))}
         </div>
       )}
       {step === 2 && (
         <div role="radiogroup" aria-label={t.step2} className="mt-6 flex flex-wrap gap-3">
-          {builderSizes.map((s) => (
-            <Chip key={s.key} role="radio" on={size === s.key} onClick={() => setSize(s.key)}>
-              {s.label}
-            </Chip>
+          {builderSizes.map((s, i) => (
+            <Fragment key={s.key}>
+              {i > 0 && " "}
+              <Chip role="radio" on={size === s.key} onClick={() => setSize(s.key)}>
+                {s.label}
+              </Chip>
+            </Fragment>
           ))}
         </div>
       )}
       {step === 3 && (
         <div role="radiogroup" aria-label={t.step3} className="mt-6 flex flex-wrap gap-3">
-          {builderGoals.map((g) => (
-            <Chip key={g.key} role="radio" on={goal === g.key} onClick={() => setGoal(g.key)}>
-              {g.label}
-            </Chip>
+          {builderGoals.map((g, i) => (
+            <Fragment key={g.key}>
+              {i > 0 && " "}
+              <Chip role="radio" on={goal === g.key} onClick={() => setGoal(g.key)}>
+                {g.label}
+              </Chip>
+            </Fragment>
           ))}
         </div>
       )}
@@ -117,6 +126,7 @@ export function EngineBuilder({ services }: { services: { slug: ServiceSlug; nam
                 <dt className="text-sm text-muted">{t.monthly}</dt>
                 <dd className="font-display text-3xl font-bold">
                   {formatUsd(pkg.monthlyFrom)}
+                  {pkg.monthlyNote && " "}
                   {pkg.monthlyNote && <span className="block text-sm font-normal text-muted">{pkg.monthlyNote}</span>}
                 </dd>
               </div>

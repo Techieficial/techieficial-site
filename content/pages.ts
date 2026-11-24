@@ -57,6 +57,7 @@ export const footer = {
 };
 
 export const servicesHub = {
+  feeds: "feeds",
   seo: {
     title: "Services | Techieficial",
     description: "Marketing automation, paid ads, AI video, AI agents and training, planned and run as one growth engine.",
@@ -374,6 +375,7 @@ export const ui = {
   lastUpdated: "Last updated",
   platforms: "Platforms",
   comingSoon: "coming soon",
+  newTab: "(opens in a new tab)",
   results: "Results",
   whatWeBuilt: "What we built",
   problem: "The problem",

@@ -41,7 +41,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button href={siteConfig.cta.primary.href} size="lg">
             {siteConfig.cta.primary.label}
-          </Button>
+          </Button>{" "}
           <Button href="/demo" size="lg" variant="secondary" arrow={false}>
             {ui.seeDemo}
           </Button>
@@ -84,7 +84,8 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
               {s.platforms.map((p) => (
                 <li key={p.name} className={`rounded-full border px-4 py-1.5 text-sm ${p.soon ? "border-dashed border-rule text-muted" : "border-rule bg-surface"}`}>
                   {p.name}
-                  {p.soon && <span className="ml-1.5 text-xs">({ui.comingSoon})</span>}
+                  {p.soon && " "}
+                  {p.soon && <span className="ml-0.5 text-xs">({ui.comingSoon})</span>}
                 </li>
               ))}
             </ul>

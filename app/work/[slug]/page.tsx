@@ -53,7 +53,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
         <ol className="grid gap-4 md:grid-cols-2">
           {c.steps.map((s, i) => (
             <li key={s.title} className="rounded-2xl border border-rule bg-surface p-6">
-              <span className="font-display text-sm font-bold text-accent-text">{String(i + 1).padStart(2, "0")}</span>
+              <span className="font-display text-sm font-bold text-accent-text">{String(i + 1).padStart(2, "0")}</span>{" "}
               <h3 className="mt-2 text-lg font-semibold">{s.title}</h3>
               <p className="mt-1 leading-relaxed text-muted">{s.body}</p>
             </li>

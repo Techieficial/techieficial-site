@@ -154,7 +154,7 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
                     <textPath href={`#gw-${s.id}`} startOffset="50%" textAnchor="middle">
                       {s.text}
                     </textPath>
-                  </text>
+                  </text>{" "}
                 </g>
               ))}
             </g>

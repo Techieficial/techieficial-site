@@ -39,8 +39,9 @@ export default function ServicesHubPage() {
             return (
               <li key={c.label} className="rounded-2xl border border-rule bg-bg p-6">
                 <p className="flex flex-wrap items-center gap-2 font-display text-lg font-semibold">
-                  <span style={{ color: readableOnDark(siteConfig.serviceColors[from.slug]) }}>{from.navName}</span>
-                  <ArrowRightIcon aria-label="feeds" className="size-5 text-muted" />
+                  <span style={{ color: readableOnDark(siteConfig.serviceColors[from.slug]) }}>{from.navName}</span>{" "}
+                  <ArrowRightIcon aria-hidden className="size-5 text-muted" />
+                  <span className="sr-only">{servicesHub.feeds}</span>{" "}
                   <span style={{ color: readableOnDark(siteConfig.serviceColors[to.slug]) }}>{to.navName}</span>
                 </p>
                 <p className="mt-2 leading-relaxed text-muted">{c.label}</p>

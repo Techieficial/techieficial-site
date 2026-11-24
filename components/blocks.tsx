@@ -73,6 +73,7 @@ export function PricingCard({ pkg, compact = false }: { pkg: Package; compact?: 
           <dt className="text-sm text-muted">{pricingPage.monthly}</dt>
           <dd className="mt-1 font-display text-2xl font-semibold">
             {formatUsd(pkg.monthlyFrom)}
+            {pkg.monthlyNote && " "}
             {pkg.monthlyNote && <span className="block text-sm font-normal text-muted">{pkg.monthlyNote}</span>}
           </dd>
         </div>

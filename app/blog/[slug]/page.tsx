@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -49,12 +50,15 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           <Prose html={post.body} />
           {post.services.length > 0 && (
             <p className="mt-12 flex flex-wrap gap-2 border-t border-rule pt-6 text-sm">
-              {post.services.map((s) => {
+              {post.services.map((s, i) => {
                 const svc = serviceBySlug(s);
                 return (
-                  <Link key={s} href={svc.url} className="rounded-full border border-rule px-4 py-2 hover:border-accent-hover">
-                    {svc.name}
-                  </Link>
+                  <Fragment key={s}>
+                    {i > 0 && " "}
+                    <Link href={svc.url} className="rounded-full border border-rule px-4 py-2 hover:border-accent-hover">
+                      {svc.name}
+                    </Link>
+                  </Fragment>
                 );
               })}
             </p>

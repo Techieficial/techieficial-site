@@ -216,7 +216,7 @@ export function Navbar({
                   <Link href={s.url} className="flex gap-4 rounded-2xl p-4 transition-colors hover:bg-surface-2">
                     <ServiceGlyph service={s} />
                     <span>
-                      <span className="block font-medium">{s.name}</span>
+                      <span className="block font-medium">{s.name}</span>{" "}
                       <span className="mt-1 block text-sm leading-snug text-muted">{s.outcome}</span>
                     </span>
                   </Link>
@@ -242,7 +242,7 @@ export function Navbar({
             </div>
             <Link href={nav.featured.href} className="group relative flex flex-col justify-end overflow-hidden rounded-2xl border border-rule bg-surface p-6">
               <div aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-[radial-gradient(closest-side,rgba(34,211,238,0.45),transparent)]" />
-              <span className="relative font-display text-lg font-semibold">{nav.featured.title}</span>
+              <span className="relative font-display text-lg font-semibold">{nav.featured.title}</span>{" "}
               <span className="relative mt-2 text-sm text-muted">{nav.featured.body}</span>
               <ArrowRightIcon aria-hidden className="relative mt-4 size-5 text-accent-2 transition-transform group-hover:translate-x-1" />
             </Link>

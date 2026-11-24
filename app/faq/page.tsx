@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { faqPage } from "@/content/pages";
 import { faqGroups } from "@/content/faq";
 import { faqLd, pageMetadata } from "@/lib/seo";
@@ -17,10 +18,13 @@ export default function FaqPage() {
       <JsonLd data={faqLd(faqGroups.flatMap((g) => g.items))} />
       <Section className="!pt-4">
         <nav aria-label={faqPage.title} className="mb-12 flex flex-wrap gap-2">
-          {faqGroups.map((g) => (
-            <a key={g.title} href={`#${slug(g.title)}`} className="min-h-11 rounded-full border border-rule px-4 py-2.5 text-sm hover:border-accent-hover">
-              {g.title}
-            </a>
+          {faqGroups.map((g, i) => (
+            <Fragment key={g.title}>
+              {i > 0 && " "}
+              <a href={`#${slug(g.title)}`} className="min-h-11 rounded-full border border-rule px-4 py-2.5 text-sm hover:border-accent-hover">
+                {g.title}
+              </a>
+            </Fragment>
           ))}
         </nav>
         <div className="grid gap-16">

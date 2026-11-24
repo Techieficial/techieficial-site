@@ -39,11 +39,13 @@ export default function ThankYouPage() {
       <Section labelledBy="explore-title">
         <SectionHeader id="explore-title" title={thankYouPage.explore} />
         <div className="flex flex-wrap gap-3">
-          <Button href="/demo">{thankYouPage.demoLink}</Button>
+          <Button href="/demo">{thankYouPage.demoLink}</Button>{" "}
           {hasWork() && (
-            <Button href="/work" variant="secondary">
-              {thankYouPage.workLink}
-            </Button>
+            <>
+              <Button href="/work" variant="secondary">
+                {thankYouPage.workLink}
+              </Button>{" "}
+            </>
           )}
           <Button href="/blog" variant="secondary">
             {thankYouPage.blogLink}

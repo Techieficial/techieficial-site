@@ -26,7 +26,7 @@ export default function AboutPage() {
           <ol className="grid gap-3">
             {aboutPage.how.map((h, i) => (
               <li key={h} className="flex gap-4 rounded-2xl border border-rule bg-bg p-5">
-                <span className="font-display font-bold text-accent-text">{String(i + 1).padStart(2, "0")}</span>
+                <span className="font-display font-bold text-accent-text">{String(i + 1).padStart(2, "0")}</span>{" "}
                 {h}
               </li>
             ))}
