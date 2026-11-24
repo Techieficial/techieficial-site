@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
-import { ArrowRightIcon, CaretDownIcon, PhoneCallIcon } from "@phosphor-icons/react";
-import { siteConfig, telHref } from "@/site.config";
+import { ArrowRightIcon, CaretDownIcon } from "@phosphor-icons/react";
+import { siteConfig } from "@/site.config";
 import { nav } from "@/content/pages";
 import { Logo } from "./Logo";
 import { ServiceGlyph, type NavService } from "./ServiceGlyph";
@@ -31,7 +31,6 @@ export function Navbar({
   const megaId = useId();
   const sheetId = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const phone = siteConfig.contact.demoPhone;
   const links = nav.links.filter((l) => l.href !== "/work" || showWork);
 
   // Glass background after 80px of scroll, observed with a sentinel instead of a scroll listener.
@@ -120,9 +119,9 @@ export function Navbar({
     <header className="fixed inset-x-0 top-0 z-40" onBlur={onFocusOut}>
       <AnnouncementBar />
       <div
-        className={`transition-[background-color,border-color,backdrop-filter] duration-300 ${solid ? "border-b border-rule bg-bg/80 backdrop-blur-xl" : "border-b border-transparent"}`}
+        className={`transition-[background-color,border-color,backdrop-filter] duration-300 ${solid ? "border-b border-rule bg-bg/90 backdrop-blur-xl" : "border-b border-transparent"}`}
       >
-        <nav aria-label="Main" className="mx-auto flex h-[72px] max-w-[1240px] items-center gap-6 px-4 sm:px-6">
+        <nav aria-label="Main" className="mx-auto flex h-16 max-w-[1240px] items-center gap-6 px-4 sm:px-6">
           <Logo />
 
           <ul className="ml-4 hidden items-center gap-1 lg:flex">
@@ -172,13 +171,8 @@ export function Navbar({
           </ul>
 
           <div className="ml-auto hidden items-center gap-4 lg:flex">
+            {/* Clean nav: one switch and one button. The demo number lives in the mobile bar, footer and Demo Lab. */}
             <ThemeToggle />
-            {phone && (
-              <a href={telHref(phone)} data-event="demo_call_started" className="inline-flex items-center gap-2 text-[15px] font-medium text-ink/90 hover:text-accent-text">
-                <PhoneCallIcon aria-hidden className="size-4" />
-                {siteConfig.cta.callAi.label}
-              </a>
-            )}
             <Link
               href={siteConfig.cta.primary.href}
               className="inline-flex h-11 items-center rounded-full bg-electric px-5 text-[15px] font-semibold text-on-accent transition-transform active:scale-[0.98]"
@@ -210,7 +204,7 @@ export function Navbar({
           onClick={(e) => (e.target as HTMLElement).closest("a") && closeAll()}
           onMouseEnter={openWithDelay}
           onMouseLeave={closeWithDelay}
-          className="hidden border-t border-rule bg-bg/95 backdrop-blur-xl lg:block"
+          className="hidden border-y border-rule bg-bg shadow-[0_24px_48px_-24px_var(--shadow)] lg:block"
         >
           <div className="mx-auto grid max-w-[1240px] grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-8 px-6 py-8">
             <ul className="grid grid-cols-2 gap-2">
@@ -243,8 +237,7 @@ export function Navbar({
                 </li>
               </ul>
             </div>
-            <Link href={nav.featured.href} className="group relative flex flex-col justify-end overflow-hidden rounded-2xl border border-rule bg-surface p-6">
-              <div aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
+            <Link href={nav.featured.href} className="group relative flex flex-col justify-end overflow-hidden rounded-2xl bg-surface p-6 transition-colors hover:bg-surface-2">
               <span className="relative font-display text-lg font-semibold">{nav.featured.title}</span>{" "}
               <span className="relative mt-2 text-sm text-muted">{nav.featured.body}</span>
               <ArrowRightIcon aria-hidden className="relative mt-4 size-5 text-accent-text transition-transform group-hover:translate-x-1" />
@@ -257,7 +250,7 @@ export function Navbar({
       <div
         id={sheetId}
         hidden={!sheetOpen}
-        className="fixed inset-x-0 bottom-0 top-[72px] flex flex-col overflow-y-auto bg-bg px-4 pb-28 pt-4 lg:hidden"
+        className="fixed inset-x-0 bottom-0 top-16 flex flex-col overflow-y-auto bg-bg px-4 pb-28 pt-4 lg:hidden"
       >
         <ul className="divide-y divide-rule border-b border-rule">
           <li>
