@@ -82,6 +82,7 @@ export const home = {
   },
   comparison: {
     title: "Techieficial vs. the alternatives",
+    caption: "Cost, speed to launch, planning and reporting compared for Techieficial, separate vendors and hiring in-house",
     columns: ["Techieficial", "Separate vendors", "Hiring in-house"],
     rows: [
       { label: "Cost", values: ["One setup fee and one monthly fee", "Several retainers and invoices", "Salaries, benefits and tool costs"] },

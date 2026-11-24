@@ -205,7 +205,7 @@ export default function HomePage() {
         <SectionHeader id="compare-title" title={home.comparison.title} />
         <div className="overflow-x-auto rounded-[20px] border border-rule">
           <table className="w-full min-w-[720px] border-collapse text-left">
-            <caption className="sr-only">{home.comparison.title}</caption>
+            <caption className="sr-only">{home.comparison.caption}</caption>
             <thead>
               <tr className="border-b border-rule">
                 <td className="p-5" />

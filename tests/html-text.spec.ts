@@ -23,3 +23,11 @@ test("text does not run together where elements meet", async ({ request }) => {
     for (const j of joined) expect(text.includes(j), `${path}: ${j}`).toBe(false);
   }
 });
+
+test("comparison table caption differs from the section heading", async ({ page }) => {
+  await page.goto("/");
+  const heading = (await page.locator("#compare-title").innerText()).trim();
+  const caption = (await page.locator("table caption").textContent())?.trim();
+  expect(caption).toBeTruthy();
+  expect(caption).not.toBe(heading);
+});
