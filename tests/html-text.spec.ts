@@ -2,10 +2,10 @@ import { test, expect } from "@playwright/test";
 import { countOf, htmlText } from "./helpers";
 import { siteConfig } from "../site.config";
 
-test("homepage HTML lists each client country once", async ({ request }) => {
+test("homepage hero names each client country once", async ({ request }) => {
   const html = await (await request.get("/")).text();
-  // Countries also appear in an FAQ answer, so count list items only.
-  for (const country of siteConfig.countries) expect(countOf(html, `>${country}</li>`), country).toBe(1);
+  const hero = htmlText(html.slice(html.indexOf('id="top"'), html.indexOf("</section>", html.indexOf('id="top"'))));
+  for (const country of siteConfig.countries) expect(countOf(hero, country), country).toBe(1);
 });
 
 test("homepage HTML has one wheel details card", async ({ request }) => {

@@ -221,25 +221,17 @@ export function DemoCallBlock({ title, body, children }: { title: string; body: 
   );
 }
 
-/* ---------- Trust strip ---------- */
+/* ---------- Trust line ---------- */
 
-/** Rendered once, as a still row, so the list is never duplicated in the page HTML. */
-export function LogoMarquee({ lead, items }: { lead: string; items: readonly string[] }) {
+/** One quiet line under the hero buttons, e.g. "Clients in United States, United Kingdom ...". Rendered once. */
+export function TrustLine({ lead, items }: { lead: string; items: readonly string[] }) {
   return (
-    <div className="border-y border-rule bg-surface/40 py-6">
-      <Container className="flex flex-col items-center gap-4 md:flex-row md:gap-10">
-        <p id="trust-lead" className="shrink-0 text-sm text-muted">
-          {lead}
-        </p>
-        <ul aria-labelledby="trust-lead" className="flex flex-wrap items-center justify-center gap-x-10 gap-y-2 md:justify-start">
-          {items.map((item) => (
-            <li key={item} className="whitespace-nowrap font-display text-lg font-semibold text-ink/85">
-              {item}
-            </li>
-          ))}
-        </ul>
-      </Container>
-    </div>
+    <p className="mt-8 max-w-[60ch] text-sm text-muted">
+      {lead}{" "}
+      <span className="font-medium text-ink">{items.slice(0, -1).join(", ")}</span>
+      {items.length > 1 && " and "}
+      <span className="font-medium text-ink">{items[items.length - 1]}</span>
+    </p>
   );
 }
 

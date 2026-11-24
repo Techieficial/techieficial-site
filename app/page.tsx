@@ -8,7 +8,7 @@ import { packages } from "@/content/pricing";
 import { recordedCallAudio } from "@/content/gallery";
 import { getCaseStudies, getServices } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
-import { CaseStudyCard, CTABand, DemoCallBlock, FAQAccordion, LogoMarquee, PricingCard, ServiceCard } from "@/components/blocks";
+import { CaseStudyCard, CTABand, DemoCallBlock, FAQAccordion, PricingCard, TrustLine, ServiceCard } from "@/components/blocks";
 import { GrowthWheel } from "@/components/GrowthWheel";
 import { CountUp, Reveal } from "@/components/Reveal";
 import { Button, Container, Section, SectionHeader } from "@/components/ui";
@@ -32,47 +32,48 @@ export default function HomePage() {
 
   return (
     <>
-      {/* 1. Hero */}
+      {/* 1. Hero: centred message, then the main visual (the "viewing point"). */}
       <section id="top" className="relative overflow-hidden pb-16 pt-28 md:pb-24 md:pt-36">
-        <div aria-hidden className="pointer-events-none absolute -top-48 right-[-15%] -z-10 size-[820px] rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
-                <Container className="grid grid-cols-[minmax(0,1fr)] items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-8">
-          <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-rule bg-surface/70 px-3.5 py-1.5 text-sm font-medium">
-              <span aria-hidden className="size-2 rounded-full bg-accent-2" />
-              {hero.tag}
-            </p>
-            <h1 className="mt-6 text-[length:var(--text-display)] font-bold leading-[1.02] tracking-[-0.035em]">
-              {hero.titleStart} <span className="text-electric">{hero.titleHighlight}</span>
-              {hero.titleEnd}
-            </h1>
-            <p className="mt-6 max-w-[46ch] text-[length:var(--text-lead)] leading-relaxed text-muted">{hero.sub}</p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Button href={siteConfig.cta.primary.href} size="lg">
-                {siteConfig.cta.primary.label}
-              </Button>{" "}
-              <Button href={siteConfig.cta.demo.href} size="lg" variant="secondary" arrow={false}>
-                {siteConfig.cta.demo.label}
-              </Button>
-            </div>
-            {hero.stats.length > 0 && (
-              <dl className="mt-10 flex flex-wrap gap-3">
-                {hero.stats.map((s) => (
-                  <div key={s.label} className="rounded-2xl border border-rule bg-surface/70 px-4 py-3">
-                    <dd className="font-display text-2xl font-bold">
-                      <CountUp value={s.value} suffix={s.suffix} />
-                    </dd>
-                    <dt className="text-sm text-muted">{s.label}</dt>
-                  </div>
-                ))}
-              </dl>
-            )}
+        <div aria-hidden className="pointer-events-none absolute -top-64 left-1/2 -z-10 size-[900px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
+        <Container className="flex flex-col items-center text-center">
+          <p className="inline-flex items-center gap-2 rounded-full border border-rule bg-surface/70 px-3.5 py-1.5 text-sm font-medium">
+            <span aria-hidden className="size-2 rounded-full bg-accent" />
+            {hero.tag}
+          </p>
+          <h1 className="mt-6 max-w-[16ch] text-[length:var(--text-display)] font-bold leading-[1.02] tracking-[-0.035em]">
+            {hero.titleStart} <span className="text-electric">{hero.titleHighlight}</span>
+            {hero.titleEnd}
+          </h1>
+          <p className="mt-6 max-w-[52ch] text-[length:var(--text-lead)] leading-relaxed text-muted">{hero.sub}</p>
+          <div className="mt-9 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
+            <Button href={siteConfig.cta.primary.href} size="lg">
+              {siteConfig.cta.primary.label}
+            </Button>{" "}
+            <Button href={siteConfig.cta.demo.href} size="lg" variant="secondary" arrow={false}>
+              {siteConfig.cta.demo.label}
+            </Button>
           </div>
-          <GrowthWheel services={wheelServices} />
+          <TrustLine lead={home.trust.lead} items={siteConfig.countries} />
+          {hero.stats.length > 0 && (
+            <dl className="mt-10 flex flex-wrap justify-center gap-3">
+              {hero.stats.map((s) => (
+                <div key={s.label} className="rounded-2xl border border-rule bg-surface/70 px-4 py-3">
+                  <dd className="font-display text-2xl font-bold">
+                    <CountUp value={s.value} suffix={s.suffix} />
+                  </dd>
+                  <dt className="text-sm text-muted">{s.label}</dt>
+                </div>
+              ))}
+            </dl>
+          )}
+        </Container>
+        {/* Main visual. The wheel stands in until the owner's hero video is ready (see content/_missing.md). */}
+        <Container className="mt-14 md:mt-20">
+          <div className="mx-auto max-w-[640px]">
+            <GrowthWheel services={wheelServices} />
+          </div>
         </Container>
       </section>
-
-      {/* 2. Trust */}
-      <LogoMarquee lead={home.trust.lead} items={siteConfig.countries} />
 
       {/* 3. Problem */}
       <Section id="problem" labelledBy="problem-title">

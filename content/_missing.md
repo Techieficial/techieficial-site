@@ -29,6 +29,7 @@ Send items in any order. Each one is a small edit once we have it.
 ## Media
 
 - [ ] **Recorded AI receptionist call** (audio file) for the home page demo block.
+- [ ] **Homepage hero video** (owner is making it): a short silent loop plus a poster image. It replaces the Growth Engine wheel as the main visual under the hero headline. The wheel stays until then.
 - [ ] **3 walkthrough videos** (YouTube or Vimeo links + a poster image each) for Demo Lab, "Watch it work" tab (hidden).
 - [ ] **AI video samples** (links + poster + category: Ad creative, Product launch, Review, Training, Infographic) for the Demo Lab gallery (hidden).
 
