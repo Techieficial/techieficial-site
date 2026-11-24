@@ -4,7 +4,7 @@ import type { APIRequestContext } from "@playwright/test";
 export async function allRoutes(request: APIRequestContext) {
   const xml = await (await request.get("/sitemap.xml")).text();
   const paths = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
-  return [...paths, "/thank-you"];
+  return [...paths, "/thank-you", "/thank-you/audit"];
 }
 
 /** Text a crawler reads from the raw page HTML: scripts, styles and tags stripped, entities decoded. */

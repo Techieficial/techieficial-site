@@ -19,7 +19,7 @@ test("every route: 200, one H1, title, description, canonical, no serious a11y i
     if (!title || title.length > 60) failures.push(`${path}: bad title "${title}"`);
     const desc = await page.locator('meta[name="description"]').getAttribute("content");
     if (!desc || desc.length > 160) failures.push(`${path}: bad description`);
-    if (path !== "/thank-you") {
+    if (!path.startsWith("/thank-you")) {
       const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
       if (!canonical) failures.push(`${path}: no canonical`);
     }

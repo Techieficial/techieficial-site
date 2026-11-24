@@ -127,39 +127,46 @@ export const servicesHub = {
   packagesTitle: "Start where you are.",
 };
 
+/** Demo Lab, "Interview your AI team" (docs/SITE_CONTENT_V3.md 2.6). Status: needs-review. */
 export const demoPage = {
   seo: {
-    title: "Demo Lab | Techieficial",
-    description: "Test our AI receptionist live, watch the system at work and see AI video samples. Or book a test build for your business.",
+    title: "Demo Lab: Interview Your AI Team | Techieficial",
+    description: "Call the AI Receptionist, test the Lead Responder and see what the system does after every call. Or book a test build for your business.",
   },
-  title: "Don't take our word for it. Test it.",
-  intro: "Call our AI receptionist, see what happens in the CRM, and book a test build for your own business.",
+  title: "Interview your AI team before you hire it.",
+  intro: "Call the AI Receptionist, test the Lead Responder and see what the system does after every call.",
+  noPhoneButton: "Book a live demo",
+  tabsLabel: "Demo Lab",
   tabs: {
-    live: "Try it live",
+    live: "Call the AI Receptionist",
+    chat: "Test the Lead Responder",
     watch: "Watch it work",
-    gallery: "AI content gallery",
     build: "Book a test build",
   },
   live: {
-    callTitle: "Call the AI receptionist",
-    callBody: "Ask about prices, opening hours or booking a time. It answers like a real front desk.",
-    callMeTitle: "Or have it call you",
-    callMeBody: "Enter your details and the AI receptionist will call you in a moment.",
+    callTitle: "Call the AI Receptionist",
+    tipsTitle: "Interview tips",
+    tips: ["Ask for a booking tomorrow morning.", "Say it's an emergency.", "Ask a price question.", "Ask if it's a robot."],
+    callMeTitle: "Have it call me",
+    callMeBody: "Enter your details and the AI Receptionist will call you in a moment.",
     callMeSubmit: "Call me now",
-    chatButton: "Chat with the AI agent",
-    chatLoaded: "Chat is open, see the bottom corner",
-    whatHappened: "What happens after the call",
-    steps: [
-      "The call is logged in the CRM with a summary",
-      "Your details are tagged by interest",
-      "A follow-up text is sent to you",
-      "A task is created for the team",
-    ],
+    whatHappened: "What just happened",
+    steps: ["The call was logged in the CRM.", "The caller was tagged.", "A confirmation text was sent.", "The owner got a summary."],
   },
+  chat: {
+    title: "Test the Lead Responder",
+    tip: "Pretend you filled in a quote form. See how fast it replies and what it asks.",
+    button: "Start the chat",
+    loaded: "Chat is open, see the bottom corner",
+  },
+  watchTitle: "Watch it work",
   build: {
     title: "Book a test build",
-    intro: "Tell us about your business and we will scope a test build of an AI agent or marketing automation for you.",
+    intro: "Want to hear it with your business name and your services? We'll set up a test version for your business.",
+    submit: "Send and pick a time",
+    calendarTitle: "Test Build Session calendar",
   },
+  galleryTitle: "AI video samples",
   galleryAll: "All",
 };
 
@@ -352,17 +359,13 @@ export const forms = {
   errorEmail: "Enter a valid email address, like you@company.com.",
   errorPhone: "Enter a valid phone number, including country code.",
   success: "Thanks, we have your details.",
-  testBuild: {
-    type: "What should we build?",
-    types: ["AI agent", "Marketing automation"],
-    questions: [
-      { name: "leads", label: "How do most leads reach you today?" },
-      { name: "volume", label: "Roughly how many enquiries do you get each month?" },
-      { name: "tools", label: "Which tools do you use today?" },
-      { name: "problem", label: "What is the biggest problem you want fixed?" },
-      { name: "success", label: "What would success look like in 90 days?" },
-    ],
-  },
+  company: "Business name",
+  siteUrl: "Website",
+  city: "Main city",
+  problem: "Biggest problem",
+  role: "I'm a...",
+  roles: ["Business owner", "Employee", "VA or freelancer", "Agency"],
+  chooseOne: "Choose one",
 };
 
 export const cookieBanner = {

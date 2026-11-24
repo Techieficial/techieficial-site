@@ -9,7 +9,7 @@ import { track, type ConversionEvent } from "@/lib/analytics";
 import { leadSchema, type LeadSource } from "@/lib/lead";
 import { Turnstile } from "./Turnstile";
 
-export type FieldKey = "name" | "email" | "phone" | "businessType" | "goal" | "budget" | "message" | "testBuild";
+export type FieldKey = "name" | "email" | "phone" | "company" | "siteUrl" | "city" | "businessType" | "problem" | "role" | "goal" | "budget" | "message";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -24,6 +24,7 @@ export function LeadForm({
   redirectTo,
   successMessage = forms.success,
   selection,
+  extraAnswers,
   compact = false,
 }: {
   source: LeadSource;
@@ -33,6 +34,8 @@ export function LeadForm({
   redirectTo?: string;
   successMessage?: string;
   selection?: Record<string, string>;
+  /** Extra answers sent with the lead (e.g. calculator results). */
+  extraAnswers?: Record<string, string>;
   compact?: boolean;
 }) {
   const router = useRouter();
@@ -51,22 +54,23 @@ export function LeadForm({
       const v = fd.get(k);
       return typeof v === "string" && v.trim() ? v.trim() : undefined;
     };
-    const answers: Record<string, string> = {};
-    if (has("testBuild")) {
-      const type = get("buildType");
-      if (type) answers[forms.testBuild.type] = type;
-      for (const q of forms.testBuild.questions) {
-        const v = get(`q-${q.name}`);
-        if (v) answers[q.label] = v;
-      }
+    const answers: Record<string, string> = { ...extraAnswers };
+    for (const [k, label] of [
+      ["siteUrl", forms.siteUrl],
+      ["city", forms.city],
+      ["role", forms.role],
+    ] as const) {
+      const v = get(k);
+      if (v) answers[label] = v;
     }
     const payload = {
       source,
       name: get("name"),
       email: get("email") ?? "",
       phone: get("phone") ?? "",
+      company: get("company"),
       businessType: get("businessType"),
-      goal: get("goal"),
+      goal: get("goal") ?? get("problem"),
       budget: get("budget"),
       message: get("message"),
       smsConsent: fd.get("smsConsent") === "on",
@@ -172,7 +176,29 @@ export function LeadForm({
           "phone",
           forms.phone,
           <input {...aria("phone")} type="tel" autoComplete="tel" placeholder="+1 415 000 0000" className={inputClass} />,
-          source !== "contact" && source !== "demo-callme",
+          source !== "contact" && source !== "demo-callme" && source !== "audit",
+        )}
+      {(has("company") || has("siteUrl")) && (
+        <div className="grid gap-5 sm:grid-cols-2">
+          {has("company") && field("company", forms.company, <input {...aria("company")} autoComplete="organization" className={inputClass} />, source !== "audit" && source !== "test-build")}
+          {has("siteUrl") && field("siteUrl", forms.siteUrl, <input {...aria("siteUrl")} type="url" inputMode="url" autoComplete="url" placeholder="https://" className={inputClass} />, true)}
+        </div>
+      )}
+      {has("city") && field("city", forms.city, <input {...aria("city")} autoComplete="address-level2" className={inputClass} />, true)}
+      {has("problem") && field("problem", forms.problem, <input {...aria("problem")} className={inputClass} />, true)}
+      {has("role") &&
+        field(
+          "role",
+          forms.role,
+          <select {...aria("role")} className={inputClass} defaultValue="">
+            <option value="" disabled>
+              {forms.chooseOne}
+            </option>
+            {forms.roles.map((o) => (
+              <option key={o}>{o}</option>
+            ))}
+          </select>,
+          true,
         )}
       <div className="grid gap-5 sm:grid-cols-2">
         {has("businessType") &&
@@ -181,7 +207,7 @@ export function LeadForm({
             forms.businessType,
             <select {...aria("businessType")} className={inputClass} defaultValue="">
               <option value="" disabled>
-                Choose one
+                {forms.chooseOne}
               </option>
               {forms.businessTypes.map((o) => (
                 <option key={o}>{o}</option>
@@ -195,7 +221,7 @@ export function LeadForm({
             forms.goal,
             <select {...aria("goal")} className={inputClass} defaultValue={selection?.goal ?? ""}>
               <option value="" disabled>
-                Choose one
+                {forms.chooseOne}
               </option>
               {forms.goals.map((o) => (
                 <option key={o}>{o}</option>
@@ -210,7 +236,7 @@ export function LeadForm({
           forms.budget,
           <select {...aria("budget")} className={inputClass} defaultValue="">
             <option value="" disabled>
-              Choose one
+              {forms.chooseOne}
             </option>
             {forms.budgets.map((o) => (
               <option key={o}>{o}</option>
@@ -218,24 +244,6 @@ export function LeadForm({
           </select>,
           true,
         )}
-      {has("testBuild") && (
-        <>
-          <fieldset className="grid gap-3">
-            <legend className="text-sm font-medium">{forms.testBuild.type}</legend>
-            <div className="flex flex-wrap gap-3">
-              {forms.testBuild.types.map((t, i) => (
-                <label key={t} className="flex min-h-11 cursor-pointer items-center gap-2.5 rounded-full border border-rule px-4 has-[:checked]:border-accent-hover has-[:checked]:bg-surface-2">
-                  <input type="radio" name="buildType" value={t} defaultChecked={i === 0} className="accent-[var(--accent)]" />
-                  {t}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          {forms.testBuild.questions.map((q) =>
-            field(`q-${q.name}`, q.label, <input id={id(`q-${q.name}`)} name={`q-${q.name}`} className={inputClass} />, true),
-          )}
-        </>
-      )}
       {has("message") &&
         field("message", forms.message, <textarea {...aria("message")} rows={4} className={`${inputClass} resize-y`} />, true)}
       {has("phone") && (

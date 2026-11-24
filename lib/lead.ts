@@ -41,7 +41,10 @@ export const leadSchema = z
   .check(
     z.superRefine((data, ctx) => {
       if (data.source !== "newsletter" && !data.name) ctx.addIssue({ code: "custom", path: ["name"], message: "required", input: data.name });
-      if ((data.source === "demo-callme" || data.source === "contact") && !data.phone) {
+      if ((data.source === "audit" || data.source === "test-build") && !data.company) {
+        ctx.addIssue({ code: "custom", path: ["company"], message: "required", input: data.company });
+      }
+      if ((data.source === "demo-callme" || data.source === "contact" || data.source === "audit") && !data.phone) {
         ctx.addIssue({ code: "custom", path: ["phone"], message: "required", input: data.phone });
       }
     }),

@@ -76,14 +76,47 @@ test("demo lab test-build tab is reachable by hash and submits", async ({ page }
   const tab = page.getByRole("tab", { name: "Book a test build" });
   await expect(tab).toHaveAttribute("aria-selected", "true");
   const panel = page.getByRole("tabpanel");
-  await panel.getByLabel("AI agent").check();
   await panel.getByLabel("Your name").fill("Test Build");
   const email = `build+${Date.now()}@techieficial.com`;
   await panel.getByLabel("Work email").fill(email);
-  await panel.getByRole("button", { name: "Send" }).click();
+  await panel.getByRole("button", { name: "Send and pick a time" }).click();
+  await expect(panel.getByLabel("Business name")).toHaveAttribute("aria-invalid", "true");
+  await panel.getByLabel("Business name").fill("Test Plumbing Co");
+  await panel.getByLabel("Biggest problem").fill("Missed calls on jobs");
+  await panel.getByRole("button", { name: "Send and pick a time" }).click();
   await expect(page).toHaveURL(/\/thank-you$/);
   const lead = await leadFor(page, email);
   expect(lead.tag).toBe("test-build");
+  expect(lead.company_name).toBe("Test Plumbing Co");
+  expect(lead.main_goal).toBe("Missed calls on jobs");
+});
+
+test("free audit form is tagged audit and goes to its thank-you page", async ({ page }) => {
+  await page.goto("/audit");
+  const form = page.locator("form").filter({ has: page.getByLabel("Business name") });
+  const email = `audit+${Date.now()}@techieficial.com`;
+  await form.getByLabel("Your name").fill("Audit Test");
+  await form.getByLabel("Work email").fill(email);
+  await form.getByLabel("Mobile number").fill("+1 555 010 0177");
+  await form.getByLabel("Business name").fill("Audit HVAC");
+  await form.getByLabel(/Main city/).fill("Austin");
+  await form.getByRole("button", { name: "Request my audit" }).click();
+  await expect(page).toHaveURL(/\/thank-you\/audit$/);
+  const lead = await leadFor(page, email);
+  expect(lead.tag).toBe("audit");
+  expect(lead.source).toBe("audit");
+  expect(String(lead.message)).toContain("Main city: Austin");
+});
+
+test("missed-call calculator uses the v3 formula", async ({ page }) => {
+  await page.goto("/tools/missed-call-calculator");
+  await page.getByLabel("Calls per week").fill("50");
+  await page.getByLabel(/Calls you miss/).fill("20");
+  await page.getByLabel(/Answered callers who book/).fill("50");
+  await page.getByLabel(/Average job value/).fill("400");
+  // 50 x 4.3 x 0.2 x 0.5 x 400 = 8,600 a month, 103,200 a year.
+  await expect(page.getByText("$8,600").first()).toBeVisible();
+  await expect(page.getByText("$103,200")).toBeVisible();
 });
 
 test("call-me requests go to the call-me webhook only", async ({ request }) => {

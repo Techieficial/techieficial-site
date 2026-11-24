@@ -4,9 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/site.config";
 import { contactPage } from "@/content/pages";
 
-/** Booking calendar, loaded only when it scrolls into view. Hidden until a calendar URL is configured. */
-export function CalendarEmbed() {
-  const url = siteConfig.contact.calendarUrl;
+/** Booking calendar, loaded only when it scrolls into view. Defaults to the Strategy Call calendar. */
+export function CalendarEmbed({ url = siteConfig.contact.calendarUrl, title = contactPage.calendarTitle }: { url?: string; title?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [load, setLoad] = useState(false);
 
@@ -20,8 +19,8 @@ export function CalendarEmbed() {
   if (!url) return null;
   return (
     <div ref={ref} className="min-h-[640px] overflow-hidden rounded-[20px] border border-rule bg-surface">
-      <h2 className="sr-only">{contactPage.calendarTitle}</h2>
-      {load && <iframe src={url} title={contactPage.calendarTitle} className="h-[720px] w-full" loading="lazy" />}
+      <h2 className="sr-only">{title}</h2>
+      {load && <iframe src={url} title={title} className="h-[720px] w-full" loading="lazy" />}
     </div>
   );
 }

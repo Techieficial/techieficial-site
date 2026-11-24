@@ -18,6 +18,9 @@ export function publicRoutes(): RouteEntry[] {
     "/faq",
     "/blog",
     "/ai-team",
+    "/inside",
+    "/tools/missed-call-calculator",
+    "/audit",
   ];
   if (hasWork()) staticPaths.push("/work");
 
