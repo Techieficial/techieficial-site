@@ -220,23 +220,23 @@ export function DemoCallBlock({ title, body, children }: { title: string; body: 
   );
 }
 
-/* ---------- Trust marquee ---------- */
+/* ---------- Trust strip ---------- */
 
+/** Rendered once, as a still row, so the list is never duplicated in the page HTML. */
 export function LogoMarquee({ lead, items }: { lead: string; items: readonly string[] }) {
-  const row = [...items, ...items];
   return (
     <div className="border-y border-rule bg-surface/40 py-6">
       <Container className="flex flex-col items-center gap-4 md:flex-row md:gap-10">
-        <p className="shrink-0 text-sm text-muted">{lead}</p>
-        <div className="marquee relative w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_10%,black_90%,transparent)]">
-          <ul className="marquee-track flex w-max gap-12" aria-label={`${lead} ${items.join(", ")}`}>
-            {row.map((item, i) => (
-              <li key={`${item}-${i}`} aria-hidden={i >= items.length} className="font-display text-lg font-semibold whitespace-nowrap text-ink/85">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <p id="trust-lead" className="shrink-0 text-sm text-muted">
+          {lead}
+        </p>
+        <ul aria-labelledby="trust-lead" className="flex flex-wrap items-center justify-center gap-x-10 gap-y-2 md:justify-start">
+          {items.map((item) => (
+            <li key={item} className="whitespace-nowrap font-display text-lg font-semibold text-ink/85">
+              {item}
+            </li>
+          ))}
+        </ul>
       </Container>
     </div>
   );

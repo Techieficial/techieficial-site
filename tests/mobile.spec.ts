@@ -28,7 +28,7 @@ test("no horizontal scroll on key pages", async ({ page }) => {
     // The body clips overflow, so also check that headings and text actually fit on screen.
     const wide = await page.evaluate(() =>
       [...document.querySelectorAll("main h1, main h2, main p")]
-        .filter((el) => el.getBoundingClientRect().right > window.innerWidth + 1 && !el.closest("[class*='overflow-x-auto'], .marquee"))
+        .filter((el) => el.getBoundingClientRect().right > window.innerWidth + 1 && !el.closest("[class*='overflow-x-auto']"))
         .map((el) => el.textContent?.slice(0, 40)),
     );
     expect(wide, path).toEqual([]);

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore, type KeyboardEvent } from "react";
 import { motion, useAnimationFrame, useReducedMotion } from "motion/react";
 import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react";
 import { ContentIcon } from "./icons";
@@ -52,6 +52,18 @@ const STAGES = [
   { id: "revenue", text: "Grow Revenue", a0: 272, a1: 208, r: 306 },
 ];
 
+const MOBILE_QUERY = "(max-width: 767px)";
+const subscribeMobile = (cb: () => void) => {
+  const mq = window.matchMedia(MOBILE_QUERY);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+
+/** True on phones. False on the server, so the static HTML carries only the wheel. */
+function useIsMobile() {
+  return useSyncExternalStore(subscribeMobile, () => window.matchMedia(MOBILE_QUERY).matches, () => false);
+}
+
 export function GrowthWheel({ services }: { services: WheelService[] }) {
   const reduce = useReducedMotion();
   const [active, setActive] = useState(0);
@@ -67,6 +79,8 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
   const n = services.length;
   const step = 360 / n;
   const current = services[selected ?? active];
+  const isMobile = useIsMobile();
+  const panelId = useId();
 
   // Pause all motion when the wheel is off screen.
   useEffect(() => {
@@ -230,52 +244,56 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
                 <p className="mt-3 font-display text-lg font-bold leading-tight" style={{ color: readableOnDark(current.color) }}>
                   {current.name}
                 </p>
-                <p className="mt-1.5 text-[13px] leading-snug text-[#C9CEDB]">{current.outcome}</p>
               </div>
             </foreignObject>
           </svg>
         </div>
-
-        {/* Side card: details for the selected or highlighted service */}
-        <div
-          aria-live={interacted ? "polite" : "off"}
-          className="mx-auto mt-4 max-w-[520px] rounded-2xl border border-rule bg-surface/90 p-5 backdrop-blur"
-        >
-          <ServiceSummary service={current} />
-        </div>
       </div>
 
-      {/* Mobile: swipeable chips + summary card */}
-      <div className="md:hidden">
-        <div role="tablist" aria-label="Techieficial services" className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-2">
-          {services.map((s, i) => {
-            const on = (selected ?? active) === i;
-            return (
-              <button
-                key={s.slug}
-                type="button"
-                role="tab"
-                aria-selected={on}
-                onClick={() => {
-                  setInteracted(true);
-                  setSelected(i);
-                }}
-                className="flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors"
-                style={on ? { background: s.color, borderColor: s.color, color: "#0A0B14" } : { borderColor: "#24263A" }}
-              >
-                <ContentIcon name={s.icon} weight="duotone" className="size-4" aria-hidden />
-                {s.navName}
-              </button>
-            );
-          })}
-        </div>
-        <div role="tabpanel" className="mt-3 rounded-2xl border border-rule bg-surface p-5" style={{ boxShadow: `inset 0 3px 0 ${current.color}` }}>
-          <p className="font-display text-lg font-bold" style={{ color: readableOnDark(current.color) }}>
-            {current.name}
-          </p>
-          <p className="mt-1 text-sm text-muted">{current.outcome}</p>
-          <ServiceSummary service={current} hideTitle />
-        </div>
+      {/* Mobile only: swipeable chips. Rendered on phones only, so the page HTML holds one set of service controls. */}
+      <div className="min-h-[52px] md:hidden">
+        {isMobile && (
+          <div role="tablist" aria-label="Techieficial services" className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-2">
+            {services.map((s, i) => {
+              const on = (selected ?? active) === i;
+              return (
+                <button
+                  key={s.slug}
+                  type="button"
+                  role="tab"
+                  id={`${panelId}-tab-${i}`}
+                  aria-selected={on}
+                  aria-controls={panelId}
+                  onClick={() => {
+                    setInteracted(true);
+                    setSelected(i);
+                  }}
+                  className="flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors"
+                  style={on ? { background: s.color, borderColor: s.color, color: "#0A0B14" } : { borderColor: "#24263A" }}
+                >
+                  <ContentIcon name={s.icon} weight="duotone" className="size-4" aria-hidden />
+                  {s.navName}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* One details card for every screen size: under the wheel on desktop, under the chips on mobile. */}
+      <div
+        id={panelId}
+        role={isMobile ? "tabpanel" : undefined}
+        aria-labelledby={isMobile ? `${panelId}-tab-${selected ?? active}` : undefined}
+        aria-live={interacted ? "polite" : "off"}
+        className="mx-auto mt-3 max-w-[520px] rounded-2xl border border-rule bg-surface/90 p-5 backdrop-blur md:mt-4"
+        style={{ boxShadow: `inset 0 3px 0 ${current.color}` }}
+      >
+        <p className="font-display text-lg font-bold" style={{ color: readableOnDark(current.color) }}>
+          {current.name}
+        </p>
+        <p className="mt-1 text-sm text-muted">{current.outcome}</p>
+        <ServiceSummary service={current} />
       </div>
 
       {/* Screen reader list */}
@@ -290,11 +308,10 @@ export function GrowthWheel({ services }: { services: WheelService[] }) {
   );
 }
 
-function ServiceSummary({ service, hideTitle = false }: { service: WheelService; hideTitle?: boolean }) {
+function ServiceSummary({ service }: { service: WheelService }) {
   return (
-    <div className={hideTitle ? "mt-4" : ""}>
-      {!hideTitle && <p className="sr-only">{service.name}</p>}
-      <ul className="grid gap-2 text-[15px] sm:grid-cols-1">
+    <div className="mt-4">
+      <ul className="grid gap-2 text-[15px]">
         {service.highlights.map((h) => (
           <li key={h} className="flex gap-2.5">
             <CheckIcon weight="bold" aria-hidden className="mt-1 size-4 shrink-0" style={{ color: service.color }} />
