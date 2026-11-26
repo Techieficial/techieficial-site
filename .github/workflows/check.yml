@@ -8,8 +8,44 @@ concurrency:
   group: check-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
+  secrets:
+    name: Secret scan (gitleaks, full history)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GITLEAKS_VERSION: 8.28.0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install gitleaks
+        run: |
+          curl -sSL -o gitleaks.tgz "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -sSL -o sums.txt "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          grep "gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" sums.txt | sha256sum -c -
+          tar xzf gitleaks.tgz gitleaks
+      - run: ./gitleaks git --redact --no-banner --verbose .
+
+  unit:
+    name: Unit tests (Vitest) + Storybook build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:unit
+      - run: npm run build-storybook
+
   check:
+    name: Types, lint, build, e2e, axe, links, Lighthouse
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -20,7 +56,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # Types, lint, build + placeholder scan, e2e + axe, broken links, Lighthouse.
+      # Secrets, types, lint, unit, build + placeholder scan, e2e + axe, broken links, Lighthouse.
       - run: npm run check
         env:
           CI: "true"

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * npm run check: every quality gate in order, stopping at the first failure.
- * 1 types, 2 lint, 3 build (+4 placeholder scan), 5-6 Playwright e2e + axe, 7 links, 8 Lighthouse.
+ * 0 secrets, 1 types, 2 lint, 2b unit tests, 3 build (+4 placeholder scan), 5-6 Playwright e2e + axe, 7 links, 8 Lighthouse.
  */
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
@@ -53,8 +53,10 @@ async function startServer() {
 
 const skipLighthouse = process.argv.includes("--no-lighthouse");
 
+run("0. Secret scan", "node scripts/scan-secrets.mjs");
 run("1. Types", "npm run typecheck");
 run("2. Lint", "npx eslint .");
+run("2b. Unit tests", "npx vitest run");
 run("3-4. Production build + placeholder scan", "npm run build");
 run("5-6. End-to-end + accessibility tests", "npx playwright test");
 

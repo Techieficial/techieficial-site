@@ -16,7 +16,7 @@ export default defineConfig({
     launchOptions: existsSync(localChromium) ? { executablePath: localChromium } : {},
   },
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } }, testIgnore: /mobile\.spec/ },
+    { name: "desktop", use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } }, testIgnore: [/mobile\.spec/, /unit\//] },
     { name: "mobile", use: { ...devices["Pixel 7"] }, testMatch: /mobile\.spec/ },
   ],
   webServer: [
