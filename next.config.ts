@@ -1,36 +1,17 @@
 import type { NextConfig } from "next";
 import { siteConfig } from "./site.config";
+import { buildCsp, origin } from "./lib/csp";
+import { validIds } from "./lib/consent";
+import { gallery, walkthroughs } from "./content/gallery";
 
-/** Origin of an optional URL env var, so the CSP only allows what is configured. */
-const origin = (url?: string) => {
-  try {
-    return url ? new URL(url).origin : "";
-  } catch {
-    return "";
-  }
-};
-
-const calendar = [...new Set([origin(siteConfig.contact.calendarUrl), origin(siteConfig.contact.testBuildCalendarUrl)])].join(" ");
-const chat = origin(process.env.NEXT_PUBLIC_CHAT_WIDGET_SRC);
-
-const csp = [
-  "default-src 'self'",
-  // Next.js inlines small bootstrap and JSON-LD scripts, so 'unsafe-inline' is needed on a static site.
-  `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://www.googletagmanager.com https://www.clarity.ms https://*.clarity.ms https://connect.facebook.net ${chat}`,
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com https://www.facebook.com https://i.ytimg.com https://i.vimeocdn.com",
-  "font-src 'self' data:",
-  `connect-src 'self' https://challenges.cloudflare.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com https://www.facebook.com ${chat}`,
-  `frame-src https://challenges.cloudflare.com https://www.youtube-nocookie.com https://player.vimeo.com ${calendar} ${chat}`,
-  "media-src 'self'",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-  "upgrade-insecure-requests",
-]
-  .map((d) => d.replace(/\s+/g, " ").trim())
-  .join("; ");
+// Only the third-party domains for features that are switched on (lib/csp.ts).
+const csp = buildCsp({
+  analytics: validIds(siteConfig.analytics),
+  turnstile: Boolean(siteConfig.turnstileSiteKey),
+  calendarOrigins: [origin(siteConfig.contact.calendarUrl), origin(siteConfig.contact.testBuildCalendarUrl)],
+  chatOrigin: origin(siteConfig.chatWidgetSrc) || undefined,
+  videos: gallery.length + walkthroughs.length > 0,
+});
 
 const securityHeaders = [
   { key: "Content-Security-Policy", value: csp },
@@ -77,6 +58,7 @@ const nextConfig: NextConfig = {
 
 export default nextConfig;
 
-// Lets `next dev` use Cloudflare bindings locally (OpenNext adapter).
+// Lets `next dev` use Cloudflare bindings locally (OpenNext adapter). Only in dev: under `next start`
+// (e2e tests, Lighthouse) the emulated rate limiters would block the many test submissions from one address.
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
-initOpenNextCloudflareForDev();
+if (process.env.NODE_ENV === "development") initOpenNextCloudflareForDev();

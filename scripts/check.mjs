@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * npm run check: every quality gate in order, stopping at the first failure.
- * 0 design tokens in sync, 1 types, 2 lint, 2b unit tests, 3 build (+4 placeholder scan), 5-6 Playwright e2e + axe, 7 links, 8 Lighthouse.
+ * 0 design tokens in sync, 0b images in sync, 1 types, 2 lint, 2b unit tests, 3 build (+4 placeholder scan), 5-6 Playwright e2e + axe, 7 links, 8 Lighthouse.
  */
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
@@ -54,6 +54,7 @@ async function startServer() {
 const skipLighthouse = process.argv.includes("--no-lighthouse");
 
 run("0. Design tokens in sync", "node scripts/build-tokens.mjs --check");
+run("0b. Images in sync", "node scripts/build-images.mjs --check");
 run("1. Types", "npm run typecheck");
 run("2. Lint", "npx eslint .");
 run("2b. Unit tests (Vitest)", "npx vitest run");

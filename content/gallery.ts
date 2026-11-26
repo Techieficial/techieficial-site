@@ -9,7 +9,7 @@ export type VideoItem = {
   title: string;
   /** YouTube or Vimeo URL. */
   url: string;
-  /** Poster image in /public, e.g. /media/ad-1.jpg */
+  /** Poster image: put the original in assets/images (e.g. assets/images/media/ad-1.jpg), run npm run images, then use "media/ad-1". */
   poster: string;
   category?: GalleryCategory;
 };

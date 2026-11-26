@@ -75,3 +75,26 @@ describe("handleLead", () => {
     expect(fetchMock).toHaveBeenCalledWith("https://challenges.cloudflare.com/turnstile/v0/siteverify", expect.anything());
   });
 });
+
+describe("handleLead with the Cloudflare rate-limit binding", () => {
+  afterEach(() => {
+    vi.doUnmock("@opennextjs/cloudflare");
+    vi.unstubAllEnvs();
+  });
+  it("returns 429 when the edge limiter says no, and checks the IP key", async () => {
+    vi.stubEnv("CRM_WEBHOOK_URL", "https://crm.test/hook");
+    const limit = vi.fn().mockResolvedValue({ success: false });
+    vi.doMock("@opennextjs/cloudflare", () => ({ getCloudflareContext: () => ({ env: { LEAD_IP_LIMITER: { limit } } }) }));
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("ok"));
+    const res = await (await handler())(post(LEAD, { "cf-connecting-ip": "5.6.7.8" }), "lead");
+    expect(res.status).toBe(429);
+    expect(limit).toHaveBeenCalledWith({ key: "ip:5.6.7.8" });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+  it("lets the lead through when the limiter errors", async () => {
+    vi.stubEnv("CRM_WEBHOOK_URL", "https://crm.test/hook");
+    vi.doMock("@opennextjs/cloudflare", () => ({ getCloudflareContext: () => ({ env: { LEAD_IP_LIMITER: { limit: () => Promise.reject(new Error("down")) } } }) }));
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("ok"));
+    expect((await (await handler())(post(LEAD, { "cf-connecting-ip": "5.6.7.9" }), "lead")).status).toBe(200);
+  });
+});

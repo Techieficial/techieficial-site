@@ -1,0 +1,10 @@
+{
+  "$description": "Gzip KB of JavaScript each page loads up front (scripts/check-js-budget.mjs, run by npm run build). Set Nov 26, 2026 at about 3% above the measured size, so any real growth fails the build. Raise a number only with a reason in the commit message; lower them as Phase 8 (A9) trims code.",
+  "defaultKb": 225,
+  "pages": {
+    "/": 268,
+    "/demo": 235,
+    "/offers": 230,
+    "/tools/missed-call-calculator": 229
+  }
+}

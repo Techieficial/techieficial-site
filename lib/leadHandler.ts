@@ -11,7 +11,25 @@ const LIMIT_PER_IP = 8;
 const LIMIT_PER_PHONE = 3;
 const hits = new Map<string, number[]>();
 
-/** Best-effort limiter, per Worker instance. Pair with a Cloudflare WAF rate-limit rule for a hard limit. */
+type RateLimitBinding = { limit: (o: { key: string }) => Promise<{ success: boolean }> };
+
+/**
+ * Cloudflare Workers rate-limit bindings (wrangler.jsonc "ratelimits"): shared by every Worker instance in a
+ * Cloudflare location, per minute. Returns false (not limited) when the binding is not there (local dev, tests,
+ * next start) or the check itself fails, so a Cloudflare hiccup never blocks a real lead.
+ */
+async function edgeLimited(binding: "LEAD_IP_LIMITER" | "CALLME_PHONE_LIMITER", key: string) {
+  try {
+    const { getCloudflareContext } = await import("@opennextjs/cloudflare");
+    const limiter = (getCloudflareContext().env as unknown as Record<string, RateLimitBinding | undefined>)[binding];
+    if (!limiter) return false;
+    return !(await limiter.limit({ key })).success;
+  } catch {
+    return false;
+  }
+}
+
+/** Second layer: per Worker instance, over 10 minutes. Catches slow repeat abuse the per-minute edge limit allows. */
 function limited(key: string, max: number) {
   const now = Date.now();
   const recent = (hits.get(key) ?? []).filter((t) => now - t < WINDOW_MS);
@@ -67,9 +85,10 @@ export async function handleLead(request: Request, kind: "lead" | "callme") {
   const lead = parsed.data;
 
   const ip = request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for");
-  if (ip && limited(`ip:${ip}`, LIMIT_PER_IP)) return json({ error: "rate_limited" }, 429);
-  if (lead.source === "demo-callme" && lead.phone && limited(`phone:${lead.phone.replace(/\D/g, "")}`, LIMIT_PER_PHONE)) {
-    return json({ error: "rate_limited" }, 429);
+  if (ip && ((await edgeLimited("LEAD_IP_LIMITER", `ip:${ip}`)) || limited(`ip:${ip}`, LIMIT_PER_IP))) return json({ error: "rate_limited" }, 429);
+  if (lead.source === "demo-callme" && lead.phone) {
+    const phoneKey = `phone:${lead.phone.replace(/\D/g, "")}`;
+    if ((await edgeLimited("CALLME_PHONE_LIMITER", phoneKey)) || limited(phoneKey, LIMIT_PER_PHONE)) return json({ error: "rate_limited" }, 429);
   }
 
   if (!(await verifyTurnstile(lead.turnstileToken, ip))) return json({ error: "spam_check_failed" }, 403);

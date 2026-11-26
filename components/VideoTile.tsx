@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { Picture } from "./Picture";
 import { useState } from "react";
 import { PlayIcon } from "@phosphor-icons/react";
 import type { GalleryCategory, VideoItem } from "@/content/gallery";
@@ -24,7 +24,7 @@ export function VideoTile({ item }: { item: VideoItem }) {
           <iframe src={embedUrl(item.url)} title={item.title} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen className="absolute inset-0 size-full" />
         ) : (
           <button type="button" onClick={() => setPlaying(true)} className="group absolute inset-0" aria-label={`Play video: ${item.title}`}>
-            <Image src={item.poster} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
+            <Picture src={item.poster} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
             <span className="absolute inset-0 grid place-items-center bg-black/30">
               <span className="grid size-16 place-items-center rounded-full bg-electric text-on-accent transition-transform group-hover:scale-105">
                 <PlayIcon weight="fill" aria-hidden className="size-7" />
