@@ -109,8 +109,12 @@ export function articleLd(p: { title: string; description: string; url: string; 
     url: absoluteUrl(p.url),
     datePublished: p.date,
     dateModified: p.updated ?? p.date,
-    author: { "@type": "Organization", name: p.author },
+    // Posts are signed by the team, not a named person, so the author is the organization.
+    author: { "@type": "Organization", name: p.author, url: siteConfig.url },
     publisher: { "@id": `${siteConfig.url}/#organization` },
     mainEntityOfPage: absoluteUrl(p.url),
+    // Google recommends an image for Article rich results: the post's share image.
+    image: absoluteUrl(ogImage(p.url).url),
+    inLanguage: siteConfig.locale,
   };
 }

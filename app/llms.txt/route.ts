@@ -36,10 +36,14 @@ export function GET() {
     link("Agencies", "/agencies", "White-label fulfillment for agencies"),
     link("Academy", "/academy", "Training and courses waitlist"),
     link("FAQ", "/faq"),
+    link("About", "/about"),
     link("Book a strategy call", "/contact"),
     "",
     "## Blog",
     ...getPosts().map((p) => link(p.title, p.url, p.description)),
+    "",
+    "## Contact",
+    `- Email: ${siteConfig.contact.email}`,
     "",
   ];
   return new Response(lines.join("\n"), { headers: { "Content-Type": "text/plain; charset=utf-8" } });
