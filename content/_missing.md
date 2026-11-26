@@ -52,7 +52,7 @@ Supplied on Nov 24, 2026 (docs/CRM_SETUP.md): business emails (hello@, support@)
 ## Accounts and tracking
 
 - [ ] LinkedIn company URL and X account (the other socials are live).
-- [ ] GA4 measurement ID, Meta Pixel ID, Microsoft Clarity ID. The cookie banner only appears once at least one is set.
+- [ ] GA4 measurement ID, Google Tag Manager container ID (optional, use GTM or direct GA4), Meta Pixel ID, Microsoft Clarity ID. Each tag stays off until its ID is set; the cookie banner only appears once at least one is set.
 - [ ] Chat agent widget script URL (`NEXT_PUBLIC_CHAT_WIDGET_SRC`) for the Demo Lab (button hidden).
 
 ## v3 items to confirm (hidden until confirmed)

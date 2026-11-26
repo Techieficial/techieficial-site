@@ -11,9 +11,17 @@ export type ServiceSlug =
   | "ai-agents"
   | "training";
 
-const env = (name: string) => {
-  const value = process.env[name];
-  return value && value.trim() ? value.trim() : undefined;
+/**
+ * Public build variables must be read as literal `process.env.NEXT_PUBLIC_*` expressions:
+ * Next.js only inlines those into browser code. A lookup like process.env[name] stays
+ * undefined in the browser, so client components (forms, cookie banner) would never see the value.
+ */
+const clean = (value: string | undefined) => (value && value.trim() ? value.trim() : undefined);
+
+/** Accepts an ID only if it matches the expected format, so a typo cannot inject script. */
+const id = (value: string | undefined, format: RegExp) => {
+  const v = clean(value);
+  return v && format.test(v) ? v : undefined;
 };
 
 export const siteConfig = {
@@ -35,14 +43,14 @@ export const siteConfig = {
 
   contact: {
     /** General business email (footer, contact page, Organization schema). */
-    email: env("NEXT_PUBLIC_CONTACT_EMAIL") ?? "hello@techieficial.com",
+    email: clean(process.env.NEXT_PUBLIC_CONTACT_EMAIL) ?? "hello@techieficial.com",
     /** Existing-client support email. */
     supportEmail: "support@techieficial.com",
     /** Phone number of the live AI receptionist demo, in international format, e.g. +14155550100. */
-    demoPhone: env("NEXT_PUBLIC_DEMO_PHONE") as string | undefined,
+    demoPhone: clean(process.env.NEXT_PUBLIC_DEMO_PHONE) as string | undefined,
     /** CRM booking calendars (public widget links, docs/CRM_SETUP.md). An env var overrides each. */
-    calendarUrl: env("NEXT_PUBLIC_CALENDAR_URL") ?? "https://api.leadconnectorhq.com/widget/booking/vanlKYhT08mnXvYIySry",
-    testBuildCalendarUrl: env("NEXT_PUBLIC_TESTBUILD_CALENDAR_URL") ?? "https://api.leadconnectorhq.com/widget/booking/lLQv2kiaIh5gGxwypAky",
+    calendarUrl: clean(process.env.NEXT_PUBLIC_CALENDAR_URL) ?? "https://api.leadconnectorhq.com/widget/booking/vanlKYhT08mnXvYIySry",
+    testBuildCalendarUrl: clean(process.env.NEXT_PUBLIC_TESTBUILD_CALENDAR_URL) ?? "https://api.leadconnectorhq.com/widget/booking/lLQv2kiaIh5gGxwypAky",
   },
 
   /** Only accounts that exist. Leave out anything that does not. */
@@ -85,13 +93,15 @@ export const siteConfig = {
   } satisfies Record<ServiceSlug, string>,
 
   analytics: {
-    ga4: env("NEXT_PUBLIC_GA_ID"),
-    metaPixel: env("NEXT_PUBLIC_META_PIXEL_ID"),
-    clarity: env("NEXT_PUBLIC_CLARITY_ID"),
+    // Every tag stays switched off until its ID is set in Cloudflare build variables.
+    gtm: id(process.env.NEXT_PUBLIC_GTM_ID, /^GTM-[A-Z0-9]{4,12}$/),
+    ga4: id(process.env.NEXT_PUBLIC_GA_ID, /^G-[A-Z0-9]{4,15}$/),
+    metaPixel: id(process.env.NEXT_PUBLIC_META_PIXEL_ID, /^\d{6,20}$/),
+    clarity: id(process.env.NEXT_PUBLIC_CLARITY_ID, /^[a-z0-9]{6,20}$/),
   },
 
-  turnstileSiteKey: env("NEXT_PUBLIC_TURNSTILE_SITE_KEY"),
-  chatWidgetSrc: env("NEXT_PUBLIC_CHAT_WIDGET_SRC"),
+  turnstileSiteKey: clean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY),
+  chatWidgetSrc: clean(process.env.NEXT_PUBLIC_CHAT_WIDGET_SRC),
 } as const;
 
 /**
@@ -103,7 +113,7 @@ export const isPreviewBuild =
   Boolean(process.env.WORKERS_CI_BRANCH && process.env.WORKERS_CI_BRANCH !== siteConfig.productionBranch);
 
 export const hasAnalytics = Boolean(
-  siteConfig.analytics.ga4 || siteConfig.analytics.metaPixel || siteConfig.analytics.clarity,
+  siteConfig.analytics.gtm || siteConfig.analytics.ga4 || siteConfig.analytics.metaPixel || siteConfig.analytics.clarity,
 );
 
 export function telHref(phone: string) {
