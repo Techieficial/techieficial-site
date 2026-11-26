@@ -100,6 +100,28 @@ export function serviceLd(s: { name: string; description: string; url: string })
   };
 }
 
+/** Hub pages (/services, /ai-team, /offers): the services listed on the page, in order. */
+export function serviceListLd(name: string, path: string, items: { name: string; description: string; url: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    url: absoluteUrl(path),
+    numberOfItems: items.length,
+    itemListElement: items.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Service",
+        name: s.name,
+        description: s.description,
+        url: absoluteUrl(s.url),
+        provider: { "@id": `${siteConfig.url}/#organization` },
+      },
+    })),
+  };
+}
+
 export function articleLd(p: { title: string; description: string; url: string; date: string; updated?: string; author: string }) {
   return {
     "@context": "https://schema.org",
@@ -112,5 +134,7 @@ export function articleLd(p: { title: string; description: string; url: string; 
     author: { "@type": "Organization", name: p.author },
     publisher: { "@id": `${siteConfig.url}/#organization` },
     mainEntityOfPage: absoluteUrl(p.url),
+    image: absoluteUrl(ogImage(p.url).url),
+    inLanguage: "en",
   };
 }

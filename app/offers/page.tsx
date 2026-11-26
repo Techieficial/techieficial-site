@@ -3,7 +3,8 @@ import { ArrowRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { offersPage, teamBuilder } from "@/content/offers";
 import { addOns, formatUsd, monthlyCovers, offers, pricingFaqs } from "@/content/pricing";
 import { liveHref, liveLinks } from "@/lib/nav";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, serviceListLd } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 import { CTABand, FAQAccordion, PageHero, PricingCard } from "@/components/blocks";
 import { TeamBuilder } from "@/components/TeamBuilder";
 import { Section, SectionHeader } from "@/components/ui";
@@ -24,6 +25,7 @@ export default function OffersPage() {
   const free = liveLinks(offersPage.free);
   return (
     <>
+      <JsonLd data={serviceListLd(offersPage.title, "/offers", offers.map((o) => ({ name: o.name, description: o.tagline, url: `/offers/${o.slug}` })))} />
       <PageHero title={offersPage.title} intro={offersPage.intro} crumbs={[{ name: offersPage.ladderTitle, path: "/offers" }]} />
 
       <Section className="!pt-4" labelledBy="builder-title">

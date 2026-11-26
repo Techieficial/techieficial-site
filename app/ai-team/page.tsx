@@ -1,7 +1,8 @@
 import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { siteConfig } from "@/site.config";
-import { teamPage } from "@/content/team";
-import { pageMetadata } from "@/lib/seo";
+import { team, teamPage, teamUrl } from "@/content/team";
+import { JsonLd } from "@/components/JsonLd";
+import { pageMetadata, serviceListLd } from "@/lib/seo";
 import { CTABand, PageHero } from "@/components/blocks";
 import { TeamCards } from "@/components/team";
 import { Button, Section, SectionHeader } from "@/components/ui";
@@ -13,6 +14,7 @@ export default function AiTeamPage() {
   const wholeTeam = "/offers/ai-front-office";
   return (
     <>
+      <JsonLd data={serviceListLd(teamPage.title, "/ai-team", team.map((m) => ({ name: m.profileName ?? m.name, description: m.line, url: teamUrl(m.slug) })))} />
       <PageHero title={teamPage.title} intro={teamPage.intro} crumbs={[{ name: teamPage.profile.breadcrumb, path: "/ai-team" }]}>
         <div className="flex flex-col gap-3 sm:flex-row">
           {wholeTeam && (
