@@ -1,66 +1,7 @@
 @import "tailwindcss";
 
-/*
- * Colour system: neutrals plus ONE accent (violet). Light and dark themes.
- * The theme follows the visitor's device until they use the switch in the nav,
- * which sets data-theme on <html> (see app/layout.tsx). Change the accent here only.
- */
-:root {
-  --bg: #ffffff;
-  --surface: #f6f7fa;
-  --surface-2: #eef0f5;
-  --rule: #e2e5ec;
-  --ink: #0b0c14;
-  --muted: #596074;
-  --prose: #2b3040;
-  --accent: #6d4aff;
-  --accent-hover: #5b3be8;
-  --accent-text: #5636e0;
-  --headline-from: #5636e0;
-  --headline-to: #8b6bff;
-  --glow: rgba(109, 74, 255, 0.18);
-  --shadow: rgba(11, 12, 20, 0.12);
-  --on-accent: #ffffff;
-  color-scheme: light;
-}
-
-:root[data-theme="dark"] {
-  --bg: #0a0b14;
-  --surface: #12131f;
-  --surface-2: #191b2b;
-  --rule: #24263a;
-  --ink: #f4f5fa;
-  --muted: #9ca3b8;
-  --prose: #d5d9e5;
-  --accent: #6d4aff;
-  --accent-hover: #5b3be8;
-  --accent-text: #a99bff;
-  --headline-from: #b3a4ff;
-  --headline-to: #e4deff;
-  --glow: rgba(109, 74, 255, 0.32);
-  --shadow: rgba(0, 0, 0, 0.6);
-  --on-accent: #ffffff;
-  color-scheme: dark;
-}
-
-/* Without JavaScript, follow the device setting. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --bg: #0a0b14;
-    --surface: #12131f;
-    --surface-2: #191b2b;
-    --rule: #24263a;
-    --ink: #f4f5fa;
-    --muted: #9ca3b8;
-    --prose: #d5d9e5;
-    --accent-text: #a99bff;
-    --headline-from: #b3a4ff;
-    --headline-to: #e4deff;
-    --glow: rgba(109, 74, 255, 0.32);
-    --shadow: rgba(0, 0, 0, 0.6);
-    color-scheme: dark;
-  }
-}
+/* Theme colours live in design/tokens.json; app/tokens.css is generated from it (npm run tokens). */
+@import "./tokens.css";
 
 /* Older class names kept as aliases of the single accent. */
 :root {

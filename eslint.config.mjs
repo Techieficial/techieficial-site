@@ -13,6 +13,10 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     ".claude/**",
+    // Generated output.
+    "storybook-static/**",
+    "test-results/**",
+    "playwright-report/**",
     ".agents/**",
     ".impeccable/**",
     ".open-next/**",

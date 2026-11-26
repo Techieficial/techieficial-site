@@ -1,0 +1,65 @@
+import { Meta, ColorPalette, ColorItem, Typeset } from "@storybook/addon-docs/blocks";
+import tokens from "../design/tokens.json";
+
+<Meta title="Foundations/Design tokens" />
+
+# Design tokens
+
+One source of truth: `design/tokens.json`. Run `npm run tokens` after editing it; that regenerates `app/tokens.css`, which the site and this Storybook both load. `npm run check` fails if the two drift.
+
+**Rules:** neutrals plus one violet accent; light and dark themes; never hardcode colours in a component, use the tokens. Use the theme switch in the toolbar to see both.
+
+## Light theme
+
+<ColorPalette>
+  {Object.entries(tokens.color.light).map(([name, value]) => (
+    <ColorItem key={name} title={name} subtitle={`--${name}`} colors={[value]} />
+  ))}
+</ColorPalette>
+
+## Dark theme
+
+<ColorPalette>
+  {Object.entries(tokens.color.dark).map(([name, value]) => (
+    <ColorItem key={name} title={name} subtitle={`--${name}`} colors={[value]} />
+  ))}
+</ColorPalette>
+
+## Service shades
+
+<ColorPalette>
+  {Object.entries(tokens.color.service).filter(([k]) => !k.startsWith("$")).map(([name, value]) => (
+    <ColorItem key={name} title={name} colors={[value]} />
+  ))}
+</ColorPalette>
+
+## Type
+
+Headings: Space Grotesk 600/700. Body: Inter 400/500. Fluid sizes:
+
+<table>
+  <tbody>
+    {Object.entries(tokens.text).map(([name, value]) => (
+      <tr key={name}>
+        <td><code>--text-{name}</code></td>
+        <td><code>{value}</code></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Radius, spacing, shadow, motion
+
+<table>
+  <tbody>
+    {["radius", "space", "shadow", "motion"].flatMap((group) =>
+      Object.entries(tokens[group]).filter(([k]) => !k.startsWith("$")).map(([name, value]) => (
+        <tr key={group + name}>
+          <td>{group}</td>
+          <td><code>{name}</code></td>
+          <td>{value}</td>
+        </tr>
+      )),
+    )}
+  </tbody>
+</table>
