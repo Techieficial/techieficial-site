@@ -69,10 +69,19 @@ const json = (body: object, status = 200) => Response.json(body, { status });
  * Shared handler for /api/lead (every form) and /api/callme (Demo Lab "call me").
  * `kind` picks the webhook: callme uses CRM_CALLME_WEBHOOK_URL, falling back to CRM_WEBHOOK_URL.
  */
+/** Largest form body accepted (the longest form, with a 4,000-character message, is well under this). */
+export const MAX_BODY_BYTES = 16 * 1024;
+
 export async function handleLead(request: Request, kind: "lead" | "callme") {
+  // JSON only: a cross-site HTML form cannot send this content type without a CORS preflight, which is never allowed.
+  if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) return json({ error: "unsupported_media_type" }, 415);
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) return json({ error: "too_large" }, 413);
+
   let raw: unknown;
   try {
-    raw = await request.json();
+    const body = await request.text();
+    if (new TextEncoder().encode(body).length > MAX_BODY_BYTES) return json({ error: "too_large" }, 413);
+    raw = JSON.parse(body);
   } catch {
     return json({ error: "invalid_json" }, 400);
   }

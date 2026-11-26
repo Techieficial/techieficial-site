@@ -3,7 +3,8 @@ import { accentText, type ServiceSlug } from "@/site.config";
 import { servicesHub } from "@/content/pages";
 import { featuredOffers } from "@/content/pricing";
 import { getServicePages, serviceBySlug } from "@/lib/content";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, serviceListLd } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 import { CTABand, PageHero, PricingCard, ServiceCard } from "@/components/blocks";
 import { Reveal } from "@/components/Reveal";
 import { Button, Section, SectionHeader } from "@/components/ui";
@@ -15,6 +16,7 @@ export default function ServicesHubPage() {
   const services = getServicePages();
   return (
     <>
+      <JsonLd data={serviceListLd(servicesHub.title, "/services", getServicePages().map((s) => ({ name: s.name, description: s.outcome, url: s.url })))} />
       <PageHero title={servicesHub.title} intro={servicesHub.intro} crumbs={[{ name: "Services", path: "/services" }]} />
 
       <Section className="!pt-4" labelledBy="all-services">

@@ -66,3 +66,26 @@ test("llms.txt lists the key pages", async ({ request }) => {
   }
   expect(txt).not.toMatch(/—/);
 });
+
+test("hub pages list their services as ItemList structured data", async ({ page }) => {
+  for (const path of ["/services", "/ai-team", "/offers"]) {
+    await page.goto(path);
+    const types = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((t) => JSON.parse(t)["@type"]);
+    expect(types, path).toContain("ItemList");
+  }
+});
+
+test("internal links: service pages reach demo, offers and 2 industries; industry pages reach 2 services", async ({ page, request }) => {
+  const xml = await (await request.get("/sitemap.xml")).text();
+  const paths = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
+  const failures: string[] = [];
+  for (const path of paths.filter((p) => /^\/(services|industries)\/[^/]+$/.test(p))) {
+    await page.goto(path);
+    const hrefs = await page.locator("main a[href^='/']").evaluateAll((as) => as.map((a) => (a.getAttribute("href") ?? "").split(/[?#]/)[0]));
+    if (path.startsWith("/services/")) {
+      for (const need of ["/demo", "/offers"]) if (!hrefs.includes(need)) failures.push(`${path}: no link to ${need}`);
+      if (new Set(hrefs.filter((h) => h.startsWith("/industries/"))).size < 2) failures.push(`${path}: fewer than 2 industry links`);
+    } else if (new Set(hrefs.filter((h) => /^\/(services\/|ai-team)/.test(h))).size < 2) failures.push(`${path}: fewer than 2 service links`);
+  }
+  expect(failures, failures.join("\n")).toEqual([]);
+});

@@ -25,6 +25,16 @@ describe("handleLead", () => {
     expect(res.status).toBe(200);
     expect(fetchMock).toHaveBeenCalledWith("https://crm.test/hook", expect.objectContaining({ method: "POST" }));
   });
+  it("rejects non-JSON (415) and bodies over 16 KB (413) without calling the CRM", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch");
+    const handle = await handler();
+    const form = new Request("http://localhost/api/lead", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: "source=newsletter" });
+    expect((await handle(form, "lead")).status).toBe(415);
+    expect((await handle(post({ ...LEAD, message: "x".repeat(20_000) }), "lead")).status).toBe(413);
+    expect((await handle(post(LEAD, { "content-length": "999999" }), "lead")).status).toBe(413);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it("rejects invalid JSON (400) and invalid fields (422)", async () => {
     const h = await handler();
     expect((await h(post("{"), "lead")).status).toBe(400);
