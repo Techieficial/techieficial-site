@@ -1,0 +1,7 @@
+{
+  "$comment": "Per-page limits, gzip KB, set at Nov 26, 2026 levels plus ~8% headroom. Raise only on purpose. Checked by scripts/check-budget.mjs (every built page) and lighthouserc.json (4 key pages).",
+  "jsKbPerPage": 245,
+  "jsKbHome": 280,
+  "cssKbPerPage": 20,
+  "htmlKbPerPage": 60
+}

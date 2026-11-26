@@ -57,7 +57,9 @@ run("0. Secret scan", "node scripts/scan-secrets.mjs");
 run("1. Types", "npm run typecheck");
 run("2. Lint", "npx eslint .");
 run("2b. Unit tests", "npx vitest run");
+run("2c. Images up to date", "node scripts/optimize-images.mjs --check");
 run("3-4. Production build + placeholder scan", "npm run build");
+run("4b. Performance budget", "node scripts/check-budget.mjs");
 run("5-6. End-to-end + accessibility tests", "npx playwright test");
 
 await startServer();

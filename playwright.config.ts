@@ -26,7 +26,7 @@ export default defineConfig({
       url: `http://127.0.0.1:${PORT}/`,
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
-      env: { CRM_WEBHOOK_URL: "http://127.0.0.1:3999/hook", CRM_CALLME_WEBHOOK_URL: "http://127.0.0.1:3999/callme" },
+      env: { CRM_WEBHOOK_URL: "http://127.0.0.1:3999/hook", CRM_CALLME_WEBHOOK_URL: "http://127.0.0.1:3999/callme", RATE_LIMIT_BINDINGS: "off" },
     },
   ],
 });

@@ -1,3 +1,4 @@
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { leadSchema } from "./lead";
 import { toCrmPayload } from "./crm";
 
@@ -19,6 +20,33 @@ function limited(key: string, max: number) {
   hits.set(key, recent);
   if (hits.size > 5000) hits.clear();
   return recent.length > max;
+}
+
+/** Largest form body accepted (the longest form, with a 4,000-character message, is well under this). */
+export const MAX_BODY_BYTES = 16 * 1024;
+
+type RateLimiter = { limit(options: { key: string }): Promise<{ success: boolean }> };
+
+/**
+ * Hard limit shared by every Worker instance: Cloudflare's rate limiting binding (wrangler.jsonc "ratelimits").
+ * Missing locally and in tests, where only the in-memory limiter applies.
+ */
+async function bindingLimited(binding: "LEAD_IP_LIMITER" | "CALLME_PHONE_LIMITER", key: string) {
+  // The e2e suite posts many forms from one IP; it switches the shared limiter off (playwright.config.ts).
+  if (process.env.RATE_LIMIT_BINDINGS === "off") return false;
+  let limiter: RateLimiter | undefined;
+  try {
+    limiter = (getCloudflareContext().env as unknown as Record<string, RateLimiter | undefined>)[binding];
+  } catch {
+    return false; // Not running on Cloudflare (next start, tests).
+  }
+  if (!limiter) return false;
+  try {
+    return !(await limiter.limit({ key })).success;
+  } catch (e) {
+    console.error("rate limiter failed open", binding, e);
+    return false;
+  }
 }
 
 async function verifyTurnstile(token: string | undefined, ip: string | null) {
@@ -52,9 +80,15 @@ const json = (body: object, status = 200) => Response.json(body, { status });
  * `kind` picks the webhook: callme uses CRM_CALLME_WEBHOOK_URL, falling back to CRM_WEBHOOK_URL.
  */
 export async function handleLead(request: Request, kind: "lead" | "callme") {
+  // JSON only: a cross-site form post cannot send this content type without a CORS preflight, which we never allow.
+  if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) return json({ error: "unsupported_media_type" }, 415);
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) return json({ error: "too_large" }, 413);
+
   let raw: unknown;
   try {
-    raw = await request.json();
+    const body = await request.text();
+    if (new TextEncoder().encode(body).length > MAX_BODY_BYTES) return json({ error: "too_large" }, 413);
+    raw = JSON.parse(body);
   } catch {
     return json({ error: "invalid_json" }, 400);
   }
@@ -67,9 +101,10 @@ export async function handleLead(request: Request, kind: "lead" | "callme") {
   const lead = parsed.data;
 
   const ip = request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for");
-  if (ip && limited(`ip:${ip}`, LIMIT_PER_IP)) return json({ error: "rate_limited" }, 429);
-  if (lead.source === "demo-callme" && lead.phone && limited(`phone:${lead.phone.replace(/\D/g, "")}`, LIMIT_PER_PHONE)) {
-    return json({ error: "rate_limited" }, 429);
+  if (ip && (limited(`ip:${ip}`, LIMIT_PER_IP) || (await bindingLimited("LEAD_IP_LIMITER", `ip:${ip}`)))) return json({ error: "rate_limited" }, 429);
+  if (lead.source === "demo-callme" && lead.phone) {
+    const phoneKey = `phone:${lead.phone.replace(/\D/g, "")}`;
+    if (limited(phoneKey, LIMIT_PER_PHONE) || (await bindingLimited("CALLME_PHONE_LIMITER", phoneKey))) return json({ error: "rate_limited" }, 429);
   }
 
   if (!(await verifyTurnstile(lead.turnstileToken, ip))) return json({ error: "spam_check_failed" }, 403);

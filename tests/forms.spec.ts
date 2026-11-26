@@ -175,3 +175,13 @@ test("Team Builder recommends an offer by the v3 rules and passes the choices to
   await expect(page).toHaveURL(/\/contact\?package=AI(\+|%20)Front(\+|%20)Office/);
   await expect(page.getByText("Your choices")).toBeVisible();
 });
+
+test("lead API rejects non-JSON and oversized bodies", async ({ request }) => {
+  const form = await request.post("/api/lead", { form: { source: "newsletter", email: "a@test.dev" } });
+  expect(form.status()).toBe(415);
+  const big = await request.post("/api/lead", {
+    headers: { "Content-Type": "application/json" },
+    data: JSON.stringify({ source: "newsletter", email: "a@test.dev", message: "x".repeat(20_000) }),
+  });
+  expect(big.status()).toBe(413);
+});

@@ -23,6 +23,8 @@ const csp = [
   `connect-src 'self' https://challenges.cloudflare.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com https://www.facebook.com ${chat}`,
   `frame-src https://challenges.cloudflare.com https://www.youtube-nocookie.com https://player.vimeo.com ${calendar} ${chat}`,
   "media-src 'self'",
+  "manifest-src 'self'",
+  "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -38,6 +40,8 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "DENY" },
+  // Keeps other sites' windows from reaching this one; popups (checkout, calendar) still work.
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()" },
 ];
 
