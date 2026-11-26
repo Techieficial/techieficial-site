@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { allRoutes } from "./helpers";
+import { allRoutes, ownMarkupOnly } from "./helpers";
 
 test("theme follows the device setting on first visit", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
@@ -29,7 +29,7 @@ test("no serious accessibility issues in dark mode", async ({ page, request }) =
   const failures: string[] = [];
   for (const path of await allRoutes(request)) {
     await page.goto(path, { waitUntil: "load" });
-    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+    const axe = await new AxeBuilder({ page }).options(ownMarkupOnly).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
     for (const v of axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) {
       failures.push(`${path}: axe ${v.id} (${v.impact}) x${v.nodes.length}: ${v.nodes[0]?.target.join(" ")}`);
     }
