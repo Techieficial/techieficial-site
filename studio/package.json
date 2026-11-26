@@ -1,0 +1,32 @@
+{
+  "name": "techieficial-studio",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Content studio for techieficial.com (local first, not yet connected to a project).",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "DO_NOT_TRACK=1 sanity dev",
+    "build": "DO_NOT_TRACK=1 sanity build --yes",
+    "build:local": "SANITY_STUDIO_PROJECT_ID=${SANITY_STUDIO_PROJECT_ID:-localdummy} SANITY_STUDIO_DATASET=${SANITY_STUDIO_DATASET:-development} DO_NOT_TRACK=1 sanity build --yes",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm test && npm run schema:validate && npm run build:local",
+    "schema:validate": "SANITY_STUDIO_PROJECT_ID=${SANITY_STUDIO_PROJECT_ID:-localdummy} DO_NOT_TRACK=1 sanity schema validate"
+  },
+  "dependencies": {
+    "@sanity/vision": "6.25.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "sanity": "6.25.0",
+    "styled-components": "6.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.7",
+    "@types/react": "19.3.3",
+    "typescript": "6.0.3",
+    "vitest": "5.1.2"
+  }
+}
