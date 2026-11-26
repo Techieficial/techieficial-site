@@ -26,7 +26,12 @@ export function htmlText(html: string) {
 export const countOf = (text: string, needle: string) => text.split(needle).length - 1;
 
 /**
- * axe options for the site's own markup. Third-party iframes (the CRM booking calendar, video players)
- * are not scanned inside: we cannot change their markup. The iframe element itself (title etc.) is still checked.
+ * axe results for the site's own markup. Third-party iframes (the CRM booking calendar on /demo, video players)
+ * are not judged on their inner markup, which we cannot change: axe gives an element inside a frame a target
+ * with more than one part (frame, then element). The iframe element itself (frame-title etc.) is still checked.
  */
-export const ownMarkupOnly = { iframes: false } as const;
+export function ownViolations<T extends { nodes: { target: unknown[] }[] }>(violations: T[]): T[] {
+  return violations
+    .map((v) => ({ ...v, nodes: v.nodes.filter((n) => n.target.length === 1) }))
+    .filter((v) => v.nodes.length > 0);
+}

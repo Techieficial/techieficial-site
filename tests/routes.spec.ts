@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { allRoutes, ownMarkupOnly } from "./helpers";
+import { allRoutes, ownViolations } from "./helpers";
 
 test("every route: 200, one H1, title, description, canonical, no serious a11y issues", async ({ page, request }) => {
   test.setTimeout(240_000);
@@ -23,8 +23,8 @@ test("every route: 200, one H1, title, description, canonical, no serious a11y i
       const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
       if (!canonical) failures.push(`${path}: no canonical`);
     }
-    const axe = await new AxeBuilder({ page }).options(ownMarkupOnly).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
-    for (const v of axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) {
+    const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+    for (const v of ownViolations(axe.violations).filter((v) => v.impact === "serious" || v.impact === "critical")) {
       failures.push(`${path}: axe ${v.id} (${v.impact}) x${v.nodes.length}: ${v.nodes[0]?.target.join(" ")}`);
     }
   }
