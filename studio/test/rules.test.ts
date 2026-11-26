@@ -14,7 +14,7 @@ import {
 
 describe("copy rules", () => {
   it("rejects an em dash", () => {
-    expect(copyProblem("Fast — and friendly")).toBe(messages.emDash);
+    expect(copyProblem("Fast \u2014 and friendly")).toBe(messages.emDash);
   });
 
   it("allows commas, colons, hyphens and en dashes", () => {
@@ -37,7 +37,7 @@ describe("copy rules", () => {
       title: "Fine",
       seo: { title: "Built on HighLevel", description: "ok" },
       sections: [
-        { _key: "a1", _type: "textSection", body: [{ _key: "b1", _type: "block", children: [{ _key: "s1", _type: "span", text: "One — two" }] }] },
+        { _key: "a1", _type: "textSection", body: [{ _key: "b1", _type: "block", children: [{ _key: "s1", _type: "span", text: "One \u2014 two" }] }] },
       ],
       list: ["ok", "GHL"],
     };
@@ -50,7 +50,7 @@ describe("copy rules", () => {
 
   it("document rule returns true for clean documents and paths for bad ones", () => {
     expect(siteCopyRule({ title: "Clean copy" })).toBe(true);
-    expect(siteCopyRule({ title: "Bad — copy" })).toEqual([{ path: ["title"], message: messages.emDash }]);
+    expect(siteCopyRule({ title: "Bad \u2014 copy" })).toEqual([{ path: ["title"], message: messages.emDash }]);
     expect(siteCopyRule(undefined)).toBe(true);
   });
 
@@ -69,7 +69,7 @@ describe("length limits", () => {
   });
 
   it("also applies the copy rules", () => {
-    expect(maxLength(60)("Short — title")).toBe(messages.emDash);
+    expect(maxLength(60)("Short \u2014 title")).toBe(messages.emDash);
   });
 
   it("ignores empty values (required() handles those)", () => {

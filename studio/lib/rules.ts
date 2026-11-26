@@ -3,7 +3,7 @@
  * without the Studio. Schemas wire them in through `rule.custom(...)`.
  */
 
-export const EM_DASH = "—";
+export const EM_DASH = "\u2014";
 
 /**
  * The CRM vendor name, in its common spellings. Visible copy always says "CRM".
