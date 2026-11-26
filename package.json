@@ -16,7 +16,9 @@
     "check": "node scripts/check.mjs",
     "test:e2e": "playwright test",
     "check:fast": "node scripts/check.mjs --no-lighthouse",
-    "og": "node scripts/generate-og.mjs"
+    "og": "node scripts/generate-og.mjs",
+    "storybook": "velite && storybook dev -p 6006",
+    "build-storybook": "velite && storybook build -o storybook-static --quiet"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.6",
@@ -32,7 +34,11 @@
     "@axe-core/playwright": "^4.13.0",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.63.0",
+    "@storybook/addon-a11y": "10.6.7",
+    "@storybook/addon-themes": "10.6.7",
+    "@storybook/nextjs-vite": "10.6.7",
     "@tailwindcss/postcss": "^4",
+    "@tailwindcss/vite": "4.3.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -40,8 +46,10 @@
     "eslint-config-next": "16.3.6",
     "linkinator": "^8.1.0",
     "rehype-slug": "^6.0.0",
+    "storybook": "10.6.7",
     "tailwindcss": "^4",
     "typescript": "^5",
+    "vite": "8.3.8",
     "wrangler": "^4.137.0"
   }
 }
