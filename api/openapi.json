@@ -1,0 +1,644 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "HealthController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Liveness check",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/v1/leads": {
+      "post": {
+        "description": "Validates the form, stores it in the leads log, then sends the flat CRM payload to the CRM webhook when one is configured.",
+        "operationId": "LeadsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadAcceptedDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Body is not valid JSON.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "A field is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Log a website lead and forward it to the CRM",
+        "tags": [
+          "leads"
+        ]
+      }
+    },
+    "/v1/portal/projects": {
+      "get": {
+        "description": "Clients see their own business's projects. Staff and admins see all.",
+        "operationId": "PortalController_listProjects",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid access token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List the signed-in client's projects",
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/v1/portal/projects/{id}": {
+      "get": {
+        "operationId": "PortalController_getProject",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid access token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "One project, if the signed-in user may see it",
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/v1/portal/tickets": {
+      "post": {
+        "operationId": "PortalController_createTicket",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewTicketDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid access token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Open a support ticket",
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/v1/assistant/chat": {
+      "post": {
+        "operationId": "AssistantController_chat",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "501": {
+            "description": "The assistant is not switched on yet.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Ask the website assistant (not switched on yet)",
+        "tags": [
+          "assistant"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Techieficial API",
+    "description": "Backend for the client portal, the website lead log and the AI assistant. Every route is rate limited per IP. Errors always use the ErrorResponse shape.",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "description": "Supabase access token of a signed-in portal user."
+      }
+    },
+    "schemas": {
+      "HealthDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ok"
+          },
+          "dataStore": {
+            "type": "string",
+            "enum": [
+              "memory",
+              "supabase"
+            ],
+            "description": "Where data is stored."
+          },
+          "crmForwarding": {
+            "type": "boolean",
+            "description": "Whether leads are forwarded to the CRM."
+          },
+          "uptime": {
+            "type": "number",
+            "description": "Seconds since the process started."
+          }
+        },
+        "required": [
+          "status",
+          "dataStore",
+          "crmForwarding",
+          "uptime"
+        ]
+      },
+      "UtmDto": {
+        "type": "object",
+        "properties": {
+          "utm_source": {
+            "type": "string"
+          },
+          "utm_medium": {
+            "type": "string"
+          },
+          "utm_campaign": {
+            "type": "string"
+          },
+          "utm_content": {
+            "type": "string"
+          },
+          "utm_term": {
+            "type": "string"
+          }
+        }
+      },
+      "LeadDto": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "contact",
+              "demo-callme",
+              "test-build",
+              "newsletter",
+              "academy",
+              "agency",
+              "audit",
+              "calculator"
+            ],
+            "description": "Which form sent the lead. Sets the CRM source and tag."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "description": "Required except for newsletter and calculator."
+          },
+          "company": {
+            "type": "string",
+            "maxLength": 120,
+            "description": "Required for audit and test-build."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 254
+          },
+          "phone": {
+            "type": "string",
+            "description": "Required for demo-callme, contact and audit."
+          },
+          "businessType": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "goal": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "budget": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 4000
+          },
+          "smsConsent": {
+            "type": "boolean",
+            "default": false,
+            "description": "SMS consent checkbox. Unchecked by default."
+          },
+          "answers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Extra form answers, question to answer."
+          },
+          "selection": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Engine Builder or offer selection."
+          },
+          "page": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Page the form was on."
+          },
+          "utm": {
+            "$ref": "#/components/schemas/UtmDto"
+          },
+          "website": {
+            "type": "string",
+            "description": "Honeypot. Must stay empty; real people never fill it in."
+          },
+          "turnstileToken": {
+            "type": "string",
+            "maxLength": 4096,
+            "description": "Spam check token from the site form. Checked by the site before it calls the API."
+          }
+        },
+        "required": [
+          "source",
+          "email"
+        ]
+      },
+      "LeadAcceptedDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "ok"
+        ]
+      },
+      "ErrorResponseDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 422
+          },
+          "error": {
+            "type": "string",
+            "example": "validation_failed",
+            "description": "Stable machine-readable code."
+          },
+          "message": {
+            "type": "string",
+            "example": "Some fields are missing or invalid."
+          },
+          "fields": {
+            "example": [
+              "email"
+            ],
+            "description": "Fields that failed validation.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requestId": {
+            "type": "string",
+            "example": "5f0c6e1e-8a7b-4a43-9a52-1f2d3c4b5a69"
+          }
+        },
+        "required": [
+          "statusCode",
+          "error",
+          "message",
+          "requestId"
+        ]
+      },
+      "ProjectDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "clientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "kickoff",
+              "build",
+              "review",
+              "live",
+              "operate"
+            ],
+            "description": "Delivery stage: kickoff, build, review, live, operate."
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          },
+          "startedOn": {
+            "type": "string",
+            "nullable": true,
+            "format": "date"
+          },
+          "liveOn": {
+            "type": "string",
+            "nullable": true,
+            "format": "date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "clientId",
+          "name",
+          "status",
+          "summary",
+          "startedOn",
+          "liveOn",
+          "updatedAt"
+        ]
+      },
+      "NewTicketDto": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Project the ticket is about."
+          },
+          "subject": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 5000
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "normal",
+              "high",
+              "urgent"
+            ],
+            "default": "normal"
+          }
+        },
+        "required": [
+          "subject",
+          "body"
+        ]
+      },
+      "TicketDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "clientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "normal",
+              "high",
+              "urgent"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "in_progress",
+              "waiting",
+              "closed"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "clientId",
+          "projectId",
+          "createdBy",
+          "subject",
+          "body",
+          "priority",
+          "status",
+          "createdAt"
+        ]
+      },
+      "ChatDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "sessionId": {
+            "type": "string",
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "message"
+        ]
+      }
+    }
+  }
+}
