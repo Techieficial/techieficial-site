@@ -17,6 +17,10 @@ const eslintConfig = defineConfig([
     ".impeccable/**",
     ".open-next/**",
     ".wrangler/**",
+    // Separate packages with their own tooling (v3 session B).
+    "studio/**",
+    "api/**",
+    "supabase/**",
   ]),
 ]);
 
