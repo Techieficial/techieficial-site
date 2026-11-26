@@ -20,7 +20,8 @@
     "storybook": "velite && storybook dev -p 6006",
     "build-storybook": "velite && storybook build -o storybook-static --quiet",
     "tokens": "node scripts/build-tokens.mjs",
-    "storybook:test": "npm run build-storybook && playwright test -c playwright.storybook.config.ts"
+    "storybook:test": "npm run build-storybook && playwright test -c playwright.storybook.config.ts",
+    "test": "velite && vitest run"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.6",
@@ -41,7 +42,7 @@
     "@storybook/addon-themes": "10.6.7",
     "@storybook/nextjs-vite": "10.6.7",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
@@ -53,6 +54,7 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vite": "7.3.8",
+    "vitest": "5.1.0",
     "wrangler": "^4.137.0"
   }
 }

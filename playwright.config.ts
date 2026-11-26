@@ -6,6 +6,8 @@ const localChromium = "/opt/pw-browsers/chromium";
 
 export default defineConfig({
   testDir: "tests",
+  // Unit tests in tests/unit (*.test.ts) run with Vitest, not Playwright.
+  testMatch: "**/*.spec.ts",
   fullyParallel: true,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? "github" : "list",

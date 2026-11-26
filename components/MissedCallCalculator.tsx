@@ -6,6 +6,7 @@ import { formatUsd } from "@/content/pricing";
 import { siteConfig, telHref } from "@/site.config";
 import { Button } from "@/components/ui";
 import { LeadForm } from "@/components/forms/LeadForm";
+import { monthlyLostRevenue } from "@/lib/calculator";
 
 const fields = [
   { key: "calls", label: t.inputs.calls, max: 10000 },
@@ -16,17 +17,13 @@ const fields = [
 
 type Key = (typeof fields)[number]["key"];
 
-/**
- * Missed-call calculator (docs/SITE_CONTENT_V3.md 2.8):
- * monthly lost revenue = calls per week x 4.3 x missed % x booking % x average job value.
- * Runs entirely in the browser; the result is announced to screen readers.
- */
+/** Missed-call calculator (formula in lib/calculator.ts). Runs entirely in the browser; the result is announced to screen readers. */
 export function MissedCallCalculator() {
   const uid = useId();
   const [values, setValues] = useState<Record<Key, string>>({ calls: "", missed: "", booking: "", jobValue: "" });
   const nums = Object.fromEntries(fields.map((f) => [f.key, Number(values[f.key])])) as Record<Key, number>;
   const complete = fields.every((f) => values[f.key] !== "" && Number.isFinite(nums[f.key]) && nums[f.key] >= 0);
-  const monthly = complete ? nums.calls * 4.3 * (Math.min(nums.missed, 100) / 100) * (Math.min(nums.booking, 100) / 100) * nums.jobValue : 0;
+  const monthly = complete ? monthlyLostRevenue(nums) : 0;
   const month = formatUsd(Math.round(monthly));
   const year = formatUsd(Math.round(monthly * 12));
   const phone = siteConfig.contact.demoPhone;

@@ -8,8 +8,12 @@ concurrency:
   group: check-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   check:
+    name: Site checks
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -20,7 +24,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # Types, lint, build + placeholder scan, e2e + axe, broken links, Lighthouse.
+      # Tokens, types, lint, unit tests, build + placeholder scan, e2e + axe, broken links, Lighthouse.
       - run: npm run check
         env:
           CI: "true"
@@ -33,3 +37,39 @@ jobs:
             test-results/
             .lighthouseci/
           retention-days: 7
+
+  storybook:
+    name: Storybook build + axe
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run storybook:test
+        env:
+          CI: "true"
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GITLEAKS_VERSION: 8.30.0
+      # From the release's gitleaks_8.30.0_checksums.txt (linux_x64).
+      GITLEAKS_SHA256: 79a3ab579b53f71efd634f3aaf7e04a0fa0cf206b7ed434638d1547a2470a66e
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install gitleaks (checksum verified)
+        run: |
+          curl -sSfL -o gitleaks.tgz "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  gitleaks.tgz" | sha256sum -c -
+          tar xzf gitleaks.tgz gitleaks
+      # Scans every commit on the branch. Fails if any key, token or webhook-looking secret was ever committed.
+      - run: ./gitleaks git --redact --verbose .
