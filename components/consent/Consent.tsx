@@ -6,6 +6,9 @@ import { useCallback, useEffect, useState } from "react";
 import { cookieBanner } from "@/content/pages";
 import { hasAnalytics, siteConfig } from "@/site.config";
 import { track, type ConversionEvent } from "@/lib/analytics";
+import { consentModeState, tagsToLoad, validIds } from "@/lib/consent";
+
+const ids = validIds(siteConfig.analytics);
 
 type Consent = { analytics: boolean; marketing: boolean; decided: boolean };
 const KEY = "tf_consent";
@@ -59,39 +62,44 @@ export function ConsentManager() {
     } catch {}
     setConsent({ ...next, decided: true });
     setOpen(false);
-    const w = window as Window & { gtag?: (...a: unknown[]) => void };
-    w.gtag?.("consent", "update", {
-      analytics_storage: next.analytics ? "granted" : "denied",
-      ad_storage: next.marketing ? "granted" : "denied",
-      ad_user_data: next.marketing ? "granted" : "denied",
-      ad_personalization: next.marketing ? "granted" : "denied",
-    });
+    const w = window as Window & { gtag?: (...a: unknown[]) => void; clarity?: (...a: unknown[]) => void; fbq?: (...a: unknown[]) => void };
+    w.gtag?.("consent", "update", consentModeState(next));
+    // Tags already running honour a changed choice straight away (they are not loaded again until the next visit).
+    w.clarity?.("consent", next.analytics);
+    w.fbq?.("consent", next.marketing ? "grant" : "revoke");
   }, []);
 
   if (!hasAnalytics || !consent) return null;
-  const { ga4, metaPixel, clarity } = siteConfig.analytics;
+  const load = new Set(tagsToLoad(ids, consent.decided ? consent : null));
+  const { gtm, ga4, clarity, metaPixel } = ids;
 
   return (
     <>
-      {ga4 && (
+      {/* Consent Mode v2: denied by default, then the stored choice. Runs before any Google tag. */}
+      {(gtm || ga4) && (
         <Script id="consent-default" strategy="afterInteractive">
-          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});`}
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('consent','default',${JSON.stringify(consentModeState(null))});${consent.decided ? `gtag('consent','update',${JSON.stringify(consentModeState(consent))});` : ""}`}
         </Script>
       )}
-      {ga4 && consent.analytics && (
+      {load.has("gtm") && (
+        <Script id="gtm" strategy="afterInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtm}');`}
+        </Script>
+      )}
+      {load.has("ga4") && (
         <>
           <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4}`} strategy="afterInteractive" />
           <Script id="ga4" strategy="afterInteractive">
-            {`gtag('consent','update',{analytics_storage:'granted'});gtag('js',new Date());gtag('config','${ga4}');`}
+            {`gtag('js',new Date());gtag('config','${ga4}');`}
           </Script>
         </>
       )}
-      {clarity && consent.analytics && (
+      {load.has("clarity") && (
         <Script id="clarity" strategy="lazyOnload">
-          {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarity}");`}
+          {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarity}");clarity("consent",true);`}
         </Script>
       )}
-      {metaPixel && consent.marketing && (
+      {load.has("metaPixel") && (
         <Script id="meta-pixel" strategy="lazyOnload">
           {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${metaPixel}');fbq('track','PageView');`}
         </Script>

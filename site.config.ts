@@ -4,6 +4,8 @@
  * is hidden automatically, so the site never shows a placeholder.
  */
 
+import { validIds } from "./lib/consent";
+
 export type ServiceSlug =
   | "marketing-automation"
   | "paid-ads"
@@ -11,10 +13,12 @@ export type ServiceSlug =
   | "ai-agents"
   | "training";
 
-const env = (name: string) => {
-  const value = process.env[name];
-  return value && value.trim() ? value.trim() : undefined;
-};
+/**
+ * Trims an env value; empty means "not set". Always pass process.env.NEXT_PUBLIC_X written out in full:
+ * Next.js only copies public values into browser code when the name appears literally, so a lookup by a
+ * variable name would be empty in client components (tests/unit/env.test.ts guards this).
+ */
+const env = (value: string | undefined) => (value && value.trim() ? value.trim() : undefined);
 
 export const siteConfig = {
   name: "Techieficial",
@@ -35,14 +39,14 @@ export const siteConfig = {
 
   contact: {
     /** General business email (footer, contact page, Organization schema). */
-    email: env("NEXT_PUBLIC_CONTACT_EMAIL") ?? "hello@techieficial.com",
+    email: env(process.env.NEXT_PUBLIC_CONTACT_EMAIL) ?? "hello@techieficial.com",
     /** Existing-client support email. */
     supportEmail: "support@techieficial.com",
     /** Phone number of the live AI receptionist demo, in international format, e.g. +14155550100. */
-    demoPhone: env("NEXT_PUBLIC_DEMO_PHONE") as string | undefined,
+    demoPhone: env(process.env.NEXT_PUBLIC_DEMO_PHONE) as string | undefined,
     /** CRM booking calendars (public widget links, docs/CRM_SETUP.md). An env var overrides each. */
-    calendarUrl: env("NEXT_PUBLIC_CALENDAR_URL") ?? "https://api.leadconnectorhq.com/widget/booking/vanlKYhT08mnXvYIySry",
-    testBuildCalendarUrl: env("NEXT_PUBLIC_TESTBUILD_CALENDAR_URL") ?? "https://api.leadconnectorhq.com/widget/booking/lLQv2kiaIh5gGxwypAky",
+    calendarUrl: env(process.env.NEXT_PUBLIC_CALENDAR_URL) ?? "https://api.leadconnectorhq.com/widget/booking/vanlKYhT08mnXvYIySry",
+    testBuildCalendarUrl: env(process.env.NEXT_PUBLIC_TESTBUILD_CALENDAR_URL) ?? "https://api.leadconnectorhq.com/widget/booking/lLQv2kiaIh5gGxwypAky",
   },
 
   /** Only accounts that exist. Leave out anything that does not. */
@@ -85,13 +89,15 @@ export const siteConfig = {
   } satisfies Record<ServiceSlug, string>,
 
   analytics: {
-    ga4: env("NEXT_PUBLIC_GA_ID"),
-    metaPixel: env("NEXT_PUBLIC_META_PIXEL_ID"),
-    clarity: env("NEXT_PUBLIC_CLARITY_ID"),
+    // Google Tag Manager container (starts with GTM-). When set, configure GA4 inside GTM; the direct GA4 tag is skipped.
+    gtm: env(process.env.NEXT_PUBLIC_GTM_ID),
+    ga4: env(process.env.NEXT_PUBLIC_GA_ID),
+    metaPixel: env(process.env.NEXT_PUBLIC_META_PIXEL_ID),
+    clarity: env(process.env.NEXT_PUBLIC_CLARITY_ID),
   },
 
-  turnstileSiteKey: env("NEXT_PUBLIC_TURNSTILE_SITE_KEY"),
-  chatWidgetSrc: env("NEXT_PUBLIC_CHAT_WIDGET_SRC"),
+  turnstileSiteKey: env(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY),
+  chatWidgetSrc: env(process.env.NEXT_PUBLIC_CHAT_WIDGET_SRC),
 } as const;
 
 /**
@@ -102,9 +108,7 @@ export const isPreviewBuild =
   process.env.NODE_ENV === "development" ||
   Boolean(process.env.WORKERS_CI_BRANCH && process.env.WORKERS_CI_BRANCH !== siteConfig.productionBranch);
 
-export const hasAnalytics = Boolean(
-  siteConfig.analytics.ga4 || siteConfig.analytics.metaPixel || siteConfig.analytics.clarity,
-);
+export const hasAnalytics = Object.keys(validIds(siteConfig.analytics)).length > 0;
 
 export function telHref(phone: string) {
   return `tel:${phone.replace(/[^\d+]/g, "")}`;
